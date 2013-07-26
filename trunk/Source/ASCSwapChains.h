@@ -24,7 +24,7 @@ enum CDepthStencilType {dstNone,         // No depth-stencil buffer is needed
                        };
 
 // General description of rendering swap chain
-struct CSwapChainDesc
+struct CASCSwapChainDesc
 {
 	// The width of rendering surface
 	ASCInt				Width;
@@ -55,7 +55,7 @@ struct CSwapChainDesc
 };
 
 // Pointer to SwapChainDesc structure typically used to pass it by reference
-typedef CSwapChainDesc* PSwapChainDesc;
+typedef CASCSwapChainDesc* PASCSwapChainDesc;
 
 /*
  * List of all rendering swap chains that are to be used with ASC device.
