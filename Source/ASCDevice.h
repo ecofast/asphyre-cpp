@@ -321,14 +321,14 @@ protected:
 	ASCInt					m_nTechVersion;
 	CASCDeviceState			m_DevState;
 
-	virtual	bool			InitializeDevice() = 0;
-	virtual	void			FinalizeDevice() = 0;
-	virtual	void			ResetDevice()
+	virtual	ASCBoolean		InitializeDevice() = 0;
+	virtual	ASCBoolean		FinalizeDevice() = 0;
+	virtual	ASCBoolean		ResetDevice()
 	{
 		//
 	}
 
-	virtual	bool			CanRender(ASCInt nSwapChainIndex)
+	virtual	ASCBoolean		CanRender(ASCInt nSwapChainIndex)
 	{
 		return true;
 	}
