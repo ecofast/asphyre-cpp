@@ -17,6 +17,7 @@
 #include "../ASCDevice.h"
 #include "../ASCCanvas.h"
 #include "../ASCTextures.h"
+#include "ASCDX9Device.h"
 
 const ASCUInt ASC_PROVIDERID_DX9 = 0x10000900;
 
@@ -36,7 +37,12 @@ public:
 
 	virtual CASCDevice* CreateDevice()
 	{
-		// return (new CASCDX9Device());
+		return (new CASCDX9Device());
+	}
+
+	virtual CASCCanvas* CreateCanvas()
+	{
+		// return (new CASCDX9);
 	}
 };
 

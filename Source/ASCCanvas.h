@@ -13,6 +13,8 @@
 #pragma once
 
 #include "ASCTypes.h"
+#include "ASCEvents.h"
+#include "ASCFloatVector2D.h"
 
 /*
  * The blending effect that should be applied when drawing 2D primitives
@@ -75,20 +77,81 @@ public:
 	CASCCanvas();
 	~CASCCanvas();
 
-protected:
-	virtual ASCBoolean	HandleDeviceCreate();
-	virtual void		HandleDeviceDestroy();
-	virtual ASCBoolean	HandleDeviceReset();
-	virtual void		HandleDeviceLost();
-	virtual void		HandleBeginScene()	= 0;
-	virtual void		HandleEndScene()	= 0;
-private:
-	ASCInt				m_nCacheStall;
+	// Draws line between the two specified 2D floating-point vectors using gradient of two colors
+	virtual void RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2) = 0;
+	// Draws line between the two specified 2D floating-point vectors using solid color
+	void RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor);
+	// Draws line between the specified coordinates using solid color
+	void RenderLine(ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCColor uColor);
 
-	void				OnDeviceCreate(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void				OnDeviceDestroy(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void				OnDeviceReset(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void				OnDeviceLost(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void				OnBeginScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void				OnEndScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	/*
+	 * Flushes the canvas cache and presents the pending primitives on the screen 
+	 * or render target. This can be useful to make sure that nothing
+	 * remains in canvas cache before starting to draw, for instance, a 3D scene
+	*/
+	virtual void Flush() = 0;
+
+	/*
+     * Resets all the states necessary for canvas operation. 
+	 * This can be useful when custom state changes have been made(for instance, in a 3D scene)
+	 * so to restore the canvas to its working condition this method should be called
+	*/
+	virtual void ResetStates();
+
+	/*
+	 * The clipping rectangle in which the rendering will be made. 
+	 * This can be useful for restricting the rendering to a certain part of screen
+	*/
+	RECT GetClipRect();
+	void SetClipRect(const RECT rc);
+
+	/*
+	 * Number of times the rendering cache was reseted during last rendering frame. 
+	 * Each cache reset is typically a time-consuming operation so high
+	 * number of such events could be detrimental to the application's rendering
+	 * performance. If this parameter happens to be considerably high(above 20)
+	 * in the rendered scene, the rendering code should be revised for better
+	 * grouping of images, shapes and blending types
+	*/
+	ASCInt GetCacheStall();
+
+protected:
+	virtual ASCBoolean HandleDeviceCreate();
+	virtual void HandleDeviceDestroy();
+	virtual ASCBoolean HandleDeviceReset();
+	virtual void HandleDeviceLost();
+	virtual void HandleBeginScene()	= 0;
+	virtual void HandleEndScene()	= 0;
+
+	virtual void GetViewport(ASCInt* pX, ASCInt* pY, ASCInt* pWidth, ASCInt* pHeight) = 0;
+	virtual void SetViewport(ASCInt nX, ASCInt nY, ASCInt nWidth, ASCInt nHeight) = 0;
+
+	/*
+	 * Determines whether antialiasing should be used when stretching images and textures.
+	 * If this parameter is set to False, no antialiasing will be made and
+	 * stretched images will appear pixelated. There is little to none
+	 * performance gain from not using antialiasing, so this parameter should
+	 * typically be set to True
+	*/
+	virtual ASCBoolean GetAntialias() = 0;
+	virtual void SetAntialias(ASCBoolean bValue) = 0;
+
+	/*
+	 * Determines whether mipmapping should be used when rendering images and
+	 * textures. Mipmapping can improve visual quality when extreme shrinking of
+	 * original images is made at the expense of performance
+	*/
+	virtual ASCBoolean GetMipMapping() = 0;
+	virtual void SetMipMapping(ASCBoolean bValue) = 0;
+
+	void NextRenderCall();
+private:
+	ASCInt m_nCacheStall;
+
+	void OnDeviceCreate(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceDestroy(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceReset(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceLost(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnBeginScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnEndScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
 };

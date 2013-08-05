@@ -77,3 +77,28 @@ void CASCCanvas::OnEndScene(const void* pSender, const CASCPointer pParam, ASCBo
 {
 	HandleEndScene();
 }
+
+ASCInt CASCCanvas::GetCacheStall()
+{
+	return m_nCacheStall;
+}
+
+void CASCCanvas::NextRenderCall()
+{
+	m_nCacheStall++;
+}
+
+void CASCCanvas::ResetStates()
+{
+
+}
+
+void CASCCanvas::RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor)
+{
+	RenderLine(Src, Dest, uColor, uColor)
+}
+
+void CASCCanvas::RenderLine(ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCColor uColor)
+{
+	
+}

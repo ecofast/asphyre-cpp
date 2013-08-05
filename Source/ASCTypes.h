@@ -21,12 +21,16 @@ typedef	unsigned int		ASCUInt;
 typedef ASCInt				ASCInt32;
 typedef ASCUInt				ASCUInt32;
 
+typedef ASCUInt32*			ASCPUInt32;
+
 typedef	ASCUInt32			ASCColor;
 
 typedef	float				ASCSingle;
 typedef double				ASCDouble;
 
 typedef bool				ASCBoolean;
+
+typedef char				ASCChar;
 
 typedef void*				ASCPointer;
 
@@ -99,11 +103,13 @@ enum CASCPixelFormat {
 
 typedef CASCPixelFormat* PASCPixelFormat;
 
+const ASCInt ASC_PIXELFORMAT_ELEMNUM = 9;
+
 /*
  * This constant has values defined for every possible combination of CASCPixelFormat 
  * and indicates the total number of bits used for each particular pixel format
 */
-const ASCInt CASCPixelFormatBits[sizeof(CASCPixelFormat)] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
+const ASCInt C_ASCPixelFormatBits[sizeof(CASCPixelFormat)] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
 
 /*
  * A combination of two colors, primarily used for displaying text with the
