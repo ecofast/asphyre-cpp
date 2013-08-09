@@ -11,39 +11,23 @@
 
 #pragma once
 
-#include "../ASCTypes.h"
 #include "../ASCProvider.h"
-#include "../ASCFactory.h"
-#include "../ASCDevice.h"
-#include "../ASCCanvas.h"
-#include "../ASCTextures.h"
 #include "ASCDX9Device.h"
+#include "ASCDX9Canvas.h"
+#include "ASCDX9Textures.h"
 
 const ASCUInt ASC_PROVIDERID_DX9 = 0x10000900;
 
 class CASCDX9Provider : public CASCProvider
 {
 public:
-	CASCDX9Provider() : CASCProvider()
-	{
-		m_uProviderID = ASC_PROVIDERID_DX9;
-		ASCFactory()->Subscribe(this);
-	}
+	CASCDX9Provider();
+	~CASCDX9Provider();
 
-	~CASCDX9Provider()
-	{
-		ASCFactory()->UnSubscribe(this, true);
-	}
-
-	virtual CASCDevice* CreateDevice()
-	{
-		return (new CASCDX9Device());
-	}
-
-	virtual CASCCanvas* CreateCanvas()
-	{
-		// return (new CASCDX9);
-	}
+	virtual CASCDevice* CreateDevice();
+	virtual CASCCanvas* CreateCanvas();
+	virtual CASCLockableTexture* CreateLockableTexture();
+	virtual CASCRenderTargetTexture* CreateRenderTargetTexture();
 };
 
 extern inline CASCDX9Provider* ASCDX9Provider();

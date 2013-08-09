@@ -15,7 +15,7 @@
 
 struct CASCIntVector2D
 {
-	ASCInt X, Y;
+	int X, Y;
 
 	CASCIntVector2D()
 	{
@@ -28,7 +28,7 @@ struct CASCIntVector2D
 		Y = vec.Y;
 	}
 
-	CASCIntVector2D(ASCInt nX, ASCInt nY)
+	CASCIntVector2D(int nX, int nY)
 	{
 		X = nX;
 		Y = nY;
@@ -44,7 +44,7 @@ struct CASCIntVector2D
 		return CASCIntVector2D(X - vec.X, Y - vec.Y);
 	}
 
-	ASCBoolean Equals(const CASCIntVector2D& vec)
+	bool Equals(const CASCIntVector2D& vec)
 	{
 		return ((X == vec.X) && (Y == vec.Y));
 	}

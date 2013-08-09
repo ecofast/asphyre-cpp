@@ -19,11 +19,11 @@ ASCInt CASCSwapChains::Insert()
 
 	ASCInt result = m_Datas.size();
 	m_Datas.resize(result + 1);
-	memset(&m_Datas[result], 0, sizeof(CSwapChainDesc));
+	memset(&m_Datas[result], 0, sizeof(CASCSwapChainDesc));
 	return result;
 }
 
-ASCInt CASCSwapChains::Add( const CSwapChainDesc desc )
+ASCInt CASCSwapChains::Add(const CASCSwapChainDesc desc)
 {
 	ASCInt result = Insert();
 	if (result == -1)
@@ -35,9 +35,9 @@ ASCInt CASCSwapChains::Add( const CSwapChainDesc desc )
 	return (result);
 }
 
-ASCInt CASCSwapChains::Add( ASCUInt uWndHandle, ASCIntVector2D vtSize, 
-						   ASCInt nMultisamples /*= 0*/, ASCBoolean bVSync /*= false*/, ASCPixelFormat Format /*= apfUnknown*/, 
-						   CDepthStencilType DepthStencil /*= dstNone*/ )
+ASCInt CASCSwapChains::Add(ASCUInt uWndHandle, CASCIntVector2D vtSize, 
+						   ASCInt nMultisamples /*= 0*/, ASCBoolean bVSync /*= false*/, CASCPixelFormat Format /*= apfUnknown*/, 
+						   CASCDepthStencilType DepthStencil /*= dstNone*/ )
 {
 	ASCInt result = Insert();
 	if (result == -1)
@@ -46,12 +46,12 @@ ASCInt CASCSwapChains::Add( ASCUInt uWndHandle, ASCIntVector2D vtSize,
 	} 
 	else
 	{
-		m_Datas[result].WndHandle = uWndHandle;
-		m_Datas[result].Width = ptSize.X;
-		m_Datas[result].Height = ptSize.Y;
+		m_Datas[result].hWndHandle = uWndHandle;
+		m_Datas[result].nWidth = vtSize.X;
+		m_Datas[result].nHeight = vtSize.Y;
 		m_Datas[result].Format = Format;
-		m_Datas[result].VSync = bVSync;
-		m_Datas[result].Multisamples = nMultisamples;
+		m_Datas[result].bVSync = bVSync;
+		m_Datas[result].nMultisamples = nMultisamples;
 		m_Datas[result].DepthStencil = DepthStencil;
 		return result;
 	}
@@ -64,7 +64,7 @@ void CASCSwapChains::Remove( ASCInt nIndex )
 		return;
 	}
 
-	vector<SwapChainDesc>::iterator it = m_Datas.begin();
+	vector<CASCSwapChainDesc>::iterator it = m_Datas.begin();
 	m_Datas.erase(it + nIndex);
 	/*
 	for (AGEInt i = 0; i < nIndex; i++)
@@ -90,14 +90,14 @@ void* CASCSwapChains::GetDevice()
 	return m_pDevice;
 }
 
-ASCInt CASCSwapChains::GetCount() const
+ASCInt CASCSwapChains::GetCount()
 {
 	return m_Datas.size();
 }
 
-PSwapChainDesc CASCSwapChains::GetItem( ASCInt nIndex )
+PASCSwapChainDesc CASCSwapChains::GetItem(ASCInt nIndex )
 {
-	if (nIndex >= 0 && nIndex < AGEInt(m_Datas.size()))
+	if (nIndex >= 0 && nIndex < ASCInt(m_Datas.size()))
 	{
 		return &(m_Datas[nIndex]);
 	} 

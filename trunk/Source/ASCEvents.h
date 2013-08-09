@@ -13,13 +13,11 @@
 
 #pragma once
 
-#include "ASCTypes.h"
-
 #include <string>
 #include <vector>
-
 using std::string;
 using std::vector;
+#include "ASCTypes.h"
 
 /*
  * Event callback function used by the majority of ASC events.
@@ -33,7 +31,7 @@ using std::vector;
  *             subscribed classes. If this parameter is set to True, the event handling
  *             will be finished and further subscribers will not be notified
 */
-typedef void (*CASCEventCallback)(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+typedef void (*CASCEventCallback)(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
 
 typedef struct CASCEventRec
 {
@@ -78,7 +76,7 @@ typedef void (*CASCEventValidator)(CASCEventProvider* pProvider, void* pSender, 
 class CASCEventProvider
 {
 public:
-	CASCEventProvider(const CASCEventProviders* pOwner);
+	CASCEventProvider(CASCEventProviders* pOwner);
 	~CASCEventProvider();
 
 	/*
@@ -89,52 +87,52 @@ public:
 	 * the identification number of the subscribed function, which can later be
 	 * used to unsubscribe from this provider using UnSubscribe method
 	*/
-	ASCInt					Subscribe(const string& sClassName, const CASCEventCallback CallBack, const ASCInt nPriority = -1);
+	ASCInt Subscribe(const string& sClassName, CASCEventCallback CallBack, const ASCInt nPriority = -1);
 
 	/*
 	 * Unsubscribes the event callback function registered using the specified
 	 * ID, which is usually returned by Subscribe function
 	*/
-	void					UnSubscribe(const ASCInt nEventID);
+	void UnSubscribe(const ASCInt nEventID);
 
 	/*
 	 * Unsubscribes all event callbacks registered to the specified class
 	*/
-	void					UnSubscribeClass(const string& sClassName);
+	void UnSubscribeClass(const string& sClassName);
 
 	/*
 	 * Sets the secondary priority of all event callback functions registered to
 	 * the specified class. This secondary priority is used after the first
 	 * primary priority is applied(the one passed to Subscribe function)
 	*/
-	ASCBoolean				SetClassPriority(const string& sClassName, const ASCInt nPriority);
+	ASCBoolean SetClassPriority(const string& sClassName, const ASCInt nPriority);
 	
 	/*
 	 * Marks the priority list of all event callback functions dirty, so it is
 	 * refreshed next time an event occurs. This should be called after changing
 	 * the priority of some class
 	*/
-	void					MarkEventListDirty();
+	void MarkEventListDirty();
 
 	/*
 	 * Send event notification to all subscribed classes and their callback
 	 * functions, filtered through EventValidator event
 	*/
-	ASCBoolean				Notify(const void* pSender, const ASCPointer pParam = 0);
+	ASCBoolean Notify(void* pSender, ASCPointer pParam = 0);
 
 	/*
 	 * The owner class that contains the list of all existing providers
 	*/
-	CASCEventProviders*		GetOwner();
+	CASCEventProviders* GetOwner();
 
 	/*
 	 * Event validation callback that filters which events should be received
 	 * by which classes depending on different circumstances
 	*/
-	CASCEventValidator		GetEventValidator();
-	void					SetEventValidator(const CASCEventValidator Value);
+	CASCEventValidator GetEventValidator();
+	void SetEventValidator(const CASCEventValidator Value);
 private:
-	CASCEventProviders		m_pOwner;
+	CASCEventProviders*		m_pOwner;
 	vector<CASCEventRec>	m_Datas;
 	ASCBoolean				m_bEventListDirty;
 	CASCEventValidator		m_EventValidator;
@@ -163,31 +161,42 @@ public:
 	~CASCEventProviders();
 
 	// Adds a new provider to the end of the list and returns the pointer to its class
-	CASCEventProvider*		Add();
+	CASCEventProvider* Add();
 	// Inserts a new provider to the end of the list and returns its index
-	ASCInt					Insert();
+	ASCInt Insert();
 	// Removes provider at the specified index from the list
-	void					Remove(ASCInt nIndex);
+	void Remove(ASCInt nIndex);
 	// Removes all providers from the list
-	void					Clear();
+	void Clear();
 	// Returns the index of the specified provider in the list
-	ASCInt					IndexOf(const CASCEventProvider* Provider);
+	ASCInt IndexOf(const CASCEventProvider* Provider);
 	/*
 	 * Notifies all providers that their event priority list is dirty and should
 	 * be updated the next time an event occurs. This can occur when the ordering
 	 * list has been changed
 	*/
-	void					MarkEventListsDirty();
+	void MarkEventListsDirty();
 	/*
 	 * Unsubscribes all existing event callback functions for the specified class
 	 * from all existing providers
 	*/
-	void					UnSubscribe(const string& sClassName);
+	void UnSubscribe(const string& sClassName);
 
 	// Number of registered provider classes in the list
-	ASCInt					GetItemCount();
+	ASCInt GetItemCount();
 	// Access to individual provider classes in the list
-	CASCEventProvider*		GetItem(ASCInt nIndex);
+	CASCEventProvider* GetItem(ASCInt nIndex);
+
+	// Includes the specified provider to the list
+	ASCInt Include(CASCEventProvider* pProvider);
+	// Excludes the specified provider from the list
+	void Exclude(CASCEventProvider* pProvider);
+
+	/*
+	 * Specifies new priority list for all providers and their callback functions
+	 * using the list given by the sequence of AddExecOrder function calls
+	*/
+	void CheckEventLists();	
 private:
 	vector<CASCEventProvider*>	m_Datas;
 	ASCBoolean					m_bEventListsDirty;
