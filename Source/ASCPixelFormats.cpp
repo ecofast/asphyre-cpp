@@ -131,20 +131,13 @@ CASCPixelFormatList::CASCPixelFormatList()
 void CASCPixelFormatList::InsertAll()
 {
 	Clear();
-		/*
-		CASCPixelFormat fmt = apfUnknown;
-		while (fmt < apfX4R4G4B4)
-		{
-			Insert(fmt);
-			fmt += 1;
-		}
-		*/
-		ASCInt i = (ASCInt)apfUnknown;
-		while (i <= (ASCInt)apfX4R4G4B4)
-		{
-			Insert((CASCPixelFormat)i);
-			i++;
-		}
+	
+	ASCInt i = (ASCInt)apfUnknown;
+	while (i <= (ASCInt)apfX4R4G4B4)
+	{
+		Insert((CASCPixelFormat)i);
+		i++;
+	}
 }
 
 ASCInt CASCPixelFormatList::Insert(CASCPixelFormat fmt)
