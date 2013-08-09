@@ -4,8 +4,9 @@
 CASCCanvas::CASCCanvas()
 {
 	m_nCacheStall	= 0;
+
 	/*
-	ASCDeviceCreateEvent()->Subscribe(typeid(*this).name(), OnDeviceCreate);
+	ASCDeviceCreateEvent()->Subscribe((wchar_t*)typeid(*this).name(), &CASCCanvas::OnDeviceCreate);
 	ASCDeviceDestroyEvent()->Subscribe(typeid(*this).name(), OnDeviceDestroy);
 	ASCDeviceResetEvent()->Subscribe(typeid(*this).name(), OnDeviceReset);
 	ASCDeviceLostEvent()->Subscribe(typeid(*this).name(), OnDeviceLost);
@@ -16,7 +17,7 @@ CASCCanvas::CASCCanvas()
 
 CASCCanvas::~CASCCanvas()
 {
-	ASCEventProviders()->UnSubscribe(typeid(*this).name());
+	ASCEventProviders()->UnSubscribe((wchar_t*)(typeid(*this).name()));
 }
 
 ASCBoolean CASCCanvas::HandleDeviceCreate()

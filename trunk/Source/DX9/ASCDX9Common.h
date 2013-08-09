@@ -52,13 +52,10 @@ void ClearD3D9PresentParams();
 void ClearD3D9Caps();
 
 CASCPixelFormat DX9PixelFormatToASC(D3DFORMAT fmt);
-
 D3DFORMAT ASCPixelFormatToDX9(CASCPixelFormat fmt);
 
 D3DFORMAT DX9FindBackBufferFormat(CASCPixelFormat fmt);
-
 D3DFORMAT DX9FindDepthStencilFormat(ASCInt nStencilLevel);
-
 void DX9FindBestMultisampleType(D3DFORMAT BackBufferFmt, D3DFORMAT DepthFmt, ASCInt nMultisamples, 
 								D3DMULTISAMPLE_TYPE* pSampleType, ASCUInt32* pQualityLv);
 

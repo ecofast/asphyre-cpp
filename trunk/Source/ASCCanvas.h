@@ -14,7 +14,6 @@
 
 #include <windows.h>
 #include "ASCTypes.h"
-#include "ASCEvents.h"
 #include "ASCFloatVector2D.h"
 
 /*
