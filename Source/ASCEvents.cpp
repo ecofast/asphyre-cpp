@@ -1,4 +1,5 @@
 #include <algorithm>
+using std::swap;
 #include "ASCEvents.h"
 
 static ASCInt G_nGlobalEventID = 0;
@@ -20,72 +21,72 @@ CASCEventProviders* ASCEventProviders()
 */
 CASCEventProvider* ASCCreateEvent()
 {
-	static CASCEventProvider gASCCreateEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCCreateEvent = *(ASCEventProviders()->Add());
 	return &gASCCreateEvent;
 }
 
 CASCEventProvider* ASCDestroyEvent()
 {
-	static CASCEventProvider gASCDestroyEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDestroyEvent = *(ASCEventProviders()->Add());
 	return &gASCDestroyEvent;
 }
 
 CASCEventProvider* ASCDeviceInitEvent()
 {
-	static CASCEventProvider gASCDeviceInitEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDeviceInitEvent = *(ASCEventProviders()->Add());
 	return &gASCDeviceInitEvent;
 }
 
 CASCEventProvider* ASCDeviceCreateEvent()
 {
-	static CASCEventProvider gASCDeviceCreateEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDeviceCreateEvent = *(ASCEventProviders()->Add());
 	return &gASCDeviceCreateEvent;
 }
 
 CASCEventProvider* ASCDeviceDestroyEvent()
 {
-	static CASCEventProvider gASCDeviceDestroyEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDeviceDestroyEvent = *(ASCEventProviders()->Add());
 	return &gASCDeviceDestroyEvent;
 }
 
 CASCEventProvider* ASCDeviceResetEvent()
 {
-	static CASCEventProvider gASCDeviceResetEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDeviceResetEvent = *(ASCEventProviders()->Add());
 	return &gASCDeviceResetEvent;
 }
 
 CASCEventProvider* ASCDeviceLostEvent()
 {
-	static CASCEventProvider gASCDeviceLostEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCDeviceLostEvent = *(ASCEventProviders()->Add());
 	return &gASCDeviceLostEvent;
 }
 
 CASCEventProvider* ASCBeginSceneEvent()
 {
-	static CASCEventProvider gASCBeginSceneEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCBeginSceneEvent = *(ASCEventProviders()->Add());
 	return &gASCBeginSceneEvent;
 }
 
 CASCEventProvider* ASCEndSceneEvent()
 {
-	static CASCEventProvider gASCEndSceneEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCEndSceneEvent = *(ASCEventProviders()->Add());
 	return &gASCEndSceneEvent;
 }
 
 CASCEventProvider* ASCTimerResetEvent()
 {
-	static CASCEventProvider gASCTimerResetEvent = ASCEventProviders()->Add();
+	static CASCEventProvider gASCTimerResetEvent = *(ASCEventProviders()->Add());
 	return &gASCTimerResetEvent;
 }
 
-CASCEventProvider::CASCEventProvider(const CASCEventProviders* pOwner)
+CASCEventProvider::CASCEventProvider(CASCEventProviders* pOwner)
 {
-	m_pOwner			= pOwner;
+	m_pOwner = pOwner;
 	if (m_pOwner)
 	{
-		// m_pOwner.Include(this);
+		m_pOwner->Include(this);
 	}
-	m_bEventListDirty	= false;
+	m_bEventListDirty = false;
 }
 
 CASCEventProvider::~CASCEventProvider()
@@ -93,11 +94,11 @@ CASCEventProvider::~CASCEventProvider()
 	RemoveAll();
 	if (m_pOwner)
 	{
-		// m_pOwner.Exclude(this);
+		m_pOwner->Exclude(this);
 	}
 }
 
-ASCInt CASCEventProvider::Subscribe(const string& sClassName, const CASCEventCallback CallBack, const ASCInt nPriority /* = -1 */)
+ASCInt CASCEventProvider::Subscribe(const string& sClassName, CASCEventCallback CallBack, const ASCInt nPriority /* = -1 */)
 {
 	ASCInt						nIndex	= m_Datas.size();
 	m_Datas.resize(nIndex + 1);
@@ -151,15 +152,15 @@ void CASCEventProvider::MarkEventListDirty()
 	m_bEventListDirty = true;
 	if (m_pOwner)
 	{
-		m_pOwner.MarkEventListsDirty();
+		m_pOwner->MarkEventListsDirty();
 	}
 }
 
-ASCBoolean CASCEventProvider::Notify(const void* pSender, const ASCPointer pParam /* = 0 */)
+ASCBoolean CASCEventProvider::Notify(void* pSender, ASCPointer pParam /* = 0 */)
 {
 	if (m_pOwner)
 	{
-		m_pOwner.CheckEventLists();
+		m_pOwner->CheckEventLists();
 	}
 	if (m_bEventListDirty)
 	{
@@ -173,14 +174,14 @@ ASCBoolean CASCEventProvider::Notify(const void* pSender, const ASCPointer pPara
 		if (m_EventValidator)
 		{
 			bAllowed = true;
-			m_EventValidator(this, pSender, pParam, m_Datas[i].m_sClassName, bAllowed);
+			m_EventValidator(this, pSender, pParam, m_Datas[i].m_sClassName, &bAllowed);
 			if (!bAllowed)
 			{
 				continue;
 			}
 		}
 
-		m_Datas[i].m_Callback(pSender, pParam, bResult);
+		m_Datas[i].m_Callback(pSender, pParam, &bResult);
 		if (bResult)
 		{
 			return true;
@@ -282,6 +283,8 @@ ASCInt CASCEventProvider::EventListCompare(ASCInt nIndex1, ASCInt nIndex2)
 			nResult = -1;
 		}
 	}
+
+	return nResult;
 }
 
 ASCInt CASCEventProvider::EventListSplit(ASCInt nStart, ASCInt nStop)
@@ -356,7 +359,7 @@ ASCInt CASCEventProviders::Insert()
 
 	ASCInt nResult		= m_Datas.size();
 	m_Datas.resize(nResult + 1);
-	m_Datas[nResult]	= new CASCEventProvider();
+	m_Datas[nResult]	= new CASCEventProvider(this);
 	m_bListSemaphore	= false;
 	m_bEventListsDirty	= true;
 
@@ -423,7 +426,7 @@ void CASCEventProviders::UnSubscribe(const string& sClassName)
 {
 	for (ASCInt i = m_Datas.size() - 1; i >= 0; i--)
 	{
-		m_Datas[i].UnSubscribeClass(sClassName);
+		m_Datas[i]->UnSubscribeClass(sClassName);
 	}
 }
 
@@ -436,10 +439,51 @@ CASCEventProvider* CASCEventProviders::GetItem(ASCInt nIndex)
 {
 	if ((nIndex >= 0) && (nIndex < m_Datas.size()))
 	{
-		return (m_Datas[i]);
+		return (m_Datas[nIndex]);
 	} 
 	else
 	{
 		return 0;
 	}
+}
+
+ASCInt CASCEventProviders::Include(CASCEventProvider* pProvider)
+{
+	if (m_bListSemaphore)
+	{
+		return -1;
+	}
+
+	ASCInt nResult = IndexOf(pProvider);
+	if (nResult == -1)
+	{
+		nResult = m_Datas.size();
+		m_Datas.resize(nResult + 1);
+		m_Datas[nResult] = pProvider;
+
+		m_bEventListsDirty = true;
+	}
+	return nResult;
+}
+
+void CASCEventProviders::Exclude(CASCEventProvider* pProvider)
+{
+	if (m_bListSemaphore)
+	{
+		return;
+	}
+
+	ASCInt nIndex = IndexOf(pProvider);
+	if (nIndex == -1)
+	{
+		return;
+	}
+
+	m_Datas.erase(m_Datas.begin() + nIndex);
+	m_bEventListsDirty = true;
+}
+
+void CASCEventProviders::CheckEventLists()
+{
+
 }

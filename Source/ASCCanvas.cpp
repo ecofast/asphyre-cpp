@@ -4,14 +4,14 @@
 CASCCanvas::CASCCanvas()
 {
 	m_nCacheStall	= 0;
-
+	/*
 	ASCDeviceCreateEvent()->Subscribe(typeid(*this).name(), OnDeviceCreate);
 	ASCDeviceDestroyEvent()->Subscribe(typeid(*this).name(), OnDeviceDestroy);
 	ASCDeviceResetEvent()->Subscribe(typeid(*this).name(), OnDeviceReset);
 	ASCDeviceLostEvent()->Subscribe(typeid(*this).name(), OnDeviceLost);
 	ASCBeginSceneEvent()->Subscribe(typeid(*this).name(), OnBeginScene);
 	ASCEndSceneEvent()->Subscribe(typeid(*this).name(), OnEndScene);
-
+	*/
 }
 
 CASCCanvas::~CASCCanvas()
@@ -39,7 +39,7 @@ void CASCCanvas::HandleDeviceLost()
 
 }
 
-void CASCCanvas::OnDeviceCreate(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnDeviceCreate(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	ASCBoolean bSucced = HandleDeviceCreate();
 	if (pParam)
@@ -48,12 +48,12 @@ void CASCCanvas::OnDeviceCreate(const void* pSender, const CASCPointer pParam, A
 	}
 }
 
-void CASCCanvas::OnDeviceDestroy(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnDeviceDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	HandleDeviceDestroy();
 }
 
-void CASCCanvas::OnDeviceReset(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnDeviceReset(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	ASCBoolean bSucced = HandleDeviceReset();
 	if (pParam)
@@ -62,18 +62,18 @@ void CASCCanvas::OnDeviceReset(const void* pSender, const CASCPointer pParam, AS
 	}
 }
 
-void CASCCanvas::OnDeviceLost(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnDeviceLost(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	HandleDeviceLost();
 }
 
-void CASCCanvas::OnBeginScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnBeginScene(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	m_nCacheStall = 0;
 	HandleBeginScene();
 }
 
-void CASCCanvas::OnEndScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled)
+void CASCCanvas::OnEndScene(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	HandleEndScene();
 }
@@ -95,10 +95,10 @@ void CASCCanvas::ResetStates()
 
 void CASCCanvas::RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor)
 {
-	RenderLine(Src, Dest, uColor, uColor)
+	RenderLine(Src, Dest, uColor, uColor);
 }
 
 void CASCCanvas::RenderLine(ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCColor uColor)
 {
-	
+	RenderLine(CASCFloatVector2D(fX1, fY1), CASCFloatVector2D(fX2, fY2), uColor);
 }

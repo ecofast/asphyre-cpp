@@ -67,12 +67,12 @@ enum CASCDeviceTechnology {
 class CASCDevice
 {
 public:
-	virtual					CASCDevice()
+	CASCDevice()
 	{
 		m_DevTech			= adtUnknown;
 		m_nTechVersion		= 0;
 
-		m_SwapChains		= new CASCSwapChains;
+		m_pSwapChains		= new CASCSwapChains(this);
 		m_DevState			= adsNotActive;
 		m_uFillStencilValue	= 0;
 		m_fFillDepthValue	= 1.0;
@@ -81,17 +81,17 @@ public:
 	~CASCDevice()
 	{
 		Finalize();
-		delete				m_SwapChains;
-		m_SwapChains		= 0;
+		delete m_pSwapChains;
+		m_pSwapChains = 0;
 	}
 
 	/*
 	 * Initializes the device using the swap chain information provided in SwapChains and 
 	 * prepares it for rendering. If the call succeeds, True is returned and False otherwise
 	*/
-	ASCBoolean				Initialize()
+	ASCBoolean Initialize()
 	{
-		ASCBoolean bResult = ((m_DevState == adsNotActive) && (m_SwapChains->GetCount() > 0));
+		ASCBoolean bResult = ((m_DevState == adsNotActive) && (m_pSwapChains->GetCount() > 0));
 		if (!bResult)
 		{
 			return false;
@@ -111,7 +111,7 @@ public:
 	 * content that is not handled automatically by ASC should be released
 	 * before calling this method
 	*/
-	void					Finalize()
+	void Finalize()
 	{
 
 	}
@@ -120,13 +120,13 @@ public:
 	 * The current state of the device. If the device is not in working state,
 	 * any rendering calls may fail either silently or returning @False
 	*/
-	CASCDeviceState			GetDeviceState()
+	CASCDeviceState GetDeviceState()
 	{
 		return m_DevState;
 	}
 
 	// Indicates the type of technology that is currently being used
-	CASCDeviceTechnology	GetDeviceTechnology()
+	CASCDeviceTechnology GetDeviceTechnology()
 	{
 		return m_DevTech;
 	}
@@ -135,11 +135,11 @@ public:
 	 * The value that should be used for setting depth buffer either on the
 	 * screen or the currently used rendering target
 	*/
-	ASCSingle				GetFillDepthValue()
+	ASCSingle GetFillDepthValue()
 	{
 		return m_fFillDepthValue;
 	}
-	void					SetFillDepthValue(const ASCSingle fValue)
+	void SetFillDepthValue(const ASCSingle fValue)
 	{
 		m_fFillDepthValue = fValue;
 	}
@@ -148,11 +148,11 @@ public:
 	 * The value that should be used for setting stencil buffer either on the
 	 * screen or the currently used rendering target
 	*/
-	ASCUInt					GetFillStencilValue()
+	ASCUInt GetFillStencilValue()
 	{
 		return m_uFillStencilValue;
 	}
-	void					SetFillStencilValue(const ASCUInt uValue)
+	void SetFillStencilValue(const ASCUInt uValue)
 	{
 		m_uFillStencilValue = uValue;
 	}
@@ -163,7 +163,7 @@ public:
 	 * stored in FillDepthValue/FillStencilValue, and calls the provided event handler, 
 	 * where the actual rendering should be made
 	*/
-	void					Render(CASCNotifyEvent Handler, ASCColor uBkColor)
+	void Render(CASCNotifyEvent Handler, ASCColor uBkColor)
 	{
 		if ((m_DevState == adsActive) && (CanRender(0)))
 		{
@@ -182,11 +182,11 @@ public:
 	 * where the actual rendering should be made. The first swap chain has index of zero. 
 	 * If the provided index is outside of valid range, this method does nothing
 	*/
-	void					Render(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor)
+	void Render(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor)
 	{
-		if ((m_DevState == adsActive) and (CanRender(nSwapChainIndex)))
+		if ((m_DevState == adsActive) && (CanRender(nSwapChainIndex)))
 		{
-			RenderWith(nSwapChainIndex, Handler, uBkColor)
+			RenderWith(nSwapChainIndex, Handler, uBkColor);
 		} 
 		else
 		{
@@ -203,21 +203,21 @@ public:
 	 * calling this method. If there is a problem starting the rendering to the 
 	 * given render target, this method will silently fail and the given event handler will not be called
 	*/
-	void					RenderTo(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk, CASCRenderTargetTexture Texture)
+	void RenderTo(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk, CASCRenderTargetTexture* pTexture)
 	{
-		if ((m_DevState != adsActive) || (!CanRender(-1)) || (!Texture))
+		if ((m_DevState != adsActive) || (!CanRender(-1)) || (!pTexture))
 		{
 			return;
 		}
 
-		if (!Texture.BeginRenderTo())
+		if (!(pTexture->BeginRenderTo()))
 		{
 			return;
 		}
 		else
 		{
 			RenderToTarget(Handler, uBkColor, bFillBk);
-			Texture.EndRenderTo();
+			pTexture->EndRenderTo();
 		}
 	}
 
@@ -233,15 +233,15 @@ public:
 	 * scenario is to subscribe to EventDeviceReset and EventDeviceLost events 
 	 * provided in ASCEvents.cpp
 	*/
-	ASCBoolean				Resize(ASCInt nSwapChainIndex, const CASCIntVector2D NewSize)
+	ASCBoolean Resize(ASCInt nSwapChainIndex, const CASCIntVector2D NewSize)
 	{
-		PSwapChainDesc pUserDesc;
-		if ((!pUserDesc) || (IsAtFault())
+		PASCSwapChainDesc pUserDesc;
+		if ((!pUserDesc) || (IsAtFault()))
 		{
 			return false;
 		}
 
-		if ((pUserDesc->Width == NewSize.X) && (pUserDesc->Height == NewSize.Y))
+		if ((pUserDesc->nWidth == NewSize.X) && (pUserDesc->nHeight == NewSize.Y))
 		{
 			return true;
 		}
@@ -249,10 +249,10 @@ public:
 		ClearStates();
 
 		CASCIntVector2D		PrevSize;
-		PrevSize.X			= pUserDesc->Width;
-		PrevSize.Y			= pUserDesc->Height;
-		pUserDesc->Width	= NewSize.X;
-		pUserDesc->Height	= NewSize.Y;
+		PrevSize.X			= pUserDesc->nWidth;
+		PrevSize.Y			= pUserDesc->nHeight;
+		pUserDesc->nWidth	= NewSize.X;
+		pUserDesc->nHeight	= NewSize.Y;
 		if (m_DevState != adsNotActive)
 		{
 			if (ResizeSwapChain(nSwapChainIndex, pUserDesc))
@@ -261,8 +261,8 @@ public:
 			} 
 			else
 			{
-				pUserDesc->Width	= PrevSize.X;
-				pUserDesc->Height	= PrevSize.Y;
+				pUserDesc->nWidth	= PrevSize.X;
+				pUserDesc->nHeight	= PrevSize.Y;
 				return false;
 			}
 		} 
@@ -277,7 +277,7 @@ public:
 	 * fault state. If the device is working properly or has not yet been
 	 * initialized, False is returned
 	*/
-	ASCBoolean				IsAtFault()
+	ASCBoolean IsAtFault()
 	{
 		return ((m_DevState == adsInitFailed) || (m_DevState == adsRunTimeFault));
 	}
@@ -286,7 +286,7 @@ public:
 	 * Clears all textures, shaders and states currently bound to the device.
 	 * This method works only on some modern providers
 	*/
-	void					ClearStates()
+	void ClearStates()
 	{
 		if (m_DevState == adsActive)
 		{
@@ -299,7 +299,7 @@ public:
 	 * the initialization has failed. This must be done explicitly to
 	 * acknowledge that the application is aware of the situation
 	*/
-	void					ResetInitFailed()
+	void ResetInitFailed()
 	{
 		if (m_DevState == adsInitFailed)
 		{
@@ -312,42 +312,42 @@ public:
 	 * scenario at least one swap chain must be added to this list for device
 	 * initialization to succeed.
 	*/
-	CASCSwapChains*			GetSwapChains()
+	CASCSwapChains* GetSwapChains()
 	{
-		return m_SwapChains;
+		return m_pSwapChains;
 	}
 protected:
 	CASCDeviceTechnology	m_DevTech;
 	ASCInt					m_nTechVersion;
 	CASCDeviceState			m_DevState;
 
-	virtual	ASCBoolean		InitializeDevice() = 0;
-	virtual	ASCBoolean		FinalizeDevice() = 0;
-	virtual	ASCBoolean		ResetDevice()
+	virtual	ASCBoolean InitializeDevice() = 0;
+	virtual	void FinalizeDevice() = 0;
+	virtual	void ResetDevice()
 	{
 		//
 	}
 
-	virtual	ASCBoolean		CanRender(ASCInt nSwapChainIndex)
+	virtual	ASCBoolean CanRender(ASCInt nSwapChainIndex)
 	{
 		return true;
 	}
 
-	virtual void			RenderWith(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor) = 0;
+	virtual void RenderWith(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor) = 0;
 
-	virtual void			RenderToTarget(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk) = 0;
+	virtual void RenderToTarget(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk) = 0;
 
-	virtual ASCBoolean		ResizeSwapChain(ASCInt nSwapChainIndex, PSwapChainDesc pNewUserDesc)
+	virtual ASCBoolean ResizeSwapChain(ASCInt nSwapChainIndex, PASCSwapChainDesc pNewUserDesc)
 	{
 		return true;
 	}
 
-	virtual void			ClearDevStates()
+	virtual void ClearDevStates()
 	{
 
 	}
 private:
-	CASCSwapChains*			m_SwapChains;
-	ASCSingle				m_fFillDepthValue;
-	ASCUInt					m_uFillStencilValue;
+	CASCSwapChains*	m_pSwapChains;
+	ASCSingle		m_fFillDepthValue;
+	ASCUInt			m_uFillStencilValue;
 };

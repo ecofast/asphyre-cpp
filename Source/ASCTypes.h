@@ -16,7 +16,8 @@
 #include "ASCFloatVector2D.h"
 
 typedef	int					ASCInt;
-typedef	unsigned int		ASCUInt;
+// typedef	unsigned int		ASCUInt;
+typedef unsigned long		ASCUInt;
 
 typedef ASCInt				ASCInt32;
 typedef ASCUInt				ASCUInt32;
@@ -34,7 +35,7 @@ typedef char				ASCChar;
 
 typedef void*				ASCPointer;
 
-typedef void (*CASCNotifyEvent)(void);
+typedef void (*CASCNotifyEvent)(void* pSender);
 
 // TObject in Delphi
 typedef void*				CASCObject;
@@ -109,7 +110,7 @@ const ASCInt ASC_PIXELFORMAT_ELEMNUM = 9;
  * This constant has values defined for every possible combination of CASCPixelFormat 
  * and indicates the total number of bits used for each particular pixel format
 */
-const ASCInt C_ASCPixelFormatBits[sizeof(CASCPixelFormat)] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
+const ASCInt C_ASCPixelFormatBits[ASC_PIXELFORMAT_ELEMNUM] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
 
 /*
  * A combination of two colors, primarily used for displaying text with the

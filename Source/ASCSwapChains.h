@@ -13,45 +13,44 @@
 
 #include <vector>
 using std::vector;
-
 #include "ASCTypes.h"
 #include "ASCIntVector2D.h"
 
 // The type of depth and stencil buffers to be created in the swap chain
-enum CDepthStencilType {dstNone,         // No depth-stencil buffer is needed 
-                        dstDepthOnly,    // Only depth buffer is required, stencil buffer is not needed
-                        dstDepthStencil  // Both depth and stencil buffers are required
-                       };
+enum CASCDepthStencilType {adstNone,         // No depth-stencil buffer is needed 
+                           adstDepthOnly,    // Only depth buffer is required, stencil buffer is not needed
+                           adstDepthStencil  // Both depth and stencil buffers are required
+                          };
 
 // General description of rendering swap chain
 struct CASCSwapChainDesc
 {
 	// The width of rendering surface
-	ASCInt				Width;
+	ASCInt					nWidth;
 	// The height of rendering surface
-	ASCInt				Height;
+	ASCInt					nHeight;
 	// determine whether to wait for vertical retrace to provide flicker-free animations
-	ASCBoolean			VSync;
+	ASCBoolean				bVSync;
 	/*
 	 * The desired pixel format to be used in the rendering target. This is a
 	 * suggestion and different format may be choosen by the provider depending
 	 * on hardware support. If this parameter is set to apfUnknown(by default),
 	 * the best possible pixel format will be used
 	*/
-	ASCPixelFormat		Format;
+	CASCPixelFormat			Format;
 	/*
 	 * The handle to the application's main window or a control where the
 	 * rendering should be made(can be another window or even a panel)
 	*/
-	ASCUInt				WndHandle;
+	ASCUInt					hWndHandle;
 	/*
 	 * Number of samples to use for antialiasing. This is a suggestion and
 	 * different value may actually be used by the provider depending on
 	 * hardware support; values of zero and one are treated as no multisampling
 	*/
-	ASCInt				Multisamples;
+	ASCInt					nMultisamples;
 	// The type of depth-stencil buffer to be used with the swap chain
-	CDepthStencilType	DepthStencil;
+	CASCDepthStencilType	DepthStencil;
 };
 
 // Pointer to SwapChainDesc structure typically used to pass it by reference
@@ -75,14 +74,14 @@ public:
 	 * Adds a new rendering swap chain specified in the given structure to the
 	 * end of list and returns its index
 	*/
-	ASCInt					Add(const CSwapChainDesc desc);
+	ASCInt					Add(const CASCSwapChainDesc desc);
 	/*
 	 * Adds a new rendering swap chain with the specified parameters to the end
 	 * of list and returns its index
 	*/
-	ASCInt					Add(ASCUInt uWndHandle, ASCIntVector2D vtSize, 
-								ASCInt nMultisamples = 0, ASCBoolean bVSync = false, ASCPixelFormat Format = apfUnknown,
-								CDepthStencilType DepthStencil = dstNone);
+	ASCInt					Add(ASCUInt uWndHandle, CASCIntVector2D vtSize, 
+								ASCInt nMultisamples = 0, ASCBoolean bVSync = false, CASCPixelFormat Format = apfUnknown,
+								CASCDepthStencilType DepthStencil = adstNone);
 	/*
 	 * Removes the swap at the specified index from the list, shifting all
 	 * elements by one. The index should be in range of [0..(Count - 1)] range;
@@ -103,9 +102,9 @@ public:
 	 * which should be in range of [0..(Count - 1)] range. If the index is
 	 * outside of valid range, @nil is returned
 	*/
-	PSwapChainDesc			GetItem(ASCInt nIndex);
+	PASCSwapChainDesc			GetItem(ASCInt nIndex);
 private:
-	vector<CSwapChainDesc>	m_Datas;
-	void*					m_pDevice;
-	ASCBoolean				IsDeviceInactive();
+	vector<CASCSwapChainDesc>	m_Datas;
+	void*						m_pDevice;
+	ASCBoolean					IsDeviceInactive();
 };

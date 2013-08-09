@@ -14,14 +14,11 @@
 
 #include <vector>
 using std::vector;
-
 #include "ASCTypes.h"
 #include "ASCDevice.h"
 #include "ASCCanvas.h"
 #include "ASCTextures.h"
 #include "ASCProvider.h"
-
-using std::vector;
 
 class CASCFactory
 {
@@ -33,13 +30,13 @@ public:
 
 	~CASCFactory()
 	{
-		RemoveAll();
+		Clear();
 	}
 
 	/*
 	 * Creates ASC device that is specific to the currently selected provider
 	*/
-	CASCDevice*					CreateDevice()
+	CASCDevice* CreateDevice()
 	{
 		if (m_pProvider)
 		{
@@ -54,7 +51,7 @@ public:
 	/*
 	 * Creates ASC canvas that is specific to the currently selected provider
 	*/
-	CASCCanvas*					CreateCanvas()
+	CASCCanvas* CreateCanvas()
 	{
 		if (m_pProvider)
 		{
@@ -69,7 +66,7 @@ public:
 	/*
 	 * Creates lockable ASC texture that is specific to the currently selected provider
 	*/
-	CASCLockableTexture*		CreateLockableTexture()
+	CASCLockableTexture* CreateLockableTexture()
 	{
 		if (m_pProvider)
 		{
@@ -84,7 +81,7 @@ public:
 	/*
 	 * Creates render target ASC texture that is specific to the currently selected provider
 	*/
-	CASCRenderTargetTexture*	CreateRenderTargetTexture()
+	CASCRenderTargetTexture* CreateRenderTargetTexture()
 	{
 		if (m_pProvider)
 		{
@@ -101,7 +98,7 @@ public:
 	 * used by the application. This function is usually called automatically
 	 * by each of the providers
 	*/
-	void						Subscribe(const CASCProvider* pProvider)
+	void Subscribe(CASCProvider* pProvider)
 	{
 		ASCInt nIndex = IndexOf(pProvider);
 		if (nIndex == -1)
@@ -114,7 +111,7 @@ public:
 	 * Unsubscribes the specified provider from the list of available providers
 	 * that can be used by the application
 	*/
-	void						UnSubscribe(const CASCProvider* pProvider, ASCBoolean bNoFree = false)
+	void UnSubscribe(const CASCProvider* pProvider, ASCBoolean bNoFree = false)
 	{
 		Remove(IndexOf(pProvider), bNoFree);
 	}
@@ -123,15 +120,15 @@ public:
 	 * Activates the provider with the given numerical identifier to be used by
 	 * the factory's creation functions
 	*/
-	void						UseProvider(ASCUInt uProviderID)
+	void UseProvider(ASCUInt uProviderID)
 	{
 		m_pProvider = FindProvider(uProviderID);
 	}
 private:
-	vector<CASCProvider*>		m_Providers;
-	CASCProvider*				m_pProvider;
+	vector<CASCProvider*>	m_Providers;
+	CASCProvider*			m_pProvider;
 
-	ASCInt						Insert(const CASCProvider* pProvider)
+	ASCInt Insert(CASCProvider* pProvider)
 	{
 		ASCInt nIndex = m_Providers.size();
 		m_Providers.resize(nIndex + 1);
@@ -139,9 +136,9 @@ private:
 		return nIndex;
 	}
 
-	ASCInt						IndexOf(const CASCProvider* pProvider)
+	ASCInt IndexOf(const CASCProvider* pProvider)
 	{
-		for (ASCInt i = 0; i < m_Providers.size(); i++)
+		for (ASCUInt i = 0; i < m_Providers.size(); i++)
 		{
 			if (m_Providers[i] == pProvider)
 			{
@@ -151,7 +148,7 @@ private:
 		return -1;
 	}
 
-	void						Remove(ASCInt nIndex, ASCBoolean bNoFree)
+	void Remove(ASCUInt nIndex, ASCBoolean bNoFree)
 	{
 		if ((nIndex >= 0) && (nIndex < m_Providers.size()))
 		{
@@ -163,9 +160,9 @@ private:
 		}
 	}
 
-	void						RemoveAll()
+	void Clear()
 	{
-		for (ASCInt i = 0; i < m_Providers.size(); i++)
+		for (ASCUInt i = 0; i < m_Providers.size(); i++)
 		{
 			if (m_Providers[i])
 			{
@@ -175,12 +172,12 @@ private:
 		m_Providers.clear();
 	}
 
-	CASCProvider*				FindProvider(ASCUInt uProviderID)
+	CASCProvider* FindProvider(ASCUInt uProviderID)
 	{
 		ASCInt nIndex = -1;
-		for (ASCInt i = 0; i < m_Providers.size(); i++)
+		for (ASCUInt i = 0; i < m_Providers.size(); i++)
 		{
-			if (m_Providers[i].GetProviderID() == uProviderID)
+			if (m_Providers[i]->GetProviderID() == uProviderID)
 			{
 				nIndex = i;
 				break;
@@ -194,7 +191,7 @@ private:
 
 		if (nIndex != -1)
 		{
-			return m_pProvider[nIndex];
+			return m_Providers[nIndex];
 		} 
 		else
 		{

@@ -21,7 +21,7 @@ using std::min;
 #include "../ASCTextures.h"
 #include "ASCDX9Common.h"
 
-#define ASC_DX9_VERTEX_FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
+const DWORD ASC_DX9_VERTEX_FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 typedef struct CASCDX9VertexRec
 {
@@ -54,13 +54,13 @@ const ASCInt MAX_CACHED_VERTICES   = 4096;
 
 enum CASCDX9CanvasTopology
 {
-	actUnknown, actPoints, actLines, actTriangles
+	actdx9Unknown, actdx9Points, actdx9Lines, actdx9Triangles
 };
 
 class CASCDX9Canvas : public CASCCanvas
 {
 public:
-	CASCDX9Canvas()
+	CASCDX9Canvas() : CASCCanvas()
 	{
 		m_pVertexArray = 0;
 		m_pIndexArray = 0;
@@ -84,7 +84,7 @@ public:
 		m_nVertexCount = 0;
 		m_nIndexCount = 0;
 		m_nPrimitives = 0;
-		m_CanvasTopology = actUnknown;
+		m_CanvasTopology = actdx9Unknown;
 		m_CachedEffect = abeUnknown;
 
 		if (!G_pD3D9Device)
@@ -101,7 +101,7 @@ public:
 		m_nVertexCount = 0;
 		m_nIndexCount = 0;
 		m_nPrimitives = 0;
-		m_CanvasTopology = actUnknown;
+		m_CanvasTopology = actdx9Unknown;
 		m_CachedEffect = abeUnknown;
 		m_pCachedTexture = 0;
 		m_pActiveTexture = 0;
@@ -130,7 +130,7 @@ public:
 			// Enable Alpha-testing
 			G_pD3D9Device->SetRenderState(D3DRS_ALPHATESTENABLE, 1);
 			G_pD3D9Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
-			G_pD3D9Device->SetRenderState(D3DRS_ALPHAREF, $00000001);
+			G_pD3D9Device->SetRenderState(D3DRS_ALPHAREF, 0x00000001);
 
 			// Default alpha-blending behavior
 			G_pD3D9Device->SetRenderState(D3DRS_ALPHABLENDENABLE, 1);
@@ -157,6 +157,28 @@ public:
 			// Triangle fill mode
 			G_pD3D9Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 		}
+	}
+
+	virtual void RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2)
+	{
+		if (!RequestCache(actdx9Lines, 2, 0, abeNormal, 0))
+		{
+			return;
+		}
+
+		PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
+		pEntry->Vertex.x = Src.X;
+		pEntry->Vertex.y = Src.Y;
+		pEntry->uColor = uColor1;
+		m_nVertexCount++;
+
+		pEntry = (PASCDX9VertexRec)NextVertexEntry();
+		pEntry->Vertex.x = Dest.X;
+		pEntry->Vertex.y = Dest.Y;
+		pEntry->uColor = uColor2;
+		m_nVertexCount++;
+
+		m_nPrimitives++;
 	}
 protected:
 	virtual ASCBoolean HandleDeviceCreate()
@@ -213,6 +235,121 @@ protected:
 	{
 		Flush();
 	}
+
+	virtual void GetViewport(ASCInt* pX, ASCInt* pY, ASCInt* pWidth, ASCInt* pHeight)
+	{
+		if (!G_pD3D9Device)
+		{
+			*pX = 0;
+			*pY = 0;
+			*pWidth = 0;
+			*pHeight = 0;
+			return;
+		}
+
+		D3DVIEWPORT9 vp9;
+		memset(&vp9, 0, sizeof(vp9));
+		G_pD3D9Device->GetViewport(&vp9);
+		*pX = vp9.X;
+		*pY = vp9.Y;
+		*pWidth = vp9.Width;
+		*pHeight = vp9.Height;
+	}
+
+	virtual void SetViewport(ASCInt nX, ASCInt nY, ASCInt nWidth, ASCInt nHeight)
+	{
+		if (!G_pD3D9Device)
+		{
+			return;
+		}
+
+		Flush();
+		D3DVIEWPORT9 vp9;
+		vp9.X = nX;
+		vp9.Y = nY;
+		vp9.Width = nWidth;
+		vp9.Height = nHeight;
+		vp9.MinZ = 0.0;
+		vp9.MaxZ = 1.0;
+		G_pD3D9Device->SetViewport(&vp9);
+	}
+
+	virtual ASCBoolean GetAntialias()
+	{
+		if (!G_pD3D9Device)
+		{
+			return false;
+		}
+
+		ASCUInt uVal1, uVal2;
+		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MAGFILTER, &uVal1);
+		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MINFILTER, &uVal2);
+		if ((uVal1 == D3DTEXF_POINT) || (uVal2 == D3DTEXF_POINT))
+		{
+			return false;
+		} 
+		else
+		{
+			return true;
+		}
+	}
+
+	virtual void SetAntialias(ASCBoolean bValue)
+	{
+		if (!G_pD3D9Device)
+		{
+			return;
+		}
+
+		Flush();
+		if (bValue)
+		{
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		} 
+		else
+		{
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+		}
+	}
+
+	virtual ASCBoolean GetMipMapping()
+	{
+		if (!G_pD3D9Device)
+		{
+			return false;
+		}
+
+		ASCUInt uVal;
+		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MIPFILTER, &uVal);
+		if ((uVal == D3DTEXF_NONE) || (uVal == D3DTEXF_POINT))
+		{
+			return false;
+		} 
+		else
+		{
+			return true;
+		}
+	}
+
+	virtual void SetMipMapping(ASCBoolean bValue)
+	{
+		if (!G_pD3D9Device)
+		{
+			return;
+		}
+
+		Flush();
+		if (bValue)
+		{
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+		} 
+		else
+		{
+			G_pD3D9Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+		}
+	}
 private:
 	IDirect3DVertexBuffer9*		m_pVertexBuffer;
 	IDirect3DIndexBuffer9*		m_pIndexBuffer;
@@ -243,14 +380,14 @@ private:
 		}
 
 		// Dynamic Vertex Buffer
-		if (FAILED(G_pD3D9Device->CreateVertexBuffer(m_nVertexCache * ASC_DX9_VERTEXREC_SIZE, D3DUSAGE_WRITEONLY or D3DUSAGE_DYNAMIC, 
+		if (FAILED(G_pD3D9Device->CreateVertexBuffer(m_nVertexCache * ASC_DX9_VERTEXREC_SIZE, D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC, 
 			ASC_DX9_VERTEX_FVF, D3DPOOL_DEFAULT, &m_pVertexBuffer, 0)))
 		{
 			return false;
 		}
 
 		// Dynamic Index Buffer
-		if (FAILED(G_pD3D9Device->CreateIndexBuffer(m_nIndexCache * sizeof(WORD), D3DUSAGE_WRITEONLY or D3DUSAGE_DYNAMIC, D3DFMT_INDEX16,
+		if (FAILED(G_pD3D9Device->CreateIndexBuffer(m_nIndexCache * sizeof(WORD), D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC, D3DFMT_INDEX16,
 			D3DPOOL_DEFAULT, &m_pIndexBuffer, 0)))
 		{
 			return false;
@@ -281,7 +418,7 @@ private:
 
 	void PrepareVertexArray()
 	{
-		PASCDX9VertexRec pEntry = m_pVertexArray;
+		PASCDX9VertexRec pEntry = (PASCDX9VertexRec)m_pVertexArray;
 		for (ASCInt i = 0; i < MAX_CACHED_VERTICES; i++)
 		{
 			memset(pEntry, 0, ASC_DX9_VERTEXREC_SIZE);
@@ -297,7 +434,7 @@ private:
 		memset(m_pVertexArray, 0, m_nVertexCache * ASC_DX9_VERTEXREC_SIZE);
 
 		realloc(m_pIndexArray, m_nIndexCache * sizeof(WORD));
-		memset(m_pIndexArray, m_nIndexCache * sizeof(WORD));
+		memset(m_pIndexArray, 0, m_nIndexCache * sizeof(WORD));
 
 		PrepareVertexArray();
 	}
@@ -344,7 +481,7 @@ private:
 			return false;
 		}
 
-		ASCInt nBufSize = m_IndexCount * sizeof(WORD);
+		ASCInt nBufSize = m_nIndexCount * sizeof(WORD);
 		ASCPointer pMemAddr;
 		if (FAILED(m_pIndexBuffer->Lock(0, nBufSize, &pMemAddr, D3DLOCK_DISCARD)))
 		{
@@ -370,13 +507,13 @@ private:
 		G_pD3D9Device->SetFVF(ASC_DX9_VERTEX_FVF);
 		switch (m_CanvasTopology)
 		{
-		case actPoints:
+		case actdx9Points:
 			G_pD3D9Device->DrawPrimitive(D3DPT_POINTLIST, 0, m_nPrimitives);
 			break;
-		case actLines:
+		case actdx9Lines:
 			G_pD3D9Device->DrawPrimitive(D3DPT_LINELIST, 0, m_nPrimitives);
 			break;
-		case actTriangles:
+		case actdx9Triangles:
 			G_pD3D9Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_nVertexCount, 0, m_nPrimitives);
 			break;
 		default:
@@ -393,13 +530,13 @@ private:
 
 	void AddIndexEntry(ASCInt nIndex)
 	{
-		WORD* pEntry = (ASCPointer)((ASCInt)m_pIndexArray + (m_nIndexCount * sizeof(WORD)));
+		WORD* pEntry = (WORD*)((ASCInt)m_pIndexArray + (m_nIndexCount * sizeof(WORD)));
 		*pEntry = nIndex;
 		m_nIndexCount++;
 	}
 
 	ASCBoolean RequestCache(CASCDX9CanvasTopology Topology, ASCInt nVertices, ASCInt nIndices, 
-		CASCBlendingEffect Effect, const CASCTexture* pTexture)
+		CASCBlendingEffect Effect, CASCTexture* pTexture)
 	{
 		if (!((nVertices <= MAX_CACHED_VERTICES) && (nIndices <= MAX_CACHED_INDICES)))
 		{
@@ -437,6 +574,8 @@ private:
 			m_CachedEffect = Effect;
 			m_pCachedTexture = pTexture;
 		}
+
+		return true;
 	}
 
 	void SetEffectStates(CASCBlendingEffect Effect)
@@ -451,44 +590,44 @@ private:
 		case abeNormal:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeShadow:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeAdd:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeMultiply:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCCOLOR);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeSrcColor:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCCOLOR);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCCOLOR);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeSrcColorAdd:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCCOLOR);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		case abeInvMultiply:
 			G_pD3D9Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
 			G_pD3D9Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCCOLOR);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			G_pD3D9Device->SetRenderState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			G_pD3D9Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			break;
 		default:
 			break;

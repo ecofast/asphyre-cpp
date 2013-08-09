@@ -15,7 +15,7 @@
 
 struct CASCFloatVector2D
 {
-	ASCSingle X, Y;
+	float X, Y;
 
 	CASCFloatVector2D()
 	{
@@ -28,7 +28,7 @@ struct CASCFloatVector2D
 		Y = vec.Y;
 	}
 
-	CASCFloatVector2D(ASCSingle fX, ASCSingle fY)
+	CASCFloatVector2D(float fX, float fY)
 	{
 		X = fX;
 		Y = fY;
@@ -44,7 +44,7 @@ struct CASCFloatVector2D
 		return CASCFloatVector2D(X - vec.X, Y - vec.Y);
 	}
 
-	ASCBoolean Equals(const CASCFloatVector2D& vec)
+	bool Equals(const CASCFloatVector2D& vec)
 	{
 		return ((X == vec.X) && (Y == vec.Y));
 	}

@@ -11,21 +11,12 @@
 
 #pragma once
 
+#include <windows.h>
 #include "ASCTypes.h"
 
-ASCInt Round(ASCSingle f)
-{
-	return ASCInt(f + 0.5);
-}
+ASCInt ASCRound(ASCSingle f);
 
-RECT Bounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight)
-{
-	RECT rcResult;
-	rcResult.left	= nLeft;
-	rcResult.top	= nTop;
-	rcResult.right	= nLeft + nWidth;
-	rcResult.bottom	= nTop + nHeight;
-}
+RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight);
 
 template <typename T>
 ASCInt GetArrayLen(const T& arr)
@@ -33,9 +24,11 @@ ASCInt GetArrayLen(const T& arr)
 	return (sizeof(arr) / sizeof(arr[0]));
 }
 
+/*
 template<typename T>
 const T& max3(const T& a, const T& b, const T& c)
 {
 	using std::max;
 	return max(max(a, b), c);
 }
+*/

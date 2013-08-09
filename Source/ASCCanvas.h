@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <windows.h>
 #include "ASCTypes.h"
 #include "ASCEvents.h"
 #include "ASCFloatVector2D.h"
@@ -148,10 +149,10 @@ protected:
 private:
 	ASCInt m_nCacheStall;
 
-	void OnDeviceCreate(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void OnDeviceDestroy(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void OnDeviceReset(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void OnDeviceLost(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void OnBeginScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
-	void OnEndScene(const void* pSender, const CASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceCreate(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceReset(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+	void OnDeviceLost(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+	void OnBeginScene(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+	void OnEndScene(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
 };
