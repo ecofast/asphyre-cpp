@@ -3,7 +3,14 @@
 
 CASCCanvas::CASCCanvas()
 {
-	m_nCacheStall	= 0;
+	m_nCacheStall = 0;
+
+	ASCDeviceCreateEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnDeviceCreate, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	ASCDeviceDestroyEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnDeviceDestroy, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	ASCDeviceResetEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnDeviceReset, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	ASCDeviceLostEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnDeviceLost, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	ASCBeginSceneEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnBeginScene, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	ASCEndSceneEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnEndScene, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 	/*
 	ASCDeviceCreateEvent()->Subscribe((wchar_t*)typeid(*this).name(), &CASCCanvas::OnDeviceCreate);

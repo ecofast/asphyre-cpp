@@ -18,6 +18,7 @@
 #include "ASCIntVector2D.h"
 #include "ASCSwapChains.h"
 #include "ASCTextures.h"
+#include "ASCEvents.h"
 
 // The current state of the device
 enum CASCDeviceState {
@@ -69,13 +70,13 @@ class CASCDevice
 public:
 	CASCDevice()
 	{
-		m_DevTech			= adtUnknown;
-		m_nTechVersion		= 0;
+		m_DevTech = adtUnknown;
+		m_nTechVersion = 0;
 
-		m_pSwapChains		= new CASCSwapChains(this);
-		m_DevState			= adsNotActive;
+		m_pSwapChains = new CASCSwapChains(this);
+		m_DevState = adsNotActive;
 		m_uFillStencilValue	= 0;
-		m_fFillDepthValue	= 1.0;
+		m_fFillDepthValue = 1.0;
 	}
 
 	~CASCDevice()
@@ -91,6 +92,7 @@ public:
 	*/
 	ASCBoolean Initialize()
 	{
+		/*
 		ASCBoolean bResult = ((m_DevState == adsNotActive) && (m_pSwapChains->GetCount() > 0));
 		if (!bResult)
 		{
@@ -104,6 +106,64 @@ public:
 		}
 
 		m_DevState = adsActive;
+		*/
+
+		// 1) Check initial conditions
+		if (m_DevState == adsActive)
+		{
+			return true;
+		}
+
+		if (m_DevState == adsInitFailed)
+		{
+			return false;
+		}
+
+		ASCBoolean bResult = true;
+
+		// 2) Initialize device parameters
+		ASCDeviceInitEvent()->Notify(this, &bResult);
+		if (!bResult)
+		{
+			return false;
+		}
+
+		m_DevState = adsCreating;
+
+		// 3) Create and initialize the particular device
+		bResult = InitializeDevice();
+		if (!bResult)
+		{
+			m_DevState = adsInitFailed;
+			ASCTimerResetEvent()->Notify(this);
+			return false;
+		}
+
+		m_DevState = adsActive;
+
+		// 4) Notify others that the device has been created
+		ASCDeviceCreateEvent()->Notify(this, &bResult);
+		if (!bResult)
+		{
+			FinalizeDevice();
+			m_DevState = adsInitFailed;
+			ASCTimerResetEvent()->Notify(this);
+			return false;
+		}
+
+		// 5) Notify others that the device is now in ready state
+		ASCDeviceResetEvent()->Notify(this, &bResult);
+		if (!bResult)
+		{
+			ASCDeviceDestroyEvent()->Notify(this);
+			FinalizeDevice();
+			m_DevState = adsInitFailed;
+			ASCTimerResetEvent()->Notify(this);
+			return false;
+		}
+
+		// 6) Notify the timer that a lenghty operation took place
+		ASCTimerResetEvent()->Notify(this);
 	}
 
 	/*
@@ -113,7 +173,19 @@ public:
 	*/
 	void Finalize()
 	{
+		if (!((m_DevState == adsActive) || (m_DevState == adsRunTimeFault)))
+		{
+			return;
+		}
 
+		ClearStates();
+
+		ASCDeviceLostEvent()->Notify(this);
+		ASCDeviceDestroyEvent()->Notify(this);
+
+		FinalizeDevice();
+
+		m_DevState = adsNotActive;
 	}
 
 	/*

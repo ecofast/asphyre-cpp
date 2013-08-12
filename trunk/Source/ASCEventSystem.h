@@ -15,8 +15,10 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 using std::wstring;
 using std::vector;
+using std::function;
 #include "ASCTypes.h"
 #include "ASCCanvas.h"
 
@@ -32,7 +34,8 @@ using std::vector;
  *             subscribed classes. If this parameter is set to True, the event handling
  *             will be finished and further subscribers will not be notified
 */
-typedef void (CASCCanvas::*CASCEventCallback)(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
+typedef std::function<void (const void*, const ASCPointer, ASCBoolean*)> CASCEventCallback;
+// typedef void (CASCCanvas::*CASCEventCallback)(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled);
 
 typedef struct CASCEventRec
 {

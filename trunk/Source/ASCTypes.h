@@ -35,7 +35,8 @@ typedef char				ASCChar;
 
 typedef void*				ASCPointer;
 
-typedef void (*CASCNotifyEvent)(void* pSender);
+// typedef void (*CASCNotifyEvent)(void* pSender);
+typedef void (*CASCNotifyEvent)();
 
 // TObject in Delphi
 typedef void*				CASCObject;
