@@ -23,6 +23,8 @@ CASCEventProvider::CASCEventProvider(CASCEventProviders* pOwner)
 		m_pOwner->Include(this);
 	}
 	m_bEventListDirty = false;
+
+	m_EventValidator = 0;
 }
 
 CASCEventProvider::~CASCEventProvider()
@@ -36,13 +38,13 @@ CASCEventProvider::~CASCEventProvider()
 
 ASCInt CASCEventProvider::Subscribe(const wchar_t* sClassName, CASCEventCallback CallBack, const ASCInt nPriority /* = -1 */)
 {
-	ASCInt						nIndex	= m_Datas.size();
+	ASCInt nIndex = m_Datas.size();
 	m_Datas.resize(nIndex + 1);
-	m_Datas[nIndex].m_nEventID			= NextEventID();
-	m_Datas[nIndex].m_Callback			= CallBack;
-	m_Datas[nIndex].m_sClassName		= sClassName;
-	m_Datas[nIndex].m_nPriority1		= nPriority;
-	m_Datas[nIndex].m_nPriority2		= -1;
+	m_Datas[nIndex].m_nEventID = NextEventID();
+	m_Datas[nIndex].m_Callback = CallBack;
+	m_Datas[nIndex].m_sClassName = sClassName;
+	m_Datas[nIndex].m_nPriority1 = nPriority;
+	m_Datas[nIndex].m_nPriority2 = -1;
 
 	MarkEventListDirty();
 	return (m_Datas[nIndex].m_nEventID);
@@ -291,12 +293,12 @@ ASCInt CASCEventProviders::Insert()
 		return -1;
 	}
 
-	m_bListSemaphore	= true;
+	m_bListSemaphore = true;
 
-	ASCInt nResult		= m_Datas.size();
+	ASCInt nResult = m_Datas.size();
 	m_Datas.resize(nResult + 1);
-	m_Datas[nResult]	= new CASCEventProvider(this);
-	m_bListSemaphore	= false;
+	m_Datas[nResult] = new CASCEventProvider(this);
+	m_bListSemaphore = false;
 	m_bEventListsDirty	= true;
 
 	return nResult;
@@ -309,15 +311,15 @@ void CASCEventProviders::Remove(ASCInt nIndex)
 		return;
 	}
 
-	m_bListSemaphore	= true;
+	m_bListSemaphore = true;
 	if (m_Datas[nIndex])
 	{
 		delete m_Datas[nIndex];
 	}
 	m_Datas.erase(m_Datas.begin() + nIndex);
 
-	m_bListSemaphore	= false;
-	m_bEventListsDirty	= true;
+	m_bListSemaphore = false;
+	m_bEventListsDirty = true;
 }
 
 void CASCEventProviders::Clear()
@@ -326,7 +328,7 @@ void CASCEventProviders::Clear()
 	{
 		return;
 	}
-	m_bListSemaphore	= true;
+	m_bListSemaphore = true;
 
 	for (ASCInt i = m_Datas.size() - 1; i >= 0; i--)
 	{
@@ -337,8 +339,8 @@ void CASCEventProviders::Clear()
 	}
 	m_Datas.clear();
 
-	m_bListSemaphore	= false;
-	m_bEventListsDirty	= true;
+	m_bListSemaphore = false;
+	m_bEventListsDirty = true;
 }
 
 ASCInt CASCEventProviders::IndexOf(const CASCEventProvider* Provider)

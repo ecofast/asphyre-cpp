@@ -134,7 +134,7 @@ protected:
 		if (SUCCEEDED(G_pD3D9Device->BeginScene()))
 		{
 			ASCBeginSceneEvent()->Notify(this);
-			Handler(this);
+			Handler();  // Handler(this);
 			ASCEndSceneEvent()->Notify(this);
 			G_pD3D9Device->EndScene();
 		}
@@ -173,7 +173,7 @@ protected:
 		if (SUCCEEDED(G_pD3D9Device->BeginScene()))
 		{
 			ASCBeginSceneEvent()->Notify(this);
-			Handler(this);
+			Handler;  // Handler(this);
 			ASCEndSceneEvent()->Notify(this);
 			G_pD3D9Device->EndScene();
 		}
@@ -258,7 +258,7 @@ private:
 		}
 
 		// LoadDirect3D9();
-
+		/*
 		if (G_D3D9Mode != admDirect3D9)  // if (D3D9Mode <> dmDirect3D9)and(Assigned(Direct3DCreate9Ex)) then
 		{
 			IDirect3D9Ex* pD3D9Ex;
@@ -268,6 +268,7 @@ private:
 				G_D3D9Mode = admDirect3D9Ex;
 			}
 		}
+		*/
 
 		if (!G_pD3D9)
 		{
@@ -448,7 +449,7 @@ private:
 		}
 
 		// 5) Retrieve the capabilities of the device
-		if (!bResult)
+		if (bResult)
 		{
 			bResult = SUCCEEDED(G_pD3D9Device->GetDeviceCaps(&G_D3DCaps9));
 			if (!bResult)

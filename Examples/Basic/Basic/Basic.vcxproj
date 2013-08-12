@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CD1B5E39-7453-43B0-B0B8-EC3ECA6DCEFE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Basic</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VCInstallDir)PlatformSDK\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;$(LibraryPath);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);d3d9.lib;d3dx9.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\ASCCanvas.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCEventSystem.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCFormatInfo.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCPixelFormats.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCProvider.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCSwapChains.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCWindowsConnector.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9Common.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9Provider.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\ASCCanvas.h" />
+    <ClInclude Include="..\..\..\Source\ASCConsts.h" />
+    <ClInclude Include="..\..\..\Source\ASCDevice.h" />
+    <ClInclude Include="..\..\..\Source\ASCEvents.h" />
+    <ClInclude Include="..\..\..\Source\ASCEventSystem.h" />
+    <ClInclude Include="..\..\..\Source\ASCFloatVector2D.h" />
+    <ClInclude Include="..\..\..\Source\ASCFormatInfo.h" />
+    <ClInclude Include="..\..\..\Source\ASCIntVector2D.h" />
+    <ClInclude Include="..\..\..\Source\ASCPixelFormatConv.h" />
+    <ClInclude Include="..\..\..\Source\ASCPixelFormats.h" />
+    <ClInclude Include="..\..\..\Source\ASCProvider.h" />
+    <ClInclude Include="..\..\..\Source\ASCSwapChains.h" />
+    <ClInclude Include="..\..\..\Source\ASCTextures.h" />
+    <ClInclude Include="..\..\..\Source\ASCTypes.h" />
+    <ClInclude Include="..\..\..\Source\ASCUtils.h" />
+    <ClInclude Include="..\..\..\Source\ASCWindowsConnector.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9Canvas.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9Common.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9Device.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9Provider.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9SwapChains.h" />
+    <ClInclude Include="..\..\..\Source\DX9\ASCDX9Textures.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

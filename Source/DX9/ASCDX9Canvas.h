@@ -430,10 +430,10 @@ private:
 
 	void CreateSystemBuffers()
 	{
-		realloc(m_pVertexArray, m_nVertexCache * ASC_DX9_VERTEXREC_SIZE);
+		m_pVertexArray = realloc(m_pVertexArray, m_nVertexCache * ASC_DX9_VERTEXREC_SIZE);
 		memset(m_pVertexArray, 0, m_nVertexCache * ASC_DX9_VERTEXREC_SIZE);
 
-		realloc(m_pIndexArray, m_nIndexCache * sizeof(WORD));
+		m_pIndexArray = realloc(m_pIndexArray, m_nIndexCache * sizeof(WORD));
 		memset(m_pIndexArray, 0, m_nIndexCache * sizeof(WORD));
 
 		PrepareVertexArray();
