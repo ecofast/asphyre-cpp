@@ -14,11 +14,16 @@
 
 #pragma once
 
+#include "ASCConfig.h"
+
+#include <string>
+using std::wstring;
 #include "ASCTypes.h"
 #include "ASCIntVector2D.h"
 #include "ASCSwapChains.h"
 #include "ASCTextures.h"
 #include "ASCEvents.h"
+#include "ASCTiming.h"
 
 // The current state of the device
 enum CASCDeviceState {
@@ -52,11 +57,26 @@ enum CASCDeviceState {
 
 // Type of technology that is being used in ASC device
 enum CASCDeviceTechnology {
-	adtUnknown,  // The technology has not yet been established
-	adtDirectX,  // Microsoft DirectX technology is being used
-	adtOpenGL,   // OpenGL by Khronos Group is being used
-	adtOpenGLES  // OpenGL ES by Khronos Group is being used
-	// adtPropietary  // Private propietary technology is being used
+	/*
+	 * The technology has not yet been established
+	*/
+	adtUnknown,
+	/*
+	 * Microsoft DirectX technology is being used
+	*/
+	adtDirectX,
+	/*
+	 * OpenGL by Khronos Group is being used
+	*/
+	adtOpenGL,
+	/*
+	 * OpenGL ES by Khronos Group is being used
+	*/
+	adtOpenGLES,
+	/*
+	 * Private propietary technology is being used
+	*/
+	adtPropietary
 };
 
 /*
@@ -68,230 +88,66 @@ enum CASCDeviceTechnology {
 class CASCDevice
 {
 public:
-	CASCDevice()
-	{
-		m_DevTech = adtUnknown;
-		m_nTechVersion = 0;
-
-		m_pSwapChains = new CASCSwapChains(this);
-		m_DevState = adsNotActive;
-		m_uFillStencilValue	= 0;
-		m_fFillDepthValue = 1.0;
-	}
-
-	~CASCDevice()
-	{
-		Finalize();
-		delete m_pSwapChains;
-		m_pSwapChains = 0;
-	}
+	CASCDevice();
+	~CASCDevice();
 
 	/*
 	 * Initializes the device using the swap chain information provided in SwapChains and 
 	 * prepares it for rendering. If the call succeeds, True is returned and False otherwise
 	*/
-	ASCBoolean Initialize()
-	{
-		/*
-		ASCBoolean bResult = ((m_DevState == adsNotActive) && (m_pSwapChains->GetCount() > 0));
-		if (!bResult)
-		{
-			return false;
-		}
-
-		bResult = InitializeDevice();
-		if (!bResult)
-		{
-			return false;
-		}
-
-		m_DevState = adsActive;
-		*/
-
-		// 1) Check initial conditions
-		if (m_DevState == adsActive)
-		{
-			return true;
-		}
-
-		if (m_DevState == adsInitFailed)
-		{
-			return false;
-		}
-
-		ASCBoolean bResult = true;
-
-		// 2) Initialize device parameters
-		ASCDeviceInitEvent()->Notify(this, &bResult);
-		if (!bResult)
-		{
-			return false;
-		}
-
-		m_DevState = adsCreating;
-
-		// 3) Create and initialize the particular device
-		bResult = InitializeDevice();
-		if (!bResult)
-		{
-			m_DevState = adsInitFailed;
-			ASCTimerResetEvent()->Notify(this);
-			return false;
-		}
-
-		m_DevState = adsActive;
-
-		// 4) Notify others that the device has been created
-		ASCDeviceCreateEvent()->Notify(this, &bResult);
-		if (!bResult)
-		{
-			FinalizeDevice();
-			m_DevState = adsInitFailed;
-			ASCTimerResetEvent()->Notify(this);
-			return false;
-		}
-
-		// 5) Notify others that the device is now in ready state
-		ASCDeviceResetEvent()->Notify(this, &bResult);
-		if (!bResult)
-		{
-			ASCDeviceDestroyEvent()->Notify(this);
-			FinalizeDevice();
-			m_DevState = adsInitFailed;
-			ASCTimerResetEvent()->Notify(this);
-			return false;
-		}
-
-		// 6) Notify the timer that a lenghty operation took place
-		ASCTimerResetEvent()->Notify(this);
-	}
+	ASCBoolean Initialize();
 
 	/*
-	 * Finalizes the device releasing all its resources and handles. User-created
-	 * content that is not handled automatically by ASC should be released
-	 * before calling this method
+	 * Finalizes the device releasing all its resources and handles.
+	 * User-created content that is not handled automatically by ASC
+	 * should be released before calling this method
 	*/
-	void Finalize()
-	{
-		if (!((m_DevState == adsActive) || (m_DevState == adsRunTimeFault)))
-		{
-			return;
-		}
+	void Finalize();
 
-		ClearStates();
+	CASCSwapChains* GetSwapChains();
+	CASCDeviceState GetDeviceState();
 
-		ASCDeviceLostEvent()->Notify(this);
-		ASCDeviceDestroyEvent()->Notify(this);
+	CASCDeviceTechnology GetDeviceTechnology();
+	ASCInt GetTechVersion();
+	ASCInt GetTechFeatureVersion();
 
-		FinalizeDevice();
+	ASCSingle GetDeviceScale();
+	void SetDeviceScale(ASCSingle fValue);
 
-		m_DevState = adsNotActive;
-	}
+	ASCSingle GetFillDepthValue();
+	void SetFillDepthValue(const ASCSingle fValue);
 
-	/*
-	 * The current state of the device. If the device is not in working state,
-	 * any rendering calls may fail either silently or returning @False
-	*/
-	CASCDeviceState GetDeviceState()
-	{
-		return m_DevState;
-	}
-
-	// Indicates the type of technology that is currently being used
-	CASCDeviceTechnology GetDeviceTechnology()
-	{
-		return m_DevTech;
-	}
+	ASCUInt32 GetFillStencilValue();
+	void SetFillStencilValue(const ASCUInt32 uValue);
 
 	/*
-	 * The value that should be used for setting depth buffer either on the
-	 * screen or the currently used rendering target
-	*/
-	ASCSingle GetFillDepthValue()
-	{
-		return m_fFillDepthValue;
-	}
-	void SetFillDepthValue(const ASCSingle fValue)
-	{
-		m_fFillDepthValue = fValue;
-	}
-
-	/*
-	 * The value that should be used for setting stencil buffer either on the
-	 * screen or the currently used rendering target
-	*/
-	ASCUInt GetFillStencilValue()
-	{
-		return m_uFillStencilValue;
-	}
-	void SetFillStencilValue(const ASCUInt uValue)
-	{
-		m_uFillStencilValue = uValue;
-	}
-
-	/*
-	 * Begins rendering scene to the first swap chain described in SwapChains, 
-	 * clears the back-buffer with the given background color and values 
-	 * stored in FillDepthValue/FillStencilValue, and calls the provided event handler, 
+	 * Begins rendering scene to the first swap chain described in m_pSwapChains, 
+	 * clears the back-buffer with the given background color and values stored in
+	 * m_fFillDepthValue/m_uFillStencilValue, and calls the provided event handler, 
 	 * where the actual rendering should be made
 	*/
-	void Render(CASCNotifyEvent Handler, ASCColor uBkColor)
-	{
-		if ((m_DevState == adsActive) && (CanRender(0)))
-		{
-			RenderWith(0, Handler, uBkColor);
-		} 
-		else
-		{
-			// Timing.Sleep(5);
-		}
-	}
+	void Render(CASCNotifyEvent Handler, ASCColor uBkColor);
 
 	/*
 	 * Begins rendering scene to the swap chain identified by its index described
 	 * in SwapChains, clears the back-buffer with the given background color and values 
-	 * stored in FillDepthValue/FillStencilValue, and calls the provided event handler, 
+	 * stored in m_fFillDepthValue/m_uFillStencilValue, and calls the provided event handler, 
 	 * where the actual rendering should be made. The first swap chain has index of zero. 
 	 * If the provided index is outside of valid range, this method does nothing
 	*/
-	void Render(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor)
-	{
-		if ((m_DevState == adsActive) && (CanRender(nSwapChainIndex)))
-		{
-			RenderWith(nSwapChainIndex, Handler, uBkColor);
-		} 
-		else
-		{
-			// Timing.Sleep(5);
-		}
-	}
+	void Render(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCColor uBkColor);
 
 	/*
-	 * Begins rendering scene on the specified render target texture. If FillBk
+	 * Begins rendering scene on the specified render target texture. If bFillBk
 	 * is set to True, the render target is cleared using the given background
-	 * color and values stored in FillDepthValue/FillStencilValue. This method 
+	 * color and values stored in m_fFillDepthValue/m_uFillStencilValue. This method 
 	 * calls the provided event handler, where the actual rendering should be made. 
 	 * The render target texture must be property created and initialized before 
 	 * calling this method. If there is a problem starting the rendering to the 
-	 * given render target, this method will silently fail and the given event handler will not be called
+	 * given render target, this method will silently fail and the given event handler 
+	 * will not be called
 	*/
-	void RenderTo(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk, CASCRenderTargetTexture* pTexture)
-	{
-		if ((m_DevState != adsActive) || (!CanRender(-1)) || (!pTexture))
-		{
-			return;
-		}
-
-		if (!(pTexture->BeginRenderTo()))
-		{
-			return;
-		}
-		else
-		{
-			RenderToTarget(Handler, uBkColor, bFillBk);
-			pTexture->EndRenderTo();
-		}
-	}
+	void RenderTo(CASCNotifyEvent Handler, ASCColor uBkColor, ASCBoolean bFillBk, CASCRenderTargetTexture* pTexture);
 
 	/*
 	 * Changes size of the back-buffer tied to swap chain identified by the
@@ -305,121 +161,114 @@ public:
 	 * scenario is to subscribe to EventDeviceReset and EventDeviceLost events 
 	 * provided in ASCEvents.cpp
 	*/
-	ASCBoolean Resize(ASCInt nSwapChainIndex, const CASCIntVector2D NewSize)
-	{
-		PASCSwapChainDesc pUserDesc;
-		if ((!pUserDesc) || (IsAtFault()))
-		{
-			return false;
-		}
-
-		if ((pUserDesc->nWidth == NewSize.X) && (pUserDesc->nHeight == NewSize.Y))
-		{
-			return true;
-		}
-
-		ClearStates();
-
-		CASCIntVector2D		PrevSize;
-		PrevSize.X			= pUserDesc->nWidth;
-		PrevSize.Y			= pUserDesc->nHeight;
-		pUserDesc->nWidth	= NewSize.X;
-		pUserDesc->nHeight	= NewSize.Y;
-		if (m_DevState != adsNotActive)
-		{
-			if (ResizeSwapChain(nSwapChainIndex, pUserDesc))
-			{
-				return true;
-			} 
-			else
-			{
-				pUserDesc->nWidth	= PrevSize.X;
-				pUserDesc->nHeight	= PrevSize.Y;
-				return false;
-			}
-		} 
-		else
-		{
-			return true;
-		}
-	}
+	ASCBoolean Resize(ASCInt nSwapChainIndex, const CASCIntVector2D NewSize);
 
 	/*
 	 * Returns True if the device either failed to initialize or is in run-time
 	 * fault state. If the device is working properly or has not yet been
 	 * initialized, False is returned
 	*/
-	ASCBoolean IsAtFault()
-	{
-		return ((m_DevState == adsInitFailed) || (m_DevState == adsRunTimeFault));
-	}
-
+	ASCBoolean IsAtFault();
+	
 	/*
 	 * Clears all textures, shaders and states currently bound to the device.
 	 * This method works only on some modern providers
 	*/
-	void ClearStates()
-	{
-		if (m_DevState == adsActive)
-		{
-			ClearDevStates();
-		}
-	}
+	void ClearStates();
 
 	/*
 	 * Resets the failed state of the device, which is usually set when
 	 * the initialization has failed. This must be done explicitly to
 	 * acknowledge that the application is aware of the situation
 	*/
-	void ResetInitFailed()
-	{
-		if (m_DevState == adsInitFailed)
-		{
-			m_DevState = adsNotActive;
-		}
-	}
-	
+	void ResetInitFailed();
+protected:
+	/*
+	 * Indicates the type of technology that is currently being used
+	*/
+	CASCDeviceTechnology	m_DevTech;
+
+	/*
+	 * Indicates the version of current technology that is currently being used.
+	 * The values are specified in hexadecimal format. That is, a value of 0x100
+	 * indicates version 1.0, while a value of 0x247 would indicate version
+	 * 2.4.7. This value is used in combination with m_DevTech, so if m_DevTech
+	 * is set to adtDirectX and this value is set to 0xA10, it means that
+	 * DirectX 10.1 is being used
+	*/
+	ASCInt					m_nTechVersion;
+
+	/*
+	 * Indicates the feature level version of current technology that is
+	 * currently being used. The difference between this parameter and
+	 * m_nTechVersion is that the second parameter indicates type of
+	 * technology being used(for example, DirectX 10), while this one
+	 * indicates the level of features available(for example, DirectX 9.0c).
+	 * The values here are specified in hexadecimal format. That is, a value of
+	 * 0x213 would indicate version 2.1.3
+	*/
+	ASCInt					m_nTechFeatureVersion;
+
+	/*
+	 * The current state of the device. If the device is not in working state,
+	 * any rendering calls may fail either silently or returning False
+	*/
+	CASCDeviceState			m_DevState;
+
+	/*
+	 * Indicates the current scale of device display. This is typically used on
+	 * Retina displays to provide mapping between logical and pixel units. For
+	 * example, if m_fDisplayScale is 2, then the screen has twice pixel density
+	 * for each logical unit
+	*/
+	ASCSingle				m_fDeviceScale;
+
+	virtual	ASCBoolean InitializeDevice() = 0;
+	virtual	void FinalizeDevice() = 0;
+	virtual	void ResetDevice();
+
+	virtual	ASCBoolean CanRender(ASCInt nSwapChainIndex);
+	virtual void RenderWith(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor) = 0;
+	virtual void RenderToTarget(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk) = 0;
+	virtual ASCBoolean ResizeSwapChain(ASCInt nSwapChainIndex, PASCSwapChainDesc pNewUserDesc);
+	virtual void ClearDevStates();
+private:
 	/*
 	 * The list of swap chains that will be used for rendering into. In a typical
 	 * scenario at least one swap chain must be added to this list for device
 	 * initialization to succeed.
 	*/
-	CASCSwapChains* GetSwapChains()
-	{
-		return m_pSwapChains;
-	}
-protected:
-	CASCDeviceTechnology	m_DevTech;
-	ASCInt					m_nTechVersion;
-	CASCDeviceState			m_DevState;
-
-	virtual	ASCBoolean InitializeDevice() = 0;
-	virtual	void FinalizeDevice() = 0;
-	virtual	void ResetDevice()
-	{
-		//
-	}
-
-	virtual	ASCBoolean CanRender(ASCInt nSwapChainIndex)
-	{
-		return true;
-	}
-
-	virtual void RenderWith(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, ASCUInt uBkColor) = 0;
-
-	virtual void RenderToTarget(CASCNotifyEvent Handler, ASCUInt uBkColor, ASCBoolean bFillBk) = 0;
-
-	virtual ASCBoolean ResizeSwapChain(ASCInt nSwapChainIndex, PASCSwapChainDesc pNewUserDesc)
-	{
-		return true;
-	}
-
-	virtual void ClearDevStates()
-	{
-
-	}
-private:
 	CASCSwapChains*	m_pSwapChains;
+
+	/*
+	 * The value that should be used for setting depth buffer either on the
+	 * screen or the currently used rendering target
+	*/
 	ASCSingle		m_fFillDepthValue;
-	ASCUInt			m_uFillStencilValue;
+
+	/*
+	 * The value that should be used for setting stencil buffer either on the
+	 * screen or the currently used rendering target
+	*/
+	ASCUInt32		m_uFillStencilValue;
 };
+
+/*
+ * Returns a readable text string with the name of the specified device technology
+*/
+wstring ASCDeviceTechnologyToString(CASCDeviceTechnology DevTech);
+
+/*
+ * Converts device version value originally specified in hexadecimal format
+ * (e.g. 0x324) into a readable text string describing that version(e.g. "3.2.4").
+ * If bCompact parameter is set to true,  the version text is reduced for
+ * trailing zeros, so a text like "3.0" becomes just "3"
+*/
+wstring ASCDeviceVersionToString(ASCInt nVersion, ASCBoolean bCompact = false);
+
+/*
+ * Returns a readable text string that describes the current device's
+ * technology, technology version and feature level version.
+ * This information can be used for informative purposes
+*/
+wstring ASCDeviceFullTechnologyToString(CASCDevice* pDevice);

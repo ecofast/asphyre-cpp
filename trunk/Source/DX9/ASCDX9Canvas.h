@@ -11,15 +11,13 @@
 
 #pragma once
 
-//#include <algorithm>
-using std::min;
-
 #include <d3d9.h>
-
 #include "../ASCTypes.h"
 #include "../ASCCanvas.h"
 #include "../ASCTextures.h"
 #include "ASCDX9Common.h"
+
+using std::min;
 
 const DWORD ASC_DX9_VERTEX_FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
