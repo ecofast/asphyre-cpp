@@ -1,6 +1,7 @@
 #include "ASCSwapChains.h"
+#include "ASCDevice.h"
 
-CASCSwapChains::CASCSwapChains( void* pDevice )
+CASCSwapChains::CASCSwapChains(void* pDevice)
 {
 	m_pDevice = pDevice;
 }
@@ -17,65 +18,58 @@ ASCInt CASCSwapChains::Insert()
 		return -1;
 	}
 
-	ASCInt result = m_Datas.size();
-	m_Datas.resize(result + 1);
-	memset(&m_Datas[result], 0, sizeof(CASCSwapChainDesc));
-	return result;
+	ASCInt nResult = m_Datas.size();
+	m_Datas.resize(nResult + 1);
+	memset(&(m_Datas[nResult]), 0, sizeof(CASCSwapChainDesc));
+	return nResult;
 }
 
 ASCInt CASCSwapChains::Add(const CASCSwapChainDesc desc)
 {
-	ASCInt result = Insert();
-	if (result == -1)
+	ASCInt nResult = Insert();
+	if (nResult == -1)
 	{
 		return -1;
 	}
 
-	m_Datas[result] = desc;
-	return (result);
+	m_Datas[nResult] = desc;
+	return nResult;
 }
 
 ASCInt CASCSwapChains::Add(ASCUInt uWndHandle, CASCIntVector2D vtSize, 
 						   ASCInt nMultisamples /*= 0*/, ASCBoolean bVSync /*= false*/, CASCPixelFormat Format /*= apfUnknown*/, 
 						   CASCDepthStencilType DepthStencil /*= dstNone*/ )
 {
-	ASCInt result = Insert();
-	if (result == -1)
+	ASCInt nResult = Insert();
+	if (nResult == -1)
 	{
-		return (-1);
+		return -1;
 	} 
 	else
 	{
-		m_Datas[result].hWndHandle = uWndHandle;
-		m_Datas[result].nWidth = vtSize.X;
-		m_Datas[result].nHeight = vtSize.Y;
-		m_Datas[result].Format = Format;
-		m_Datas[result].bVSync = bVSync;
-		m_Datas[result].nMultisamples = nMultisamples;
-		m_Datas[result].DepthStencil = DepthStencil;
-		return result;
+		m_Datas[nResult].hWndHandle = uWndHandle;
+		m_Datas[nResult].nWidth = vtSize.X;
+		m_Datas[nResult].nHeight = vtSize.Y;
+		m_Datas[nResult].Format = Format;
+		m_Datas[nResult].bVSync = bVSync;
+		m_Datas[nResult].nMultisamples = nMultisamples;
+		m_Datas[nResult].DepthStencil = DepthStencil;
+		return nResult;
 	}
 }
 
-void CASCSwapChains::Remove( ASCInt nIndex )
+void CASCSwapChains::Remove(ASCInt nIndex)
 {
-	if ((!IsDeviceInactive()) || (nIndex < 0) || (nIndex >= ASCInt(m_Datas.size())))
+	if ((!IsDeviceInactive()) || (nIndex < 0) || (nIndex >= (ASCInt)(m_Datas.size())))
 	{
 		return;
 	}
 
 	vector<CASCSwapChainDesc>::iterator it = m_Datas.begin();
 	m_Datas.erase(it + nIndex);
-	/*
-	for (AGEInt i = 0; i < nIndex; i++)
-	{
-		it++;
-	}
-	m_Datas.erase(it);
-	*/
 }
 
-void CASCSwapChains::RemoveAll()
+void CASCSwapChains::Clear()
 {
 	if (!IsDeviceInactive())
 	{
@@ -97,7 +91,7 @@ ASCInt CASCSwapChains::GetCount()
 
 PASCSwapChainDesc CASCSwapChains::GetItem(ASCInt nIndex )
 {
-	if (nIndex >= 0 && nIndex < ASCInt(m_Datas.size()))
+	if (nIndex >= 0 && nIndex < (ASCInt)m_Datas.size())
 	{
 		return &(m_Datas[nIndex]);
 	} 
@@ -109,12 +103,19 @@ PASCSwapChainDesc CASCSwapChains::GetItem(ASCInt nIndex )
 
 ASCBoolean CASCSwapChains::IsDeviceInactive()
 {
-	if (m_pDevice)  // (Assigned(FDevice))and(FDevice is TAsphyreDevice)
+	/*
+	if (Assigned(FDevice)) and (FDevice is TAsphyreDevice) then
+	  Result := TAsphyreDevice(FDevice).State = adsNotActive
+	else
+	  Result := True;
+	*/
+
+	if (m_pDevice)
 	{
-		return (true);  // Result:= TAsphyreDevice(FDevice).State = adsNotActive;
+		return (((CASCDevice* )m_pDevice)->GetDeviceState() == adsNotActive);
 	} 
 	else
 	{
-		return (true);
+		return true;
 	}
 }

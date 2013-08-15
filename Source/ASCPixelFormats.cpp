@@ -173,7 +173,7 @@ ASCInt CASCPixelFormatList::Include(CASCPixelFormat fmt)
 
 void CASCPixelFormatList::Remove(ASCInt nIndex)
 {
-	if ((nIndex < 0) || (nIndex >= m_Items.size()))
+	if ((nIndex < 0) || ((size_t)nIndex >= m_Items.size()))
 	{
 		return;
 	}
@@ -202,7 +202,7 @@ ASCInt CASCPixelFormatList::GetCount()
 
 CASCPixelFormat CASCPixelFormatList::GetFormat(ASCInt nIndex)
 {
-	if ((nIndex >= 0) && (nIndex < m_Items.size()))
+	if ((nIndex >= 0) && ((size_t)nIndex < m_Items.size()))
 	{
 		return (m_Items[nIndex]);
 	} 

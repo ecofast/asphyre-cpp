@@ -14,7 +14,7 @@
 #include <windows.h>
 #include "ASCTypes.h"
 
-ASCInt ASCRound(ASCSingle f);
+ASCInt ASCRound(ASCDouble f);
 
 RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight);
 

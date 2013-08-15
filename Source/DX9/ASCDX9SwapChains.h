@@ -184,7 +184,7 @@ private:
 
 		m_DepthStencilFormat = DX9FindDepthStencilFormat((ASCInt)(pUserDesc->DepthStencil));
 
-		DX9FindBestMultisampleType(m_PresentParams.BackBufferFormat,m_DepthStencilFormat, pUserDesc->nMultisamples, 
+		DX9FindBestMultisampleType(m_PresentParams.BackBufferFormat, m_DepthStencilFormat, pUserDesc->nMultisamples, 
 			&(m_PresentParams.MultiSampleType), &(m_PresentParams.MultiSampleQuality));
 
 		return true;
@@ -354,7 +354,7 @@ public:
 
 	void Clear()
 	{
-		for (ASCInt i = m_Datas.size(); i--; i >= 0)
+		for (ASCInt i = m_Datas.size() - 1; i >= 0; i--)
 		{
 			if (m_Datas[i])
 			{
@@ -418,7 +418,7 @@ public:
 
 	CASCDX9SwapChain* GetItem(ASCInt nIndex)
 	{
-		if ((nIndex >= 0) && (nIndex < m_Datas.size()))
+		if ((nIndex >= 0) && ((size_t)nIndex < m_Datas.size()))
 		{
 			return (m_Datas[nIndex]);
 		} 

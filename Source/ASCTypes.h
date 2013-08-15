@@ -16,15 +16,14 @@
 #include "ASCFloatVector2D.h"
 
 typedef	int					ASCInt;
-// typedef	unsigned int		ASCUInt;
-typedef unsigned long		ASCUInt;
+typedef	unsigned int		ASCUInt;
 
 typedef ASCInt				ASCInt32;
 typedef ASCUInt				ASCUInt32;
 
-typedef ASCUInt32*			ASCPUInt32;
-
 typedef	ASCUInt32			ASCColor;
+
+typedef unsigned long		ASCDWord;
 
 typedef	float				ASCSingle;
 typedef double				ASCDouble;
@@ -32,6 +31,7 @@ typedef double				ASCDouble;
 typedef bool				ASCBoolean;
 
 typedef char				ASCChar;
+typedef wchar_t				ASCWChar;
 
 typedef void*				ASCPointer;
 

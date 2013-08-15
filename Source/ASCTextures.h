@@ -18,229 +18,92 @@
 #include "ASCFloatVector2D.h"
 
 /*
-RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight)
-{
-	RECT rcResult;
-	rcResult.left	= nLeft;
-	rcResult.top	= nTop;
-	rcResult.right	= nLeft + nWidth;
-	rcResult.bottom	= nTop + nHeight;
-	return rcResult;
-}
-*/
-
-/*
  * General texture specification, which specifies common parameters and
  * provides basic utilities
 */
 class CASCTexture
 {
 public:
-	CASCTexture()
-	{
-		m_nWidth		= 256;
-		m_nHeight		= 256;
-		m_bActive		= false;
-		m_PixelFormat	= apfUnknown;
-		m_bMipMapping	= false;
-	}
-
-	~CASCTexture()
-	{
-		if (m_bActive)
-		{
-			Finalize();
-		}
-	}
-
+	CASCTexture();
+	~CASCTexture();
+	
 	/*
 	 * Initializes the texture creating all provider specific resources. If this
 	 * method succeeds, the texture can be used for rendering and the returned
 	 * value is True. If the returned value is False, it means that the texture
 	 * initialization failed and configuration parameters need to be revised
 	*/
-	ASCBoolean Initialize()
-	{
-		ASCBoolean bResult = !m_bActive;
-		if (!bResult)
-		{
-			return false;
-		}
-		else
-		{
-			bResult = CreateTexture();
-			m_bActive = bResult;
-			return bResult;
-		}
-	}
+	ASCBoolean Initialize();
 
 	// Finalizes the texture releasing all provider specific resources
-	void Finalize()
-	{
-		if (m_bActive)
-		{
-			DestroyTexture();
-		}
-		m_bActive = false;
-	}
+	void Finalize();
 
 	// Returns the pointer to shader resource view when used in latest DX10+ providers
-	virtual	ASCPointer GetResourceView()
-	{
-		return 0;
-	}
+	virtual	ASCPointer GetResourceView();
 
 	// Binds the texture to the given stage index in DX9- and OGL providers
-	virtual	void Bind(ASCInt nStage)
-	{
+	virtual	void Bind(ASCInt nStage);
 
-	}
-
-	virtual	void HandleDeviceReset()
-	{
-
-	}
-
-	virtual	void HandleDeviceLost()
-	{
-
-	}
+	virtual	void HandleDeviceReset();
+	virtual	void HandleDeviceLost();
 
 	/*
 	 * Converts 2D integer pixel coordinates to their logical representation
 	 * provided in range of [0..1]
 	*/
-	CASCFloatVector2D PixelToLogical(const CASCIntVector2D& pos)
-	{
-		CASCFloatVector2D result;
-	
-		if (m_nWidth > 0)
-		{
-			result.X = (ASCSingle)pos.X / m_nWidth;
-		} 
-		else
-		{
-			result.X = 0.0;
-		}
-
-		if (m_nHeight > 0)
-		{
-			result.Y = (ASCSingle)pos.Y / m_nHeight;
-		} 
-		else
-		{
-			result.Y = 0.0;
-		}
-
-		return result;
-	}
+	CASCFloatVector2D PixelToLogical(const CASCIntVector2D& pos);
 
 	/*
 	 * Converts 2D floating-point pixel coordinates to their logical
 	 * representation provided in range of [0..1]
 	*/
-	CASCFloatVector2D PixelToLogical(const CASCFloatVector2D& pos)
-	{
-		CASCFloatVector2D result;
-
-		if (m_nWidth > 0)
-		{
-			result.X = pos.X / m_nWidth;
-		} 
-		else
-		{
-			result.X = 0.0;
-		}
-
-		if (m_nHeight > 0)
-		{
-			result.Y = pos.Y / m_nHeight;
-		} 
-		else
-		{
-			result.Y = 0.0;
-		}
-
-		return result;
-	}
+	CASCFloatVector2D PixelToLogical(const CASCFloatVector2D& pos);
 
 	/*
 	 * Converts 2D logic texture coordinates in range of [0..1] to pixel
 	 * coordinates
 	*/
-	CASCIntVector2D LogicalToPixel(const CASCFloatVector2D& pos)
-	{
-		CASCIntVector2D	result;
-
-		result.X = ASCRound(pos.X * m_nWidth);
-		result.Y = ASCRound(pos.Y * m_nHeight);
-		return result;
-	}
-
+	CASCIntVector2D LogicalToPixel(const CASCFloatVector2D& pos);
+	
 	/*
 	 * Updates all mipmap images contained in the texture. This should only be
 	 * used when m_bMipmapping is set to True
 	*/
-	virtual	void UpdateMipmaps()
-	{
+	virtual	void UpdateMipmaps();
 
-	}
+	CASCPixelFormat GetPixelFormat();
+	void SetPixelFormat(const CASCPixelFormat fmt);
 
-	// The pixel format of the texture's surface and its mipmap levels
-	CASCPixelFormat GetPixelFormat()
-	{
-		return m_PixelFormat;
-	}
+	ASCInt GetWidth();
+	void SetWidth(const ASCInt nW);
 
-	void SetPixelFormat(const CASCPixelFormat fmt)
-	{
-		if (!m_bActive)
-		{
-			m_PixelFormat = fmt;
-		}
-	}
+	ASCInt GetHeight();
+	void SetHeight(const ASCInt nH);
 
-	// The width of texture's surface or first mipmap level
-	ASCInt GetWidth()
-	{
-		return m_nWidth;
-	}
-
-	void SetWidth(const ASCInt nW)
-	{
-		m_nWidth = nW;
-		if (m_bActive)
-		{
-			UpdateSize();
-		}
-	}
-
-	// The height of texture's surface or first mipmap level
-	ASCInt GetHeight()
-	{
-		return m_nHeight;
-	}
-
-	void SetHeight(const ASCInt nH)
-	{
-		m_nHeight = nH;
-		if (m_bActive)
-		{
-			UpdateSize();
-		}
-	}
-
-	// Indicates whether the texture has been created and initialized properly
-	ASCBoolean GetActive()
-	{
-		return m_bActive;
-	}
+	ASCBoolean GetActive();
 
 	// Indicates how many bytes each pixel in texture occupies
-	ASCInt BytesPerPixel()
-	{
-		return (GetBytesPerPixel());
-	}
+	ASCInt BytesPerPixel();
+
+	ASCBoolean GetMipMapping();
+	void SetMipMapping(const ASCBoolean bMM);
+protected:
+	// The pixel format of the texture's surface and its mipmap levels
+	CASCPixelFormat	m_PixelFormat;
+
+	virtual	ASCInt GetBytesPerPixel();
+	virtual	void UpdateSize();
+	virtual	ASCBoolean CreateTexture();
+	virtual	void DestroyTexture();
+private:
+	// The width of texture's surface or first mipmap level
+	ASCInt		m_nWidth;
+
+	// The height of texture's surface or first mipmap level
+	ASCInt		m_nHeight;
+
+	// Indicates whether the texture has been created and initialized properly
+	ASCBoolean	m_bActive;
 
 	/*
 	 * Determines whether mipmapping should be used for this texture. If this
@@ -249,44 +112,6 @@ public:
 	 * Mipmapping is used when the texture is drawn in significantly smaller sizes
 	 * to improve visual quality of the displayed image
 	*/
-	ASCBoolean GetMipMapping()
-	{
-		return m_bMipMapping;
-	}
-
-	void SetMipMapping(const ASCBoolean bMM)
-	{
-		if (!m_bActive)
-		{
-			m_bMipMapping = bMM;
-		}
-	}
-protected:
-	CASCPixelFormat	m_PixelFormat;
-
-	virtual	ASCInt GetBytesPerPixel()
-	{
-		return (C_ASCPixelFormatBits[m_PixelFormat] / 8);
-	}
-
-	virtual	void UpdateSize()
-	{
-
-	}
-
-	virtual	ASCBoolean CreateTexture()
-	{
-		return true;
-	}
-
-	virtual	void DestroyTexture()
-	{
-
-	}
-private:
-	ASCInt		m_nWidth;
-	ASCInt		m_nHeight;
-	ASCBoolean	m_bActive;
 	ASCBoolean	m_bMipMapping;
 };
 
@@ -299,11 +124,7 @@ private:
 class CASCLockableTexture : public CASCTexture
 {
 public:
-	CASCLockableTexture()
-	{
-		CASCTexture::CASCTexture();
-		m_bDynamicTexture = false;
-	}
+	CASCLockableTexture();
 
 	/*
 	 * Provides access to the raw texture's pixel data. If mipmapping is enabled,
@@ -312,15 +133,15 @@ public:
 	 * to call Unlock.
 	 *
 	 * Params:
-	 * Rect: The rectangle inside the texture that will be updated. For dynamic textures
-	 *       this rectangle should cover the entire texture in some providers.
-	 * Bits: In this parameter the pointer to the top-left pixel is provided 
-	 *       within the specified rectangle. If the method fails, NULL is returned.
-	 * Pitch: The number of bytes that each scanline occupies in the texture. 
-	 *        This value can be used for accessing individual rows when
-	 *        accessing pixel data. If the method fails, zero is returned.
+	 * rc: The rectangle inside the texture that will be updated. For dynamic textures
+	 *     this rectangle should cover the entire texture in some providers.
+	 * pBits: In this parameter the pointer to the top-left pixel is provided 
+	 *        within the specified rectangle. If the method fails, NULL is returned.
+	 * nPitch: The number of bytes that each scanline occupies in the texture. 
+	 *         This value can be used for accessing individual rows when
+	 *         accessing pixel data. If the method fails, zero is returned.
 	*/
-	virtual	void Lock(const RECT rc, ASCPointer pBits, ASCInt* pPitch) = 0;
+	virtual	void Lock(RECT rc, ASCPointer& pBits, ASCInt& nPitch) = 0;
 
 	/*
 	 * Finishes accessing texture's pixel data. If mipmapping is enabled, 
@@ -329,6 +150,7 @@ public:
 	virtual	void Unlock() = 0;
 
 	/*
+	 * This provides direct access to texture's pixels.
 	 * The pixel values are handled in 32-bit RGBA pixel format(apf_A8R8G8B8). 
 	 * If the actual pixel format used in the texture is different, 
 	 * the conversion is done automatically. 
@@ -337,68 +159,16 @@ public:
 	 * For performance-critical applications it is better to get access to all
 	 * texture pixels at once using Lock and Unlock methods instead.
 	*/
-	ASCUInt GetPixel(const ASCInt nX, const ASCInt nY)
-	{
-		if ((nX < 0) | (nY < 0) | (nX >= GetWidth()) | (nY >= GetHeight()))
-		{
-			return 0;
-		}
-
-		ASCUInt uResult = 0;
-		ASCPointer		pBits;
-		ASCInt			nPitch;
-		Lock(ASCBounds(0, nY, GetWidth(), 1), pBits, &nPitch);
-		if (!pBits)
-		{
-			return 0;
-		}
-		else
-		{
-			// uResult = PixelXto32(Pointer(PtrInt(Bits) + PtrInt(x) * BytesPerPixel), FFormat);
-			Unlock();
-		}
-		
-	}
-
-	void SetPixel(const ASCInt nX, const ASCInt nY, const ASCUInt uVal)
-	{
-		if ((nX < 0) | (nY < 0) | (nX >= GetWidth()) | (nY >= GetHeight()))
-		{
-			return;
-		}
-
-		ASCPointer		pBits;
-		ASCInt			nPitch;
-		Lock(ASCBounds(0, nY, GetWidth(), 1), pBits, &nPitch);
-		if (!pBits)
-		{
-			return;
-		}
-		else
-		{
-			// Pixel32toX(uVal, Pointer(PtrInt(Bits) + PtrInt(x) * BytesPerPixel), FFormat);
-			Unlock();
-		}
-	}
+	ASCUInt GetPixel(const ASCInt nX, const ASCInt nY);
+	void SetPixel(const ASCInt nX, const ASCInt nY, const ASCUInt uVal);
 
 	/*
 	 * Determines whether the texture will be used for frequent access and
 	 * updates. This is useful for textures that are modified at least once
 	 * per rendering frame
 	*/
-	ASCBoolean IsDynamicTexture()
-	{
-		return m_bDynamicTexture;
-	}
-
-	void SetIsDynamicTexture(const ASCBoolean bVal)
-	{
-		if (!GetActive())
-		{
-			m_bDynamicTexture = bVal;
-		}
-		
-	}
+	ASCBoolean IsDynamicTexture();
+	void SetIsDynamicTexture(const ASCBoolean bVal);
 private:
 	ASCBoolean	m_bDynamicTexture;
 };
@@ -411,53 +181,26 @@ private:
 class CASCRenderTargetTexture : public CASCTexture
 {
 public:
-	CASCRenderTargetTexture()
-	{
-		CASCTexture::CASCTexture();
-		m_bDepthStencil = false;
-		m_nMultisamples = 0;
-	}
+	CASCRenderTargetTexture();
 
-	virtual	ASCBoolean BeginRenderTo()	= 0;
-	virtual	void EndRenderTo()	= 0;
+	virtual	ASCBoolean BeginRenderTo() = 0;
+	virtual	void EndRenderTo() = 0;
 
-	/*
-	 * Determines whether depth-stencil buffer should be created and used with
-	 * this texture
-	*/
-	ASCBoolean GetDepthStencil()
-	{
-		return m_bDepthStencil;
-	}
+	ASCBoolean GetDepthStencil();
+	void SetDepthStencil(const ASCBoolean bVal);
 
-	void SetDepthStencil(const ASCBoolean bVal)
-	{
-		if (!GetActive())
-		{
-			m_bDepthStencil = bVal;
-		}
-		
-	}
-
+	ASCInt GetMultisamples();
+	void SetMultisamples(const ASCInt nVal);
+protected:
 	/*
 	 * Determines the number of samples used for antialiasing. This parameter is
 	 * supported only on the newest DX10+ providers
 	*/
-	ASCInt GetMultisamples()
-	{
-		return m_nMultisamples;
-	}
-
-	void SetMultisamples(const ASCInt nVal)
-	{
-		if (!GetActive())
-		{
-			m_nMultisamples = nVal;
-		}
-		
-	}
-protected:
 	ASCInt		m_nMultisamples;
 private:
+	/*
+	 * Determines whether depth-stencil buffer should be created and used with
+	 * this texture
+	*/
 	ASCBoolean	m_bDepthStencil;
 };

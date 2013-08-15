@@ -279,7 +279,7 @@ protected:
 			return false;
 		}
 
-		ASCUInt uVal1, uVal2;
+		ASCDWord uVal1, uVal2;
 		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MAGFILTER, &uVal1);
 		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MINFILTER, &uVal2);
 		if ((uVal1 == D3DTEXF_POINT) || (uVal2 == D3DTEXF_POINT))
@@ -319,7 +319,7 @@ protected:
 			return false;
 		}
 
-		ASCUInt uVal;
+		ASCDWord uVal;
 		G_pD3D9Device->GetSamplerState(0, D3DSAMP_MIPFILTER, &uVal);
 		if ((uVal == D3DTEXF_NONE) || (uVal == D3DTEXF_POINT))
 		{
