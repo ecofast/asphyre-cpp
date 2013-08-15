@@ -3,7 +3,7 @@
  *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
  *
  *  File   : ASCSwapChains.h
- *  Content: ASC(Asphyre Sphinx for C++) generic swap chains declaration
+ *  Content: ASC(Asphyre Sphinx for C++) generic swap chains description structures
  *  Date   : 2013/05/31
  *  Desc   : Specification and implementation of rendering swap chains used in ASC providers
  *
@@ -17,10 +17,21 @@ using std::vector;
 #include "ASCIntVector2D.h"
 
 // The type of depth and stencil buffers to be created in the swap chain
-enum CASCDepthStencilType {adstNone,         // No depth-stencil buffer is needed 
-                           adstDepthOnly,    // Only depth buffer is required, stencil buffer is not needed
-                           adstDepthStencil  // Both depth and stencil buffers are required
-                          };
+enum CASCDepthStencilType 
+{
+	/*
+	 * No depth-stencil buffer is needed 
+	*/
+	adstNone,
+	/*
+	 * Only depth buffer is required, stencil buffer is not needed
+	*/
+    adstDepthOnly,
+	/*
+	 *Both depth and stencil buffers are required
+	*/
+    adstDepthStencil
+};
 
 // General description of rendering swap chain
 struct CASCSwapChainDesc
@@ -69,40 +80,47 @@ public:
 	~CASCSwapChains();
 
 	// Inserts a new swap chain to the end of list and returns its index
-	ASCInt					Insert();
+	ASCInt Insert();
+
 	/*
 	 * Adds a new rendering swap chain specified in the given structure to the
 	 * end of list and returns its index
 	*/
-	ASCInt					Add(const CASCSwapChainDesc desc);
+	ASCInt Add(const CASCSwapChainDesc desc);
+
 	/*
 	 * Adds a new rendering swap chain with the specified parameters to the end
 	 * of list and returns its index
 	*/
-	ASCInt					Add(ASCUInt uWndHandle, CASCIntVector2D vtSize, 
-								ASCInt nMultisamples = 0, ASCBoolean bVSync = false, CASCPixelFormat Format = apfUnknown,
-								CASCDepthStencilType DepthStencil = adstNone);
+	ASCInt Add(ASCUInt uWndHandle, CASCIntVector2D vtSize, 
+				ASCInt nMultisamples = 0, ASCBoolean bVSync = false, CASCPixelFormat Format = apfUnknown,
+				CASCDepthStencilType DepthStencil = adstNone);
+
 	/*
 	 * Removes the swap at the specified index from the list, shifting all
 	 * elements by one. The index should be in range of [0..(Count - 1)] range;
 	 * if it is outside of valid range, this function does nothing
 	*/
-	void					Remove(ASCInt nIndex);
+	void Remove(ASCInt nIndex);
+
 	// Removes all rendering swap chains from the list
-	void					RemoveAll();
+	void Clear();
+
 	/*
 	 * The pointer to a valid ASC device which owns this list of rendering
 	 * swap chains
 	*/
-	void*					GetDevice();
+	void* GetDevice();
+
 	// Number of swap chains in the list
-	ASCInt					GetCount();
+	ASCInt GetCount();
+
 	/*
 	 * Provides access to each of the rendering swap chains in the list by index,
 	 * which should be in range of [0..(Count - 1)] range. If the index is
 	 * outside of valid range, @nil is returned
 	*/
-	PASCSwapChainDesc			GetItem(ASCInt nIndex);
+	PASCSwapChainDesc GetItem(ASCInt nIndex);
 private:
 	vector<CASCSwapChainDesc>	m_Datas;
 	void*						m_pDevice;

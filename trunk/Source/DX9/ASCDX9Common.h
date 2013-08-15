@@ -57,7 +57,7 @@ D3DFORMAT ASCPixelFormatToDX9(CASCPixelFormat fmt);
 D3DFORMAT DX9FindBackBufferFormat(CASCPixelFormat fmt);
 D3DFORMAT DX9FindDepthStencilFormat(ASCInt nStencilLevel);
 void DX9FindBestMultisampleType(D3DFORMAT BackBufferFmt, D3DFORMAT DepthFmt, ASCInt nMultisamples, 
-								D3DMULTISAMPLE_TYPE* pSampleType, ASCUInt32* pQualityLv);
+								D3DMULTISAMPLE_TYPE* pSampleType, ASCDWord* pQualityLv);
 
 CASCPixelFormat DX9FindTextureFormat(CASCPixelFormat fmt, ASCUInt32 uUsage);
 CASCPixelFormat DX9FindTextureFormatEx(CASCPixelFormat fmt, ASCUInt32 uUsage, ASCUInt32 uUsage2);

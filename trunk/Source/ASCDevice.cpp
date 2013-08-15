@@ -1,4 +1,5 @@
 #include "ASCDevice.h"
+#include "ASCStrUtils.h"
 
 CASCDevice::CASCDevice()
 {
@@ -312,14 +313,14 @@ wstring ASCDeviceVersionToString(ASCInt nVersion, ASCBoolean bCompact /*= false*
 
 	wstring sResult = L"";
 
-	if (nVersion & 0x00F > 0)
+	if ((nVersion & 0x00F) > 0)
 	{
-		sResult = "." + IntToStr(nVersion & 0x00F);
+		sResult = L"." + IntToStr(nVersion & 0x00F);
 	}
 
-	if ((!bCompact) || (nVersion & 0x0F0 > 0))
+	if ((!bCompact) || ((nVersion & 0x0F0) > 0))
 	{
-		sResult = "." + IntToStr((nVersion & 0x0F0) >> 4) + sResult;
+		sResult = L"." + IntToStr((nVersion & 0x0F0) >> 4) + sResult;
 	}
 
 	sResult = IntToStr(nVersion >> 8) + sResult;
@@ -337,7 +338,7 @@ wstring ASCDeviceFullTechnologyToString(CASCDevice* pDevice)
 
 	if (pDevice->GetTechVersion() > 0)
 	{
-		sResult = sResult + (wchar_t)32 + ASCDeviceVersionToString(pDevice->GetTechVersion(), true);
+		sResult = sResult + (ASCWChar)32 + ASCDeviceVersionToString(pDevice->GetTechVersion(), true);
 	}
 
 	if ((pDevice->GetDeviceTechnology() == adtDirectX) && (pDevice->GetTechVersion() == 0x900))
@@ -360,4 +361,6 @@ wstring ASCDeviceFullTechnologyToString(CASCDevice* pDevice)
 			sResult = sResult + L" (feature level " + ASCDeviceVersionToString(pDevice->GetTechFeatureVersion()) + L")";
 		}
 	}
+
+	return sResult;
 }

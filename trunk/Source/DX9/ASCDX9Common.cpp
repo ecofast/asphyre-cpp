@@ -148,7 +148,7 @@ D3DFORMAT DX9FindDepthStencilFormat(ASCInt nStencilLevel)
 }
 
 void DX9FindBestMultisampleType(D3DFORMAT BackBufferFmt, D3DFORMAT DepthFmt, ASCInt nMultisamples, 
-								D3DMULTISAMPLE_TYPE* pSampleType, ASCUInt32* pQualityLv)
+								D3DMULTISAMPLE_TYPE* pSampleType, ASCDWord* pQualityLv)
 {
 	*pSampleType = D3DMULTISAMPLE_NONE;
 	pQualityLv = 0;
@@ -158,7 +158,7 @@ void DX9FindBestMultisampleType(D3DFORMAT BackBufferFmt, D3DFORMAT DepthFmt, ASC
 	}
 
 	D3DMULTISAMPLE_TYPE	TestSample;
-	ASCUInt32			uQuaLevels;
+	ASCDWord			uQuaLevels;
 	ASCBoolean			bSuccess;
 	for (ASCInt i = nMultisamples; i >= 2; i--)
 	{

@@ -61,7 +61,7 @@ void CASCEventProvider::UnSubscribe(const ASCInt nEventID)
 
 void CASCEventProvider::UnSubscribeClass(const wchar_t* sClassName)
 {
-	for (ASCInt i = 0; i < m_Datas.size(); i++)
+	for (ASCUInt i = 0; i < m_Datas.size(); i++)
 	{
 		if (m_Datas[i].m_sClassName == sClassName)
 		{
@@ -73,7 +73,7 @@ void CASCEventProvider::UnSubscribeClass(const wchar_t* sClassName)
 
 ASCBoolean CASCEventProvider::SetClassPriority(const wstring& sClassName, const ASCInt nPriority)
 {
-	for (ASCInt i = 0; i < m_Datas.size(); i++)
+	for (ASCUInt i = 0; i < m_Datas.size(); i++)
 	{
 		if (m_Datas[i].m_sClassName == sClassName)
 		{
@@ -107,7 +107,7 @@ ASCBoolean CASCEventProvider::Notify(void* pSender, ASCPointer pParam /* = 0 */)
 
 	ASCBoolean bResult	= false;
 	ASCBoolean bAllowed;
-	for (ASCInt i = 0; i < m_Datas.size(); i++)
+	for (ASCUInt i = 0; i < m_Datas.size(); i++)
 	{
 		if (m_EventValidator)
 		{
@@ -150,7 +150,7 @@ ASCInt CASCEventProvider::NextEventID()
 
 ASCInt CASCEventProvider::IndexOfEventID(const ASCInt nID)
 {
-	for (ASCInt i = 0; i < m_Datas.size(); i++)
+	for (ASCUInt i = 0; i < m_Datas.size(); i++)
 	{
 		if (m_Datas[i].m_nEventID == nID)
 		{
@@ -168,7 +168,7 @@ void CASCEventProvider::RemoveAll()
 
 void CASCEventProvider::Remove(ASCInt nIndex)
 {
-	if ((nIndex > 0) && (nIndex < m_Datas.size()))
+	if ((nIndex > 0) && ((size_t)nIndex < m_Datas.size()))
 	{
 		m_Datas.erase(m_Datas.begin() + nIndex);
 		MarkEventListDirty();
@@ -306,7 +306,7 @@ ASCInt CASCEventProviders::Insert()
 
 void CASCEventProviders::Remove(ASCInt nIndex)
 {
-	if ((nIndex < 0) || (nIndex >= m_Datas.size()) || m_bListSemaphore)
+	if ((nIndex < 0) || ((size_t)nIndex >= m_Datas.size()) || m_bListSemaphore)
 	{
 		return;
 	}
@@ -345,7 +345,7 @@ void CASCEventProviders::Clear()
 
 ASCInt CASCEventProviders::IndexOf(const CASCEventProvider* Provider)
 {
-	for (ASCInt i = 0; i < m_Datas.size(); i++)
+	for (ASCUInt i = 0; i < m_Datas.size(); i++)
 	{
 		if (m_Datas[i] == Provider)
 		{
@@ -375,7 +375,7 @@ ASCInt CASCEventProviders::GetItemCount()
 
 CASCEventProvider* CASCEventProviders::GetItem(ASCInt nIndex)
 {
-	if ((nIndex >= 0) && (nIndex < m_Datas.size()))
+	if ((nIndex >= 0) && ((size_t)nIndex < m_Datas.size()))
 	{
 		return (m_Datas[nIndex]);
 	} 

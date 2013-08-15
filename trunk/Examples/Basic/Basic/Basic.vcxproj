@@ -85,15 +85,20 @@
     <ClCompile Include="..\..\..\Source\ASCEvents.cpp" />
     <ClCompile Include="..\..\..\Source\ASCEventSystem.cpp" />
     <ClCompile Include="..\..\..\Source\ASCFormatInfo.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCPixelFormatConv.cpp" />
     <ClCompile Include="..\..\..\Source\ASCPixelFormats.cpp" />
     <ClCompile Include="..\..\..\Source\ASCProvider.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCStrUtils.cpp" />
     <ClCompile Include="..\..\..\Source\ASCSwapChains.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCTextures.cpp" />
     <ClCompile Include="..\..\..\Source\ASCTiming.cpp" />
     <ClCompile Include="..\..\..\Source\ASCUtils.cpp" />
     <ClCompile Include="..\..\..\Source\ASCWindowsConnector.cpp" />
     <ClCompile Include="..\..\..\Source\ASCWindowsTimer.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Common.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9Device.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Provider.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9Textures.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
@@ -109,6 +114,7 @@
     <ClInclude Include="..\..\..\Source\ASCPixelFormatConv.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormats.h" />
     <ClInclude Include="..\..\..\Source\ASCProvider.h" />
+    <ClInclude Include="..\..\..\Source\ASCStrUtils.h" />
     <ClInclude Include="..\..\..\Source\ASCSwapChains.h" />
     <ClInclude Include="..\..\..\Source\ASCTextures.h" />
     <ClInclude Include="..\..\..\Source\ASCTiming.h" />

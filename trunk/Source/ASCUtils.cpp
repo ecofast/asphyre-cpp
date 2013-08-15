@@ -1,6 +1,6 @@
 #include "ASCUtils.h"
 
-ASCInt ASCRound(ASCSingle f)
+ASCInt ASCRound(ASCDouble f)
 {
 	return (ASCInt)(f + 0.5);
 }
