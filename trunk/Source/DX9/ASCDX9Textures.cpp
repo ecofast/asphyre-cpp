@@ -1,5 +1,5 @@
 #include "ASCDX9Textures.h"
-
+#include "ASCDX9Common.h"
 
 CASCDX9LockableTexture::CASCDX9LockableTexture() : CASCLockableTexture()
 {

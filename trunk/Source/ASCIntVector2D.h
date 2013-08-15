@@ -1,6 +1,6 @@
 /***************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCIntVector2D.h
  *  Content: Definitions and functions working with 2D integer vectors
@@ -10,8 +10,6 @@
  ***************************************************************************************/
 
 #pragma once
-
-#include "ASCTypes.h"
 
 struct CASCIntVector2D
 {

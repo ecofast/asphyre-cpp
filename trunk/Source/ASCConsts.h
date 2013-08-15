@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCConsts.h
  *  Content: ASC(Asphyre Sphinx for C++) Constant variable definitions
@@ -10,6 +10,10 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
+
+#include "ASCTypes.h"
 
 /*
  * Unknown Color individual constant. It can be used in some cases to specify

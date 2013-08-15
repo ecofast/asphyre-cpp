@@ -1,10 +1,12 @@
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <objbase.h>
 #include "ASCDX9Device.h"
+#include "../ASCEvents.h"
+#include "ASCDX9Common.h"
 
-// Remove the dot to preserve FPU state
-#define PRESERVEFPU
-
-// Enable multi-threading mode or not
-// #define ENABLEMULTITHREAD
+// DIRECT3DCREATE9EXFUNCTION
+typedef HRESULT (WINAPI *Direct3DCreate9ExFunction)(ASCUInt uSDKVersion, IDirect3D9Ex**);
 
 CASCDX9Device::CASCDX9Device() : CASCDevice()
 {
@@ -134,8 +136,7 @@ void CASCDX9Device::RenderWith(ASCInt nSwapChainIndex, CASCNotifyEvent Handler, 
 	{
 		if (G_D3D9Mode == admDirect3D9Ex)
 		{
-			// ((IDirect3DDevice9Ex)G_pD3D9Device).PresentEx(0, 0, 0, 0, 0);
-			//G_pD3D9Device->PresentEx(0, 0, 0, 0, 0);
+			((IDirect3DDevice9Ex*)G_pD3D9Device)->PresentEx(0, 0, 0, 0, 0);
 		} 
 		else
 		{
@@ -194,8 +195,7 @@ ASCBoolean CASCDX9Device::ResizeSwapChain(ASCInt nSwapChainIndex, PASCSwapChainD
 		{
 			G_D3D9PresentParams.BackBufferWidth = pDesc->nWidth;
 			G_D3D9PresentParams.BackBufferHeight = pDesc->nHeight;
-			// bResult = SUCCEEDED(((IDirect3DDevice9Ex)G_pD3D9Device).ResetEx(&G_D3D9PresentParams, 0));
-			//bResult = SUCCEEDED(G_pD3D9Device->ResetEx(&G_D3D9PresentParams, 0));
+			bResult = SUCCEEDED(((IDirect3DDevice9Ex*)G_pD3D9Device)->ResetEx(&G_D3D9PresentParams, 0));
 		} 
 		else
 		{
@@ -217,56 +217,61 @@ ASCBoolean CASCDX9Device::ResizeSwapChain(ASCInt nSwapChainIndex, PASCSwapChainD
 ASCBoolean CASCDX9Device::CreateDirect3D()
 {
 	m_bManagedD3D = false;
+	if (G_pD3D9)
+	{
+		G_D3D9Mode = admDirect3D9;
+		m_nTechFeatureVersion = 0x900;
+
+		IDirect3D9Ex* pD3D9Ex = 0;
+		if (SUCCEEDED(G_pD3D9->QueryInterface(__uuidof(IDirect3D9Ex), (void**)&pD3D9Ex)))
+		{
+			G_D3D9Mode = admDirect3D9Ex;
+			m_nTechFeatureVersion = 0x901;
+			pD3D9Ex = 0;
+		}
+
+		return true;
+	}
+
+	if (G_D3D9Mode != admDirect3D9)
+	{
+		HMODULE hD3D = LoadLibrary(L"d3d9.dll");
+		IDirect3D9Ex* pD3D9Ex;
+		Direct3DCreate9ExFunction pfnCreate9Ex = (Direct3DCreate9ExFunction)GetProcAddress(hD3D, "Direct3DCreate9Ex");
+		if (pfnCreate9Ex)
+		{
+			(*pfnCreate9Ex)(D3D_SDK_VERSION, &pD3D9Ex);
+			pD3D9Ex->QueryInterface(__uuidof(IDirect3D9), reinterpret_cast<void **>(&G_pD3D9));
+			G_D3D9Mode = admDirect3D9Ex;
+			m_nTechFeatureVersion = 0x901;
+			pD3D9Ex = 0;
+		}
+
+		if (hD3D)
+		{
+			FreeLibrary(hD3D);
+		}
+	}
+
+	if (!G_pD3D9)
+	{
+		G_pD3D9 = Direct3DCreate9(D3D_SDK_VERSION);
 		if (G_pD3D9)
 		{
 			G_D3D9Mode = admDirect3D9;
-			/*
-			IDirect3D9Ex* pD3D9Ex = 0;
-			if (SUCCEEDED(G_pD3D9->QueryInterface(IDirect3D9Ex, &pD3D9Ex)))
-			{
-				G_D3D9Mode = admDirect3D9Ex;
-			}
-			*/
-			/*
-			if (QUERYINTERFACE(G_pD3D9, IDirect3D9Ex))
-			{
-				G_D3D9Mode = admDirect3D9Ex;
-			}
-			*/
-			return true;
+			m_nTechFeatureVersion = 0x900;
 		}
+	}
 
-		// LoadDirect3D9();
-		/*
-		if (G_D3D9Mode != admDirect3D9)  // if (D3D9Mode <> dmDirect3D9)and(Assigned(Direct3DCreate9Ex)) then
-		{
-			IDirect3D9Ex* pD3D9Ex;
-			if (SUCCEEDED(Direct3DCreate9Ex(D3D_SDK_VERSION, &pD3D9Ex)))
-			{
-				G_pD3D9 = pD3D9Ex;
-				G_D3D9Mode = admDirect3D9Ex;
-			}
-		}
-		*/
-
-		if (!G_pD3D9)
-		{
-			G_pD3D9 = Direct3DCreate9(D3D_SDK_VERSION);
-			if (G_pD3D9)
-			{
-				G_D3D9Mode = admDirect3D9;
-			}
-		}
-
-		if (G_pD3D9)
-		{
-			m_bManagedD3D = true;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	if (G_pD3D9)
+	{
+		m_bManagedD3D = true;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void CASCDX9Device::DestroyDirect3D()
@@ -295,8 +300,7 @@ ASCBoolean CASCDX9Device::GetDisplayMode()
 
 	if (G_D3D9Mode == admDirect3D9Ex)  // Vista enhanced mode
 	{
-		// return (SUCCEEDED(((IDirect3D9Ex)G_pD3D9)->GetAdapterDisplayModeEx(D3DADAPTER_DEFAULT, &G_D3D9DisplayMode, 0)));
-		return false;
+		return (SUCCEEDED(((IDirect3D9Ex*)G_pD3D9)->GetAdapterDisplayModeEx(D3DADAPTER_DEFAULT, &G_D3D9DisplayMode, 0)));
 	}
 	else  // XP compatibility mode
 	{
@@ -364,12 +368,12 @@ ASCBoolean CASCDX9Device::CreateDevice()
 		if (G_D3D9Mode == admUnknown)
 		{
 			G_D3D9Mode = admDirect3D9;
-			/*
-			if (QueryInterface(G_pD3D9Device, IDirect3DDevice9Ex))
+			IDirect3D9Ex* pD3D9Ex = 0;
+			if (SUCCEEDED(G_pD3D9->QueryInterface(__uuidof(IDirect3D9Ex), (void**)&pD3D9Ex)))
 			{
 				G_D3D9Mode = admDirect3D9Ex;
+				pD3D9Ex = 0;
 			}
-			*/
 			return (SUCCEEDED(G_pD3D9Device->GetDeviceCaps(&G_D3DCaps9)));
 		}
 	}
@@ -388,10 +392,10 @@ ASCBoolean CASCDX9Device::CreateDevice()
 
 	// 3) Prepare the device flags
 	ASCUInt32 uFlags = D3DCREATE_NOWINDOWCHANGES;
-#ifdef PreserveFPU
+#ifdef PRESERVEFPU
 	uFlags = uFlags | D3DCREATE_FPU_PRESERVE;
 #endif
-#ifdef EnableMultithread
+#ifdef ENABLEMULTITHREAD
 	uFlags = uFlags | D3DCREATE_MULTITHREADED;
 #endif
 
@@ -399,22 +403,21 @@ ASCBoolean CASCDX9Device::CreateDevice()
 	ASCBoolean bResult;
 	if (G_D3D9Mode == admDirect3D9Ex)  // Vista enhanced mode
 	{
-		/*
 		IDirect3DDevice9Ex *pD3DDev9Ex;
-		bResult = SUCCEEDED(((IDirect3D9Ex)G_pD3D9)->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 
-			pDesc->hWndHandle, uFlags | D3DCREATE_HARDWARE_VERTEXPROCESSING, &G_D3D9PresentParams, 0, &pD3DDev9Ex));
+		bResult = SUCCEEDED(((IDirect3D9Ex*)G_pD3D9)->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 
+			(HWND)(pDesc->hWndHandle), uFlags | D3DCREATE_HARDWARE_VERTEXPROCESSING, &G_D3D9PresentParams, 0, &pD3DDev9Ex));
 
 		if (!bResult)
 		{
-			bResult = SUCCEEDED(((IDirect3D9Ex)G_pD3D9)->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 
-				pDesc->hWndHandle, uFlags | D3DCREATE_SOFTWARE_VERTEXPROCESSING, &G_D3D9PresentParams, 0, &pD3DDev9Ex));
+			bResult = SUCCEEDED(((IDirect3D9Ex*)G_pD3D9)->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 
+				(HWND)(pDesc->hWndHandle), uFlags | D3DCREATE_SOFTWARE_VERTEXPROCESSING, &G_D3D9PresentParams, 0, &pD3DDev9Ex));
 		}
 
 		if (bResult)
 		{
 			G_pD3D9Device = pD3DDev9Ex;
 			pD3DDev9Ex = 0;
-		}*/
+		}
 	} 
 	else  // XP compatibility mode
 	{
@@ -484,8 +487,7 @@ ASCBoolean CASCDX9Device::AttemptRecoverState()
 	{
 		if (G_D3D9Mode == admDirect3D9Ex)
 		{
-			//bResult = SUCCEEDED(((IDirect3DDevice9Ex)G_pD3D9Device).ResetEx(G_D3D9PresentParams, 0));
-			bResult = SUCCEEDED(G_pD3D9Device->Reset(&G_D3D9PresentParams));
+			bResult = SUCCEEDED(((IDirect3DDevice9Ex*)G_pD3D9Device)->ResetEx(&G_D3D9PresentParams, 0));
 		} 
 		else
 		{
@@ -523,20 +525,19 @@ ASCBoolean CASCDX9Device::CheckDeviceCondition(ASCInt nSwapChainIndex)
 		{
 			return bResult;
 		}
-		/*
-		PASCSwapChainDesc pDesc = GetSwapChains(nSwapChainIndex);
+
+		PASCSwapChainDesc pDesc = GetSwapChains()->GetItem(nSwapChainIndex);
 		if (!pDesc)
 		{
 			return bResult;
 		}
 
-		bResult = SUCCEEDED(((IDirect3DDevice9Ex)G_pD3D9Device).CheckDeviceState(pDesc->hWndHandle));
+		bResult = SUCCEEDED(((IDirect3DDevice9Ex*)G_pD3D9Device)->CheckDeviceState((HWND)(pDesc->hWndHandle)));
 		if (!bResult)
 		{
 			MoveIntoLostState();
 			bResult = AttemptRecoverState();
 		}
-		*/
 	} 
 	else
 	{
@@ -584,6 +585,7 @@ void CASCDX9Device::SetDefaultViewport(const PASCSwapChainDesc pDesc)
 	vp9.Height = pDesc->nHeight;
 	vp9.MinZ = 0.0;
 	vp9.MaxZ = 1.0;
+
 	G_pD3D9Device->SetViewport(&vp9);
 }
 

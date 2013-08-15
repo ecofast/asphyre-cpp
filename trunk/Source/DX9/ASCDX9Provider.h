@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCDX9Provider.h
  *  Content: ASC(Asphyre Sphinx for C++) Direct3D9 provider definition
@@ -10,6 +10,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "../ASCConfig.h"
 
 #include "../ASCProvider.h"
 #include "ASCDX9Device.h"

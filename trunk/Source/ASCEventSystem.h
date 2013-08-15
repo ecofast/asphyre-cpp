@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCEventSystem.h
  *  Content: ASC(Asphyre Sphinx for C++) Event System implementing observer pattern
@@ -12,6 +12,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
 
 #include <string>
 #include <vector>

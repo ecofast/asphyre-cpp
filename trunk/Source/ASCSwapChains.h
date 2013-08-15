@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCSwapChains.h
  *  Content: ASC(Asphyre Sphinx for C++) generic swap chains description structures
@@ -10,6 +10,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
 
 #include <vector>
 using std::vector;

@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCWindowsConnector.h
  *  Content: ASC(Asphyre Sphinx for C++) Native Connection Manager
@@ -10,6 +10,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
 
 #include "ASCTypes.h"
 #include "ASCEvents.h"
@@ -22,15 +24,8 @@
 class CASCWindowsConnector
 {
 public:
-	CASCWindowsConnector()
-	{
-		m_bInitialized = false;
-	}
-
-	~CASCWindowsConnector()
-	{
-
-	}
+	CASCWindowsConnector();
+	~CASCWindowsConnector();
 
 	/*
 	 * Initializes the component and calls the respective ASC events where
@@ -39,37 +34,17 @@ public:
 	 * this function does nothing and returns True; it can be called as many
 	 * times as possible in timer events to make sure that ASC components are properly created
 	*/
-	ASCBoolean Init()
-	{
-		if (m_bInitialized)
-		{
-			return true;
-		}
+	ASCBoolean Init();
 
-		m_bInitialized = true;
-		ASCCreateEvent()->Notify(this);
-		ASCTimerResetEvent()->Notify(this);
+	/*
+	 * Finalizes the component and calls events where ASC components should be released
+	*/
+	void Done();
 
-		return true;
-	}
-
-	// Finalizes the component and calls events where ASC components should be released
-	void Done()
-	{
-		if (!m_bInitialized)
-		{
-			return;
-		}
-
-		ASCDestroyEvent()->Notify(this);
-		m_bInitialized = false;
-	}
-
-	// Determines whether the component has been successfully initialized
-	ASCBoolean IsInitialized()
-	{
-		return m_bInitialized;
-	}
+	/*
+	 * Determines whether the component has been successfully initialized
+	*/
+	ASCBoolean IsInitialized();
 private:
 	ASCBoolean	m_bInitialized;
 };

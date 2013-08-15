@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCDX9Device.h
  *  Content: ASC(Asphyre Sphinx for C++) Direct3D9 device management
@@ -11,20 +11,23 @@
 
 #pragma once
 
-#include <d3d9.h>
-#include <objbase.h>
+#include "../ASCConfig.h"
+
 #include "../ASCDevice.h"
-#include "../ASCTextures.h"
-#include "../ASCSwapChains.h"
-#include "../ASCEvents.h"
 #include "ASCDX9SwapChains.h"
-#include "ASCDX9Common.h"
+
+// Preserve FPU state or not
+#define PRESERVEFPU
+
+// Enable multi-threading mode or not
+// #define ENABLEMULTITHREAD
 
 class CASCDX9Device : public CASCDevice
 {
 public:
 	CASCDX9Device();
 	~CASCDX9Device();
+
 	CASCDX9SwapChains* GetDX9SwapChains();
 protected:
 	virtual ASCBoolean InitializeDevice();

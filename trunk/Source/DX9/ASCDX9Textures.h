@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCDX9Textures.h
  *  Content: ASC(Asphyre Sphinx for C++) Direct3D9 texture implementation
@@ -11,11 +11,11 @@
 
 #pragma once
 
-#include <d3d9.h>
+#include "../ASCConfig.h"
 
+#include <d3d9.h>
 #include "../ASCTypes.h"
 #include "../ASCTextures.h"
-#include "ASCDX9Common.h"
 
 class CASCDX9LockableTexture : public CASCLockableTexture
 {

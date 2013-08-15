@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCPixelFormatConv.h
  *  Content: ASC(Asphyre Sphinx for C++) Pixel Format conversion
@@ -10,6 +10,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
 
 #include "ASCTypes.h"
 

@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCTypes.h
  *  Content: ASC(Asphyre Sphinx for C++) types and definitions
@@ -11,6 +11,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "ASCConfig.h"
 
 #include "ASCIntVector2D.h"
 #include "ASCFloatVector2D.h"

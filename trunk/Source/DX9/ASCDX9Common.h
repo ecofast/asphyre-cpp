@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCDX9Common.h
  *  Content: ASC(Asphyre Sphinx for C++) Direct3D9 general type definitions and utilities
@@ -10,6 +10,8 @@
  *******************************************************************************************/
 
 #pragma once
+
+#include "../ASCConfig.h"
 
 #include <d3d9.h>
 #include <d3d9types.h>
