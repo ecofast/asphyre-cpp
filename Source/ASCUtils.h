@@ -1,6 +1,6 @@
 /*******************************************************************************************
  *
- *  Copyright (C) Yuriy Kotsarenko / adelphicoder.  All Rights Reserved.
+ *  Copyright (C) Yuriy Kotsarenko / HuGuangyao.  All Rights Reserved.
  *
  *  File   : ASCUtils.h
  *  Content: ASC(Asphyre Sphinx for C++) useful function definitions
@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "ASCConfig.h"
+
 #include <windows.h>
 #include "ASCTypes.h"
 
@@ -19,7 +21,7 @@ ASCInt ASCRound(ASCDouble f);
 RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight);
 
 template <typename T>
-ASCInt GetArrayLen(const T& arr)
+inline ASCInt GetArrayLen(const T& arr)
 {
 	return (sizeof(arr) / sizeof(arr[0]));
 }

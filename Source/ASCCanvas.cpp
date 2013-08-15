@@ -11,15 +11,6 @@ CASCCanvas::CASCCanvas()
 	ASCDeviceLostEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnDeviceLost, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	ASCBeginSceneEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnBeginScene, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	ASCEndSceneEvent()->Subscribe((wchar_t*)typeid(*this).name(), std::bind(&CASCCanvas::OnEndScene, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-
-	/*
-	ASCDeviceCreateEvent()->Subscribe((wchar_t*)typeid(*this).name(), &CASCCanvas::OnDeviceCreate);
-	ASCDeviceDestroyEvent()->Subscribe(typeid(*this).name(), OnDeviceDestroy);
-	ASCDeviceResetEvent()->Subscribe(typeid(*this).name(), OnDeviceReset);
-	ASCDeviceLostEvent()->Subscribe(typeid(*this).name(), OnDeviceLost);
-	ASCBeginSceneEvent()->Subscribe(typeid(*this).name(), OnBeginScene);
-	ASCEndSceneEvent()->Subscribe(typeid(*this).name(), OnEndScene);
-	*/
 }
 
 CASCCanvas::~CASCCanvas()
