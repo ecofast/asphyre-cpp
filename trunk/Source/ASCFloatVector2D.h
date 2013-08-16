@@ -47,3 +47,5 @@ struct CASCFloatVector2D
 		return ((X == vec.X) && (Y == vec.Y));
 	}
 };
+
+typedef CASCFloatVector2D* PASCFloatVector2D;

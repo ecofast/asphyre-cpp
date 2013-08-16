@@ -64,7 +64,11 @@ public:
 
 	void Flush();
 	virtual void ResetStates();
+
+	virtual void RenderPixel(const CASCFloatVector2D Pt, ASCColor uColor);
 	virtual void RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2);
+	virtual void RenderIndexedTriangles(PASCFloatVector2D pVertices, ASCUInt* pColors, ASCInt* pIndices,
+		ASCInt nNumVertices, ASCInt nNumTriangles, CASCBlendingEffect Effect = abeNormal);
 protected:
 	virtual ASCBoolean HandleDeviceCreate();
 	virtual void HandleDeviceDestroy();

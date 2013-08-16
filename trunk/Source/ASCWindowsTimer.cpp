@@ -165,7 +165,7 @@ void CASCWindowsTimer::Process()
 
 	if (m_OnProcess)
 	{
-		for (ASCInt i = 0; i < nInvokeCnt - 1; i++)
+		for (ASCInt i = 1; i < nInvokeCnt + 1; i++)
 		{
 			m_OnProcess();
 		}	
