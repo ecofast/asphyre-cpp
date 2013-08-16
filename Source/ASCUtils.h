@@ -13,6 +13,8 @@
 
 #include "ASCConfig.h"
 
+#include <string>
+using std::wstring;
 #include <windows.h>
 #include "ASCTypes.h"
 
@@ -45,3 +47,18 @@ const T& max3(const T& a, const T& b, const T& c)
 	return max(max(a, b), c);
 }
 */
+
+class CASCResourse
+{
+public:
+	CASCResourse(const ASCPointer pHandle, const ASCUInt uSize);
+	~CASCResourse();
+
+	ASCPointer GetHandle();
+	ASCUInt GetSize();
+private:
+	ASCPointer	m_pHandle;
+	ASCUInt		m_uSize;
+};
+
+CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize);

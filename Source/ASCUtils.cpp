@@ -54,3 +54,59 @@ void ASCColor4From4Color(ASCColor uColor1, ASCColor uColor2, ASCColor uColor3, A
 	Rtn[2] = uColor3;
 	Rtn[3] = uColor4;
 }
+
+CASCResourse::CASCResourse(const ASCPointer pHandle, const ASCUInt uSize)
+{
+	m_pHandle = pHandle;
+	m_uSize = uSize;
+}
+
+CASCResourse::~CASCResourse()
+{
+	free(m_pHandle);
+}
+
+ASCPointer CASCResourse::GetHandle()
+{
+	return m_pHandle;
+}
+
+ASCUInt CASCResourse::GetSize()
+{
+	return m_uSize;
+}
+
+CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize)
+{
+	if (sFileName == L"")
+	{
+		return 0;
+	}
+
+	// load from file
+	HANDLE h = CreateFile((LPCWSTR)&sFileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, 0);
+	if (INVALID_HANDLE_VALUE == h)
+	{
+		return 0;
+	}
+
+	ASCUInt uFileSize = GetFileSize(h, 0);
+	ASCPointer pData = malloc(uFileSize);
+	if (!pData)
+	{
+		CloseHandle(h);
+		return 0;
+	}
+
+	ASCDWord uBytesRead;
+	if (!ReadFile(h, pData, uFileSize, &uBytesRead, 0))
+	{
+		CloseHandle(h);
+		free(pData);
+		return 0;
+	}
+
+	CloseHandle(h);
+	uSize = uBytesRead;
+	return (new CASCResourse(pData, uSize));
+}

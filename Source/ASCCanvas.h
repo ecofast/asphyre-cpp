@@ -17,6 +17,7 @@
 #include <windows.h>
 #include "ASCTypes.h"
 #include "ASCFloatVector2D.h"
+#include "ASCTextures.h"
 
 /*
  * The blending effect that should be applied when drawing 2D primitives
@@ -186,6 +187,15 @@ public:
 	*/
 	void RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVector2D Size, const CASCFloatVector2D Center, const CASCFloatVector2D Radius,
 		ASCColor uOutColor, ASCColor uInColor, ASCInt nSteps, CASCBlendingEffect Effect = abeNormal);
+
+	/*
+	 * Draws textured rectangle at the given vertices and multiplied by the 
+	 * specified 4-color gradient. All pixels of the rendered texture are multiplied
+	 * by the gradient color before applying alpha-blending. If the texture has  
+	 * no alpha-channel present, alpha value of the gradient will be used instead
+	*/
+	virtual void RenderTexture(CASCTexture* pTexture, CASCPoint4 Points, CASCPoint4 Mappings, 
+		CASCColor4 Colors, CASCBlendingEffect Effect = abeNormal) = 0;
 protected:
 	ASCSingle	m_fInternalScale;
 

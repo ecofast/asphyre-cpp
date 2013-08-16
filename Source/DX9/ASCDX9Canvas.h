@@ -20,18 +20,6 @@
 #include "ASCDX9Common.h"
 using std::min;
 
-const ASCDWord ASC_DX9_VERTEX_FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
-
-typedef struct CASCDX9VertexRec
-{
-	D3DVECTOR	Vertex;
-	ASCSingle	fRHW;
-	ASCUInt32	uColor;
-	ASCSingle	fU, fV;
-} *PASCDX9VertexRec;
-
-const ASCInt ASC_DX9_VERTEXREC_SIZE = sizeof(CASCDX9VertexRec);
-
 /*
  * The following option controls the behavior of antialiased lines.
  * Enable the option for compatibility with DirectX 7 wrapper.
@@ -39,17 +27,6 @@ const ASCInt ASC_DX9_VERTEXREC_SIZE = sizeof(CASCDX9VertexRec);
  * disastrous consequences on Intel HD 3000 video cards
 */
 #define NOANTIALIASEDLINES
-
-/*
- * The following parameters roughly affect the rendering performance. The
- * higher values means that more primitives will fit in cache, but it will
- * also occupy more bandwidth, even when few primitives are rendered.
- * These parameters can be fine-tuned in a finished product to improve the
- * overall performance
-*/
-const ASCInt MAX_CACHED_PRIMITIVES = 3072;
-const ASCInt MAX_CACHED_INDICES    = 4096;
-const ASCInt MAX_CACHED_VERTICES   = 4096;
 
 enum CASCDX9CanvasTopology
 {
@@ -69,6 +46,8 @@ public:
 	virtual void RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2);
 	virtual void RenderIndexedTriangles(PASCFloatVector2D pVertices, ASCUInt* pColors, ASCInt* pIndices,
 		ASCInt nNumVertices, ASCInt nNumTriangles, CASCBlendingEffect Effect = abeNormal);
+	virtual void RenderTexture(CASCTexture* pTexture, CASCPoint4 Points, CASCPoint4 Mappings, 
+		CASCColor4 Colors, CASCBlendingEffect Effect = abeNormal);
 protected:
 	virtual ASCBoolean HandleDeviceCreate();
 	virtual void HandleDeviceDestroy();

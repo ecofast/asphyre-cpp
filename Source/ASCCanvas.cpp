@@ -197,8 +197,8 @@ void CASCCanvas::FillQuad(const CASCPoint4 Pts, const CASCColor4 Colors, CASCBle
 
 	uColors[0] = Colors[0];
 	uColors[1] = Colors[1];
-	uColors[3] = Colors[3];
-	uColors[2] = Colors[2];
+	uColors[2] = Colors[3];
+	uColors[3] = Colors[2];
 
 	RenderIndexedTriangles(&Vertices[0], &uColors[0], &Indices[0], 4, 2, Effect);
 }
@@ -236,10 +236,10 @@ void CASCCanvas::FrameRect(const CASCPoint4 Pts, const CASCColor4 Colors, CASCBl
 		uColors[i + 4] = Colors[i];
 	}
 
-	Vertices[4] = CASCFloatVector2D(Pts[0].X + 1.0, Pts[0].Y + 1.0);
-	Vertices[5] = CASCFloatVector2D(Pts[1].X - 1.0, Pts[1].Y + 1.0);
-	Vertices[6] = CASCFloatVector2D(Pts[2].X - 1.0, Pts[2].Y - 1.0);
-	Vertices[7] = CASCFloatVector2D(Pts[3].X + 1.0, Pts[3].Y - 1.0);
+	Vertices[4] = CASCFloatVector2D((ASCSingle)(Pts[0].X + 1.0), (ASCSingle)(Pts[0].Y + 1.0));
+	Vertices[5] = CASCFloatVector2D((ASCSingle)(Pts[1].X - 1.0), (ASCSingle)(Pts[1].Y + 1.0));
+	Vertices[6] = CASCFloatVector2D((ASCSingle)(Pts[2].X - 1.0), (ASCSingle)(Pts[2].Y - 1.0));
+	Vertices[7] = CASCFloatVector2D((ASCSingle)(Pts[3].X + 1.0), (ASCSingle)(Pts[3].Y - 1.0));
 
 	// RenderIndexedTriangles(&Vertices[0], &uColors[0], &Indices[0], 8, 8, Effect);
 	RenderIndexedTriangles(Vertices, uColors, Indices, 8, 8, Effect);
@@ -308,6 +308,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 	}
 
 	ASCSingle fTheta, fAngle;
+
 	for (ASCInt i = 0; i < nSteps; i++)
 	{
 		fTheta = (ASCSingle)i / (nSteps - 1);
@@ -316,7 +317,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = ASCPi * 0.25 + ASCPi * 0.5 - fTheta * ASCPi * 0.5;
+		fAngle = (ASCSingle)(ASC_PI * 0.25 + ASC_PI * 0.5 - fTheta * ASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -333,7 +334,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + fTheta * Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = ASCPi * 0.25 - fTheta * ASCPi * 0.5;
+		fAngle = (ASCSingle)(ASC_PI * 0.25 - fTheta * ASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -350,7 +351,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + fTheta * Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = ASCPi * 0.75 + fTheta * ASCPi * 0.5;
+		fAngle = (ASCSingle)(ASC_PI * 0.75 + fTheta * ASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -367,7 +368,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = ASCPi * 1.25 + fTheta * ASCPi * 0.5;
+		fAngle = (ASCSingle)(ASC_PI * 1.25 + fTheta * ASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;

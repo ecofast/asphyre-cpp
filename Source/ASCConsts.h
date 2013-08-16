@@ -15,7 +15,7 @@
 
 #include "ASCTypes.h"
 
-const ASCSingle ASCPi = 3.1415926f;
+const ASCDouble ASC_PI = 3.14159265358979;
 
 /*
  * Unknown Color individual constant. It can be used in some cases to specify

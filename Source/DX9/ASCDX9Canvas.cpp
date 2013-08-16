@@ -1,5 +1,28 @@
 #include "ASCDX9Canvas.h"
 
+const ASCDWord ASC_DX9_VERTEX_FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
+
+typedef struct CASCDX9VertexRec
+{
+	D3DVECTOR	Vertex;
+	ASCSingle	fRHW;
+	ASCUInt32	uColor;
+	ASCSingle	fU, fV;
+} *PASCDX9VertexRec;
+
+const ASCInt ASC_DX9_VERTEXREC_SIZE = sizeof(CASCDX9VertexRec);
+
+/*
+ * The following parameters roughly affect the rendering performance. The
+ * higher values means that more primitives will fit in cache, but it will
+ * also occupy more bandwidth, even when few primitives are rendered.
+ * These parameters can be fine-tuned in a finished product to improve the
+ * overall performance
+*/
+const ASCInt MAX_CACHED_PRIMITIVES = 3072;
+const ASCInt MAX_CACHED_INDICES    = 4096;
+const ASCInt MAX_CACHED_VERTICES   = 4096;
+
 CASCDX9Canvas::CASCDX9Canvas() : CASCCanvas()
 {
 	m_pVertexArray = 0;
@@ -118,7 +141,7 @@ void CASCDX9Canvas::HandleDeviceDestroy()
 {
 	if (G_D3D9Mode == admDirect3D9Ex)
 	{
-		DestroySystemBuffers();
+		DestroyVideoBuffers();
 	} 
 
 	DestroySystemBuffers();
@@ -588,8 +611,8 @@ void CASCDX9Canvas::RenderIndexedTriangles(PASCFloatVector2D pVertices, ASCUInt*
 	for (ASCInt i = 0; i < nNumVertices; i++)
 	{
 		PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
-		pEntry->Vertex.x = pVertex->X * m_fInternalScale - 0.5;
-		pEntry->Vertex.y = pVertex->Y * m_fInternalScale - 0.5;
+		pEntry->Vertex.x = (ASCSingle)(pVertex->X * m_fInternalScale - 0.5);
+		pEntry->Vertex.y = (ASCSingle)(pVertex->Y * m_fInternalScale - 0.5);
 		pEntry->uColor = *pColor;
 		m_nVertexCount++;
 
@@ -598,4 +621,58 @@ void CASCDX9Canvas::RenderIndexedTriangles(PASCFloatVector2D pVertices, ASCUInt*
 	}
 
 	m_nPrimitives += nNumTriangles;
+}
+
+void CASCDX9Canvas::RenderTexture(CASCTexture* pTexture, CASCPoint4 Points, CASCPoint4 Mappings, 
+								  CASCColor4 Colors, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	m_pActiveTexture = pTexture;
+	m_QuadMapping[0] = Mappings[0];
+	m_QuadMapping[1] = Mappings[1];
+	m_QuadMapping[2] = Mappings[2];
+	m_QuadMapping[3] = Mappings[3];
+
+	RequestCache(actdx9Triangles, 4, 6, Effect, m_pActiveTexture);
+	
+	AddIndexEntry(m_nVertexCount + 2);
+	AddIndexEntry(m_nVertexCount);
+	AddIndexEntry(m_nVertexCount + 1);
+
+	AddIndexEntry(m_nVertexCount + 3);
+	AddIndexEntry(m_nVertexCount + 2);
+	AddIndexEntry(m_nVertexCount + 1);
+
+	PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = (ASCSingle)(Points[0].X * m_fInternalScale - 0.5);
+	pEntry->Vertex.y = (ASCSingle)(Points[0].Y * m_fInternalScale - 0.5);
+	pEntry->uColor = Colors[0];
+	pEntry->fU = m_QuadMapping[0].X;
+	pEntry->fV = m_QuadMapping[0].Y;
+	m_nVertexCount++;
+
+	pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = (ASCSingle)(Points[1].X * m_fInternalScale - 0.5);
+	pEntry->Vertex.y = (ASCSingle)(Points[1].Y * m_fInternalScale - 0.5);
+	pEntry->uColor = Colors[1];
+	pEntry->fU = m_QuadMapping[1].X;
+	pEntry->fV = m_QuadMapping[1].Y;
+	m_nVertexCount++;
+
+	pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = (ASCSingle)(Points[3].X * m_fInternalScale - 0.5);
+	pEntry->Vertex.y = (ASCSingle)(Points[3].Y * m_fInternalScale - 0.5);
+	pEntry->uColor = Colors[3];
+	pEntry->fU = m_QuadMapping[3].X;
+	pEntry->fV = m_QuadMapping[3].Y;
+	m_nVertexCount++;
+
+	pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = (ASCSingle)(Points[2].X * m_fInternalScale - 0.5);
+	pEntry->Vertex.y = (ASCSingle)(Points[2].Y * m_fInternalScale - 0.5);
+	pEntry->uColor = Colors[2];
+	pEntry->fU = m_QuadMapping[2].X;
+	pEntry->fV = m_QuadMapping[2].Y;
+	m_nVertexCount++;
+
+	m_nPrimitives += 2;
 }
