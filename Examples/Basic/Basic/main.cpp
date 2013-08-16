@@ -11,12 +11,15 @@ using std::wstring;
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
 
-HINSTANCE	G_hInstance	= NULL;
-HWND		G_hWnd		= NULL;
+HINSTANCE	G_hInstance		= NULL;
+HWND		G_hWnd			= NULL;
+int			G_nWndWidth		= 1280;
+int			G_nWndHeight	= 720;
 
 CASCDevice*		G_pASCDevice = 0;
 CASCCanvas*		G_pASCCanvas = 0;
 CASCIntVector2D	G_DisplaySize;
+int				G_nGameTicks = 0;
 
 int		WINAPI		WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 LRESULT	CALLBACK	TheWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -73,7 +76,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RegisterClassEx(&wc);
 
 	// G_hWnd = CreateWindowEx(0, WINDOW_CLASS, WINDOW_TITLE, WS_OVERLAPPEDWINDOW, 0, 0, 800, 600, NULL, NULL, g_hInstance, NULL);
-	G_hWnd = CreateWindowEx(0, wsClassName.c_str(), wsWndCaption.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, 1280, 720, NULL, NULL, G_hInstance, NULL);
+	G_hWnd = CreateWindowEx(0, wsClassName.c_str(), wsWndCaption.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, G_nWndWidth, G_nWndHeight, NULL, NULL, G_hInstance, NULL);
 	
 	ShowWindow(G_hWnd, nShowCmd);
 
@@ -121,7 +124,7 @@ void OnASCDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHan
 
 void OnASCDeviceInit(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
-	G_DisplaySize = CASCIntVector2D(800, 600);
+	G_DisplaySize = CASCIntVector2D(G_nWndWidth, G_nWndHeight);
 	G_pASCDevice->GetSwapChains()->Add((ASCUInt)G_hWnd, G_DisplaySize);
 }
 
@@ -135,9 +138,27 @@ void OnASCTimerReset(const void* pSender, const ASCPointer pParam, ASCBoolean* b
 	ASCWindowsTimer()->Reset();
 }
 
+RECT G_Rc = {500, 400, 700, 550};
+CASCColor4 G_Color4 = {0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFFFFFF};
+
 void RenderEvent()
 {
+	/*
+	G_pASCCanvas->RenderPixel(10, 10, 0xFFFF0000);
 	G_pASCCanvas->RenderLine(100, 100, 200, 200, 0xFFFFFFFF);
+	G_pASCCanvas->FillRect(500, 100, 200, 200, 0xFF00FF00);
+	G_pASCCanvas->FrameRect(G_Rc, G_Color4);
+	G_pASCCanvas->FrameRect(200, 250, 100, 100, 0xFFFFFFFF);
+	G_pASCCanvas->RenderHorizLine(50, 50, 100, 0xFFFF0000, 0xFFFF0000);
+	G_pASCCanvas->RenderVertLine(400, 100, 200, 0xFFFF0000, 0xFF00FF00);
+	*/
+
+	// Draw an animated hole.
+	G_pASCCanvas->RenderQuadHole(CASCFloatVector2D(0.0, 0.0), 
+		CASCFloatVector2D(G_DisplaySize.X, G_DisplaySize.Y), 
+		CASCFloatVector2D(G_DisplaySize.X * 0.5 + cos(G_nGameTicks * 0.0073) * G_DisplaySize.X * 0.25, 
+		G_DisplaySize.Y * 0.5 + sin(G_nGameTicks * 0.00312) * G_DisplaySize.Y * 0.25), 
+		CASCFloatVector2D(80.0, 100.0), 0x20FFFFFF, 0x80955BFF, 16);
 }
 
 void HandleConnectFailure()
@@ -145,6 +166,11 @@ void HandleConnectFailure()
 	ASCWindowsTimer()->SetEnabled(false);
 	MessageBox(G_hWnd, L"Failed initializing ASC device.", L"Error", MB_OK);
 	PostQuitMessage(0);
+}
+
+void ProcessEvent()
+{
+	G_nGameTicks++;
 }
 
 void TimerEvent()
@@ -180,15 +206,10 @@ void TimerEvent()
 	}
 
 	// Render the scene
-	G_pASCDevice->Render(RenderEvent, 0xFF000000);
+	G_pASCDevice->Render(RenderEvent, 0x000050);
 
 	// Execute constant time processing
 	ASCWindowsTimer()->Process();
-}
-
-void ProcessEvent()
-{
-
 }
 
 void Setup()

@@ -95,9 +95,11 @@
     <ClCompile Include="..\..\..\Source\ASCUtils.cpp" />
     <ClCompile Include="..\..\..\Source\ASCWindowsConnector.cpp" />
     <ClCompile Include="..\..\..\Source\ASCWindowsTimer.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9Canvas.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Common.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Device.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Provider.cpp" />
+    <ClCompile Include="..\..\..\Source\DX9\ASCDX9SwapChains.cpp" />
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Textures.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />

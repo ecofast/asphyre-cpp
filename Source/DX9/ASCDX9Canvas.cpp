@@ -27,7 +27,7 @@ void CASCDX9Canvas::Flush()
 	m_CanvasTopology = actdx9Unknown;
 	m_CachedEffect = abeUnknown;
 
-	if (!G_pD3D9Device)
+	if (G_pD3D9Device)
 	{
 		G_pD3D9Device->SetTexture(0, 0);
 	}
@@ -97,28 +97,6 @@ void CASCDX9Canvas::ResetStates()
 		// Triangle fill mode
 		G_pD3D9Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	}
-}
-
-void CASCDX9Canvas::RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2)
-{
-	if (!RequestCache(actdx9Lines, 2, 0, abeNormal, 0))
-	{
-		return;
-	}
-
-	PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
-	pEntry->Vertex.x = Src.X;
-	pEntry->Vertex.y = Src.Y;
-	pEntry->uColor = uColor1;
-	m_nVertexCount++;
-
-	pEntry = (PASCDX9VertexRec)NextVertexEntry();
-	pEntry->Vertex.x = Dest.X;
-	pEntry->Vertex.y = Dest.Y;
-	pEntry->uColor = uColor2;
-	m_nVertexCount++;
-
-	m_nPrimitives++;
 }
 
 ASCBoolean CASCDX9Canvas::HandleDeviceCreate()
@@ -407,7 +385,7 @@ ASCBoolean CASCDX9Canvas::UploadIndexBuffer()
 		return false;
 	}
 
-	memmove(pMemAddr, m_pVertexArray, nBufSize);
+	memmove(pMemAddr, m_pIndexArray, nBufSize);
 	m_pIndexBuffer->Unlock();
 
 	return true;
@@ -550,4 +528,74 @@ void CASCDX9Canvas::SetEffectStates(CASCBlendingEffect Effect)
 	default:
 		break;
 	}
+}
+
+void CASCDX9Canvas::RenderPixel(const CASCFloatVector2D Pt, ASCColor uColor)
+{
+	if (!RequestCache(actdx9Points, 1, 0, abeNormal, 0))
+	{
+		return;
+	}
+
+	PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = Pt.X * m_fInternalScale;
+	pEntry->Vertex.y = Pt.Y * m_fInternalScale;
+	pEntry->uColor = uColor;
+	m_nVertexCount++;
+
+	m_nPrimitives++;
+}
+
+void CASCDX9Canvas::RenderLine(const CASCFloatVector2D Src, const CASCFloatVector2D Dest, ASCColor uColor1, ASCColor uColor2)
+{
+	if (!RequestCache(actdx9Lines, 2, 0, abeNormal, 0))
+	{
+		return;
+	}
+
+	PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = Src.X * m_fInternalScale;
+	pEntry->Vertex.y = Src.Y * m_fInternalScale;
+	pEntry->uColor = uColor1;
+	m_nVertexCount++;
+
+	pEntry = (PASCDX9VertexRec)NextVertexEntry();
+	pEntry->Vertex.x = Dest.X * m_fInternalScale;
+	pEntry->Vertex.y = Dest.Y * m_fInternalScale;
+	pEntry->uColor = uColor2;
+	m_nVertexCount++;
+
+	m_nPrimitives++;
+}
+
+void CASCDX9Canvas::RenderIndexedTriangles(PASCFloatVector2D pVertices, ASCUInt* pColors, ASCInt* pIndices, 
+										   ASCInt nNumVertices, ASCInt nNumTriangles, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (!RequestCache(actdx9Triangles, nNumVertices, nNumTriangles * 3, Effect, 0))
+	{
+		return;
+	}
+
+	ASCInt* pIndex = pIndices;
+	for (ASCInt i = 0; i < nNumTriangles * 3; i++)
+	{
+		AddIndexEntry(m_nVertexCount + *pIndex);
+		pIndex++;
+	}
+
+	PASCFloatVector2D pVertex = pVertices;
+	ASCUInt* pColor = pColors;
+	for (ASCInt i = 0; i < nNumVertices; i++)
+	{
+		PASCDX9VertexRec pEntry = (PASCDX9VertexRec)NextVertexEntry();
+		pEntry->Vertex.x = pVertex->X * m_fInternalScale - 0.5;
+		pEntry->Vertex.y = pVertex->Y * m_fInternalScale - 0.5;
+		pEntry->uColor = *pColor;
+		m_nVertexCount++;
+
+		pVertex++;
+		pColor++;
+	}
+
+	m_nPrimitives += nNumTriangles;
 }
