@@ -45,9 +45,9 @@ ASCDouble CASCTiming::GetTimeValue()
 		}
 	}
 
-	LARGE_INTEGER nTimeCounter;
 	if (m_Mode == atmHighPrecision)
 	{
+		LARGE_INTEGER nTimeCounter;
 		QueryPerformanceCounter(&nTimeCounter);
 		return ((nTimeCounter.QuadPart * 1000.0) / m_nHighFrequency.QuadPart);
 	}

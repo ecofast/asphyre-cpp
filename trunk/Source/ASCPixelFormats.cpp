@@ -2,11 +2,11 @@
 
 ASCInt GetChannelDistance(CASCPixelFormat SrcFmt, CASCPixelFormat DestFmt)
 {
-	CASCPixelFormatInfo	SrcInfo		= GetPixelFormatInfo(SrcFmt);
-	CASCPixelFormatInfo	DestInfo	= GetPixelFormatInfo(DestFmt);
-	ASCInt				nResult		= 0;
-	CASCChannelType		ChannelType;
-	ASCInt				nDestNo;
+	CASCPixelFormatInfo	SrcInfo = GetPixelFormatInfo(SrcFmt);
+	CASCPixelFormatInfo	DestInfo = GetPixelFormatInfo(DestFmt);
+	ASCInt nResult = 0;
+	CASCChannelType ChannelType;
+	ASCInt nDestNo;
 	for (ASCInt nSrcNo = 0; nSrcNo <= SrcInfo.nNumChannels - 1; nSrcNo++)
 	{
 		ChannelType = SrcInfo.Channels[nSrcNo].ChannelType;
@@ -26,10 +26,10 @@ ASCInt GetChannelDistance(CASCPixelFormat SrcFmt, CASCPixelFormat DestFmt)
 
 ASCInt GetChannelExtraBits(CASCPixelFormat SampleFmt, CASCPixelFormat ReqFmt)
 {
-	CASCPixelFormatInfo	SampleInfo	= GetPixelFormatInfo(SampleFmt);
-	CASCPixelFormatInfo	ReqInfo		= GetPixelFormatInfo(ReqFmt);
-	CASCChannelType		ChannelType;
-	ASCInt				nResult		= 0;
+	CASCPixelFormatInfo SampleInfo = GetPixelFormatInfo(SampleFmt);
+	CASCPixelFormatInfo ReqInfo = GetPixelFormatInfo(ReqFmt);
+	CASCChannelType ChannelType;
+	ASCInt nResult = 0;
 	for (ASCInt i = 0; i < SampleInfo.nNumChannels; i++)
 	{
 		ChannelType = SampleInfo.Channels[i].ChannelType;
@@ -43,11 +43,11 @@ ASCInt GetChannelExtraBits(CASCPixelFormat SampleFmt, CASCPixelFormat ReqFmt)
 
 ASCInt GetChannelPosDistance(CASCPixelFormat SrcFmt, CASCPixelFormat DestFmt)
 {
-	CASCPixelFormatInfo	SrcInfo		= GetPixelFormatInfo(SrcFmt);
-	CASCPixelFormatInfo	DestInfo	= GetPixelFormatInfo(DestFmt);
-	ASCSingle			fSum		= 0.0;
-	CASCChannelType		ChannelType;
-	ASCInt				nDestNo, nSrcPos, nDestPos;
+	CASCPixelFormatInfo SrcInfo = GetPixelFormatInfo(SrcFmt);
+	CASCPixelFormatInfo DestInfo = GetPixelFormatInfo(DestFmt);
+	ASCSingle fSum = 0.0;
+	CASCChannelType ChannelType;
+	ASCInt nDestNo, nSrcPos, nDestPos;
 	for (ASCInt nSrcNo = 0; nSrcNo <= SrcInfo.nNumChannels - 1; nSrcNo++)
 	{
 		ChannelType = SrcInfo.Channels[nSrcNo].ChannelType;
@@ -62,18 +62,18 @@ ASCInt GetChannelPosDistance(CASCPixelFormat SrcFmt, CASCPixelFormat DestFmt)
 		}
 		nSrcPos = (SrcInfo.nNumChannels - 1) - nSrcNo;
 		nDestPos = (DestInfo.nNumChannels - 1) - nDestNo;
-		fSum += (pow(nSrcPos - nDestPos, 2));
+		fSum += (ASCSingle)(pow(nSrcPos - nDestPos, 2));
 	}
 	return ASCRound(sqrt(fSum));
 }
 
 ASCBoolean AcceptFormat(CASCPixelFormat SampleFmt, CASCPixelFormat ReqFmt)
 {
-	CASCPixelFormatInfo	SampleInfo	= GetPixelFormatInfo(SampleFmt);
-	CASCPixelFormatInfo	ReqInfo		= GetPixelFormatInfo(ReqFmt);
-	ASCBoolean			bMatched	= false;
-	CASCChannelType		ChannelType;
-	ASCInt				nDestNo;
+	CASCPixelFormatInfo SampleInfo = GetPixelFormatInfo(SampleFmt);
+	CASCPixelFormatInfo ReqInfo = GetPixelFormatInfo(ReqFmt);
+	ASCBoolean bMatched = false;
+	CASCChannelType ChannelType;
+	ASCInt nDestNo;
 	for (ASCInt i = 0; i < ReqInfo.nNumChannels; i++)
 	{
 		ChannelType = ReqInfo.Channels[i].ChannelType;
@@ -219,8 +219,8 @@ void CASCPixelFormatList::ItemSortSwap(ASCInt nIndex1, ASCInt nIndex2)
 
 ASCInt CASCPixelFormatList::ItemSortCompare(CASCPixelFormat fmt1, CASCPixelFormat fmt2)
 {
-	ASCInt	nDelta1 = GetChannelDistance(fmt1, m_ReqSortFormat);
-	ASCInt	nDelta2 = GetChannelDistance(fmt2, m_ReqSortFormat);
+	ASCInt nDelta1 = GetChannelDistance(fmt1, m_ReqSortFormat);
+	ASCInt nDelta2 = GetChannelDistance(fmt2, m_ReqSortFormat);
 	if (nDelta1 == nDelta2)
 	{
 		nDelta1 = GetChannelExtraBits(fmt1, m_ReqSortFormat);
@@ -257,12 +257,12 @@ ASCInt CASCPixelFormatList::ItemSortCompare(CASCPixelFormat fmt1, CASCPixelForma
 
 ASCInt CASCPixelFormatList::ItemSortSplit(ASCInt nStart, ASCInt nStop)
 {
-	ASCInt			nLeft	= nStart + 1;
-	ASCInt			nRight	= nStop;
-	CASCPixelFormat	Pivot	= m_Items[nStart];
-	while (nLeft < nRight)
+	ASCInt nLeft = nStart + 1;
+	ASCInt nRight = nStop;
+	CASCPixelFormat Pivot = m_Items[nStart];
+	while (nLeft <= nRight)
 	{
-		while ((nLeft < nStop) && (ItemSortCompare(m_Items[nLeft], Pivot) < 0))
+		while ((nLeft <= nStop) && (ItemSortCompare(m_Items[nLeft], Pivot) < 0))
 		{
 			nLeft++;
 		}
@@ -281,10 +281,9 @@ ASCInt CASCPixelFormatList::ItemSortSplit(ASCInt nStart, ASCInt nStop)
 
 void CASCPixelFormatList::ItemSortExec(ASCInt nStart, ASCInt nStop)
 {
-	ASCInt nSplitPos;
 	if (nStart < nStop)
 	{
-		nSplitPos = ItemSortSplit(nStart, nStop);
+		ASCInt nSplitPos = ItemSortSplit(nStart, nStop);
 		ItemSortExec(nStart, nSplitPos - 1);
 		ItemSortExec(nSplitPos + 1, nStop);
 	}

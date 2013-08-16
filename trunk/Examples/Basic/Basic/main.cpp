@@ -11,10 +11,13 @@ using std::wstring;
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
 
+const int CLIENT_WIDTH  = 1280;
+const int CLIENT_HEIGHT = 720;
+
 HINSTANCE	G_hInstance		= NULL;
 HWND		G_hWnd			= NULL;
-int			G_nWndWidth		= 1280;
-int			G_nWndHeight	= 720;
+int			G_nWndWidth, G_nWndHeight;
+int			G_nLeft, G_nTop;
 
 CASCDevice*		G_pASCDevice = 0;
 CASCCanvas*		G_pASCCanvas = 0;
@@ -75,8 +78,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	RegisterClassEx(&wc);
 
+	G_nWndWidth = CLIENT_WIDTH + GetSystemMetrics(SM_CXSIZEFRAME) * 2;
+	G_nWndHeight = CLIENT_HEIGHT + GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION);
+	G_nLeft = (GetSystemMetrics(SM_CXSCREEN) - G_nWndWidth) / 2;
+	G_nTop = (GetSystemMetrics(SM_CYSCREEN) - G_nWndHeight) / 2;
 	// G_hWnd = CreateWindowEx(0, WINDOW_CLASS, WINDOW_TITLE, WS_OVERLAPPEDWINDOW, 0, 0, 800, 600, NULL, NULL, g_hInstance, NULL);
-	G_hWnd = CreateWindowEx(0, wsClassName.c_str(), wsWndCaption.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, G_nWndWidth, G_nWndHeight, NULL, NULL, G_hInstance, NULL);
+	G_hWnd = CreateWindowEx(0, wsClassName.c_str(), wsWndCaption.c_str(), WS_OVERLAPPEDWINDOW, 
+		G_nLeft, G_nTop, G_nWndWidth, G_nWndHeight, NULL, NULL, G_hInstance, NULL);
 	
 	ShowWindow(G_hWnd, nShowCmd);
 
@@ -124,7 +132,7 @@ void OnASCDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHan
 
 void OnASCDeviceInit(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
-	G_DisplaySize = CASCIntVector2D(G_nWndWidth, G_nWndHeight);
+	G_DisplaySize = CASCIntVector2D(CLIENT_WIDTH, CLIENT_HEIGHT);
 	G_pASCDevice->GetSwapChains()->Add((ASCUInt)G_hWnd, G_DisplaySize);
 }
 
@@ -143,7 +151,6 @@ CASCColor4 G_Color4 = {0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFFFFFF};
 
 void RenderEvent()
 {
-	/*
 	G_pASCCanvas->RenderPixel(10, 10, 0xFFFF0000);
 	G_pASCCanvas->RenderLine(100, 100, 200, 200, 0xFFFFFFFF);
 	G_pASCCanvas->FillRect(500, 100, 200, 200, 0xFF00FF00);
@@ -151,14 +158,13 @@ void RenderEvent()
 	G_pASCCanvas->FrameRect(200, 250, 100, 100, 0xFFFFFFFF);
 	G_pASCCanvas->RenderHorizLine(50, 50, 100, 0xFFFF0000, 0xFFFF0000);
 	G_pASCCanvas->RenderVertLine(400, 100, 200, 0xFFFF0000, 0xFF00FF00);
-	*/
-
+	
 	// Draw an animated hole.
 	G_pASCCanvas->RenderQuadHole(CASCFloatVector2D(0.0, 0.0), 
-		CASCFloatVector2D(G_DisplaySize.X, G_DisplaySize.Y), 
-		CASCFloatVector2D(G_DisplaySize.X * 0.5 + cos(G_nGameTicks * 0.0073) * G_DisplaySize.X * 0.25, 
-		G_DisplaySize.Y * 0.5 + sin(G_nGameTicks * 0.00312) * G_DisplaySize.Y * 0.25), 
-		CASCFloatVector2D(80.0, 100.0), 0x20FFFFFF, 0x80955BFF, 16);
+		CASCFloatVector2D((ASCSingle)G_DisplaySize.X, (ASCSingle)G_DisplaySize.Y), 
+		CASCFloatVector2D((ASCSingle)(G_DisplaySize.X * 0.5 + cos(G_nGameTicks * 0.0073) * G_DisplaySize.X * 0.25), 
+		(ASCSingle)(G_DisplaySize.Y * 0.5 + sin(G_nGameTicks * 0.00312) * G_DisplaySize.Y * 0.25)),
+		CASCFloatVector2D(80.0f, 100.0f), 0x20FFFFFF, 0x80955BFF, 16);
 }
 
 void HandleConnectFailure()

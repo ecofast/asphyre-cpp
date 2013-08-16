@@ -33,8 +33,8 @@ const ASCDouble cASCQuickSampleTimeMax = 1.0;
 
 CASCWindowsTimer::CASCWindowsTimer()
 {
-	m_fSpeed = 60.0;
-	m_nMaxFPS = 4000;
+	SetSpeed(60.0);
+	SetMaxFPS(4000);
 
 	// Application.OnIdle:= AppIdle;
 
@@ -93,7 +93,7 @@ void CASCWindowsTimer::AppIdle()/*(ASCBoolean* pDone)*/
 		m_nSlowFrameCount = 0;
 	}
 
-	if (fQuickSampleDiff > cASCQuickSampleTimeMax)
+	if (fQuickSampleDiff >= cASCQuickSampleTimeMax)
 	{
 		if (m_nQuickFrameCount > 0)
 		{
@@ -113,7 +113,7 @@ void CASCWindowsTimer::AppIdle()/*(ASCBoolean* pDone)*/
 
 		if (m_bProcessed)
 		{
-			m_fDeltaAccum = m_fDeltaAccum + fDelta;
+			m_fDeltaAccum = (ASCSingle)(m_fDeltaAccum + fDelta);
 			m_bProcessed = false;
 		}
 

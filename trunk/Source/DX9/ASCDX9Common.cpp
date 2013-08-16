@@ -92,9 +92,9 @@ D3DFORMAT DX9FindBackBufferFormat(CASCPixelFormat fmt)
 		ModeFmt = D3DFMT_X8R8G8B8;
 	}
 
-	CASCPixelFormatList*	pFmtLst	= new CASCPixelFormatList();
-	CASCPixelFormat			Sample;
-	D3DFORMAT				TestFmt;
+	CASCPixelFormatList* pFmtLst = new CASCPixelFormatList();
+	CASCPixelFormat Sample;
+	D3DFORMAT TestFmt;
 	for (ASCInt i = 0; i < ASC_BACKBUFFERFORMAT_NUM; i++)
 	{
 		Sample	= C_ASCBackBufferFormats[i];
