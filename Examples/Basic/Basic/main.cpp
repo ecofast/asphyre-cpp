@@ -7,6 +7,7 @@ using std::wstring;
 #include "../../../Source/ASCIntVector2D.h"
 #include "../../../Source/ASCWindowsConnector.h"
 #include "../../../Source/ASCWindowsTimer.h"
+#include "../../../Source/ASCTextures.h"
 
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
@@ -158,8 +159,8 @@ void RenderEvent()
 	G_pASCCanvas->FrameRect(200, 250, 100, 100, 0xFFFFFFFF);
 	G_pASCCanvas->RenderHorizLine(50, 50, 100, 0xFFFF0000, 0xFFFF0000);
 	G_pASCCanvas->RenderVertLine(400, 100, 200, 0xFFFF0000, 0xFF00FF00);
-	
-	// Draw an animated hole.
+
+	// Draw an animated hole
 	G_pASCCanvas->RenderQuadHole(CASCFloatVector2D(0.0, 0.0), 
 		CASCFloatVector2D((ASCSingle)G_DisplaySize.X, (ASCSingle)G_DisplaySize.Y), 
 		CASCFloatVector2D((ASCSingle)(G_DisplaySize.X * 0.5 + cos(G_nGameTicks * 0.0073) * G_DisplaySize.X * 0.25), 

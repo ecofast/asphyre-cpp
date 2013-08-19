@@ -193,22 +193,7 @@ CASCPixelFormat DX9FindTextureFormat(CASCPixelFormat fmt, ASCUInt32 uUsage)
 	}
 
 	CASCPixelFormatList *pFmtLst = new CASCPixelFormatList();
-	D3DFORMAT			TestFormat;
-	/*
-	for (CASCPixelFormat Sample = apfUnknown + 1; Sample <= apfX4R4G4B4; Sample++)
-	{
-		TestFormat =ASCPixelFormatToDX9(Sample);
-		if (TestFormat = D3DFMT_UNKNOWN)
-		{
-			continue;
-		}
-
-		if (SUCCEEDED(G_pD3D9->CheckDeviceFormat(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, DisplayFmt, uUsage, D3DRTYPE_TEXTURE, TestFormat)))
-		{
-			pFmtLst->Insert(Sample);
-		}
-	}
-	*/
+	D3DFORMAT TestFormat;
 	for (ASCInt Sample = (ASCInt)apfUnknown + 1; Sample <= (ASCInt)apfX4R4G4B4; Sample++)
 	{
 		TestFormat =ASCPixelFormatToDX9((CASCPixelFormat)Sample);
@@ -242,7 +227,7 @@ CASCPixelFormat DX9FindTextureFormatEx(CASCPixelFormat fmt, ASCUInt32 uUsage, AS
 	}
 
 	CASCPixelFormatList *pFmtLst = new CASCPixelFormatList();
-	D3DFORMAT			TestFormat;
+	D3DFORMAT TestFormat;
 	for (ASCInt Sample = (ASCInt)apfUnknown + 1; Sample <= (ASCInt)apfX4R4G4B4; Sample++) // for (CASCPixelFormat Sample = apfUnknown + 1; Sample <= apfX4R4G4B4; Sample++)
 	{
 		TestFormat =ASCPixelFormatToDX9((CASCPixelFormat)Sample);
