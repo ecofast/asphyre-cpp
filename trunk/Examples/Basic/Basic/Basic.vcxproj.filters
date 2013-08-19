@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\..\Source\DX9\ASCDX9Canvas.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ASCSurfaces.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -165,6 +168,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ASCStrUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ASCSurfaces.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

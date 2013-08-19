@@ -84,7 +84,7 @@ CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize)
 	}
 
 	// load from file
-	HANDLE h = CreateFile((LPCWSTR)&sFileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, 0);
+	HANDLE h = CreateFile(sFileName.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, 0);
 	if (INVALID_HANDLE_VALUE == h)
 	{
 		return 0;

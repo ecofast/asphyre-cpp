@@ -89,6 +89,7 @@
     <ClCompile Include="..\..\..\Source\ASCPixelFormats.cpp" />
     <ClCompile Include="..\..\..\Source\ASCProvider.cpp" />
     <ClCompile Include="..\..\..\Source\ASCStrUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCSurfaces.cpp" />
     <ClCompile Include="..\..\..\Source\ASCSwapChains.cpp" />
     <ClCompile Include="..\..\..\Source\ASCTextures.cpp" />
     <ClCompile Include="..\..\..\Source\ASCTiming.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="..\..\..\Source\ASCPixelFormats.h" />
     <ClInclude Include="..\..\..\Source\ASCProvider.h" />
     <ClInclude Include="..\..\..\Source\ASCStrUtils.h" />
+    <ClInclude Include="..\..\..\Source\ASCSurfaces.h" />
     <ClInclude Include="..\..\..\Source\ASCSwapChains.h" />
     <ClInclude Include="..\..\..\Source\ASCTextures.h" />
     <ClInclude Include="..\..\..\Source\ASCTiming.h" />
