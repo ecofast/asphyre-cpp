@@ -16,7 +16,10 @@
 #include <string>
 using std::wstring;
 #include <windows.h>
+#include <Shlwapi.h>
 #include "ASCTypes.h"
+
+#pragma comment(lib, "Shlwapi.lib")
 
 ASCInt ASCRound(ASCDouble f);
 
@@ -62,3 +65,5 @@ private:
 };
 
 CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize);
+
+wstring ExtractFileExt(const wstring& sFileName);
