@@ -110,3 +110,8 @@ CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize)
 	uSize = uBytesRead;
 	return (new CASCResourse(pData, uSize));
 }
+
+wstring ExtractFileExt(const wstring& sFileName)
+{
+	return (PathFindExtensionW(sFileName.c_str()));
+}
