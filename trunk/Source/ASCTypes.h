@@ -23,8 +23,12 @@ typedef	unsigned int		ASCUInt;
 typedef ASCInt				ASCInt32;
 typedef ASCUInt				ASCUInt32;
 
+typedef long long			ASCInt64;
+typedef unsigned long long	ASCUInt64;
+
 typedef	ASCUInt32			ASCColor;
 
+typedef unsigned short		ASCWord;
 typedef unsigned long		ASCDWord;
 
 typedef	float				ASCSingle;
@@ -34,6 +38,8 @@ typedef bool				ASCBoolean;
 
 typedef char				ASCChar;
 typedef wchar_t				ASCWChar;
+
+typedef unsigned char		ASCByte;
 
 typedef void*				ASCPointer;
 
