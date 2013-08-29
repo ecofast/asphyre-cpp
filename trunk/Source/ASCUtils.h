@@ -42,15 +42,6 @@ inline ASCInt GetArrayLen(const T& arr)
 	return (sizeof(arr) / sizeof(arr[0]));
 }
 
-/*
-template<typename T>
-const T& max3(const T& a, const T& b, const T& c)
-{
-	using std::max;
-	return max(max(a, b), c);
-}
-*/
-
 class CASCResourse
 {
 public:
