@@ -80,12 +80,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\ASCBitmap.cpp" />
     <ClCompile Include="..\..\..\Source\ASCBitmaps.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCBitmapsBMP.cpp" />
     <ClCompile Include="..\..\..\Source\ASCCanvas.cpp" />
     <ClCompile Include="..\..\..\Source\ASCDevice.cpp" />
     <ClCompile Include="..\..\..\Source\ASCEvents.cpp" />
     <ClCompile Include="..\..\..\Source\ASCEventSystem.cpp" />
     <ClCompile Include="..\..\..\Source\ASCFormatInfo.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCImages.cpp" />
     <ClCompile Include="..\..\..\Source\ASCPixelFormatConv.cpp" />
     <ClCompile Include="..\..\..\Source\ASCPixelFormats.cpp" />
     <ClCompile Include="..\..\..\Source\ASCProvider.cpp" />
@@ -108,7 +111,9 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\ASCBitmap.h" />
     <ClInclude Include="..\..\..\Source\ASCBitmaps.h" />
+    <ClInclude Include="..\..\..\Source\ASCBitmapsBMP.h" />
     <ClInclude Include="..\..\..\Source\ASCCanvas.h" />
     <ClInclude Include="..\..\..\Source\ASCConsts.h" />
     <ClInclude Include="..\..\..\Source\ASCDevice.h" />
@@ -116,6 +121,7 @@
     <ClInclude Include="..\..\..\Source\ASCEventSystem.h" />
     <ClInclude Include="..\..\..\Source\ASCFloatVector2D.h" />
     <ClInclude Include="..\..\..\Source\ASCFormatInfo.h" />
+    <ClInclude Include="..\..\..\Source\ASCImages.h" />
     <ClInclude Include="..\..\..\Source\ASCIntVector2D.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormatConv.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormats.h" />

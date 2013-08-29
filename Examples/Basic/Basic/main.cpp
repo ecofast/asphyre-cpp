@@ -8,6 +8,7 @@ using std::wstring;
 #include "../../../Source/ASCWindowsConnector.h"
 #include "../../../Source/ASCWindowsTimer.h"
 #include "../../../Source/ASCTextures.h"
+#include "../../../Source/ASCImages.h"
 
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
@@ -23,6 +24,7 @@ int			G_nLeft, G_nTop;
 CASCDevice*		G_pASCDevice = 0;
 CASCCanvas*		G_pASCCanvas = 0;
 CASCIntVector2D	G_DisplaySize;
+CASCImage*		G_pASCImage = 0;
 int				G_nGameTicks = 0;
 
 int		WINAPI		WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
@@ -118,11 +120,17 @@ void OnASCCreate(const void* pSender, const ASCPointer pParam, ASCBoolean* bHand
 	// Create ASC components
 	G_pASCDevice = ASCFactory()->CreateDevice();
 	G_pASCCanvas = ASCFactory()->CreateCanvas();
+
+	G_pASCImage = new CASCImage();
+	G_pASCImage->LoadFromFile(L"lena.png");
 }
 
 void OnASCDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
 {
 	ASCWindowsTimer()->SetEnabled(false);
+
+	delete G_pASCImage;
+	G_pASCImage = 0;
 
 	delete G_pASCCanvas;
 	G_pASCCanvas = 0;
