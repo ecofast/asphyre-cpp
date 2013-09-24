@@ -99,21 +99,24 @@ ASCBoolean AcceptFormat(CASCPixelFormat SampleFmt, CASCPixelFormat ReqFmt)
 
 CASCPixelFormat FindClosestFormatGeneric(CASCPixelFormat fmt, CASCPixelFormatList* pExistingFmtLst)
 {
-	CASCPixelFormatList FmtLst;
+	CASCPixelFormatList* pFmtLst = new CASCPixelFormatList();
 	for (ASCInt i = 0; i < pExistingFmtLst->GetCount(); i++)
 	{
 		if (AcceptFormat(pExistingFmtLst->GetFormat(i), fmt))
 		{
-			FmtLst.Insert(pExistingFmtLst->GetFormat(i));
+			pFmtLst->Insert(pExistingFmtLst->GetFormat(i));
 		}
 	}
-	FmtLst.SortBestMatchByGivenFormat(fmt);
-	if (FmtLst.GetCount() > 0)
+	pFmtLst->SortBestMatchByGivenFormat(fmt);
+	if (pFmtLst->GetCount() > 0)
 	{
-		return FmtLst.GetFormat(0);
+		CASCPixelFormat Result = pFmtLst->GetFormat(0);
+		delete pFmtLst;
+		return Result;
 	}
 	else
 	{
+		delete pFmtLst;
 		return apfUnknown;
 	}
 }
@@ -238,8 +241,8 @@ ASCInt CASCPixelFormatList::ItemSortCompare(CASCPixelFormat fmt1, CASCPixelForma
 	}
 	if (nDelta1 == nDelta2)
 	{
-		nDelta1 = abs(C_ASCPixelFormatBits[fmt1] - C_ASCPixelFormatBits[m_ReqSortFormat]);
-		nDelta2 = abs(C_ASCPixelFormatBits[fmt2] - C_ASCPixelFormatBits[m_ReqSortFormat]);
+		nDelta1 = abs(cASCPixelFormatBits[fmt1] - cASCPixelFormatBits[m_ReqSortFormat]);
+		nDelta2 = abs(cASCPixelFormatBits[fmt2] - cASCPixelFormatBits[m_ReqSortFormat]);
 	}
 	if (nDelta1 > nDelta2)
 	{

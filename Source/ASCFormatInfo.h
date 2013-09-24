@@ -58,7 +58,7 @@ enum CASCPixelFormatCategory
 };
 
 // R-G-B-A
-const CASCFormatBitInfo C_ASCFormatBitInfos[ASC_PIXELFORMAT_ELEMNUM] = 
+const CASCFormatBitInfo cFormatBitInfos[cASCPixelFormatElemNum] = 
 {
 	(-1,  0, -1,  0, -1,  0, -1,  0),  // apfUnknown
 	(16,  8,  8,  8,  0,  8, -1,  0),  // apfR8G8B8
@@ -71,13 +71,13 @@ const CASCFormatBitInfo C_ASCFormatBitInfos[ASC_PIXELFORMAT_ELEMNUM] =
 	( 8,  4,  4,  4,  0,  4, -1,  0)   // apfX4R4G4B4
 };
 
-const CASCPixelFormatCategory C_PixelFormatCategories[ASC_PIXELFORMAT_ELEMNUM] = 
+const CASCPixelFormatCategory cPixelFormatCategories[cASCPixelFormatElemNum] = 
 {
 	apfcMisc, apfcRGB, apfcRGB, apfcRGB, apfcRGB, apfcRGB, apfcRGB, apfcRGB, apfcRGB
 };
 
-const ASCInt	ASC_CHANNELTYPE_ELEMNUM							= 5;
-// const ASCChar	C_ChannelTextLetters[ASC_CHANNELTYPE_ELEMNUM]	= {"R", "G", "B", "A", "-"};
+const ASCInt	cChannelTypeElemNum							= 5;
+// const ASCChar	cChannelTextLetters[cChannelTypeElemNum]	= {"R", "G", "B", "A", "-"};
 
 void ResetFormatInfo(const PASCPixelFormatInfo pInfo);
 

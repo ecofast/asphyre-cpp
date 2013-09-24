@@ -4,7 +4,7 @@
 
 ASCUInt ASCPixelFormatXTo32(ASCPointer pSrc, CASCPixelFormat SrcFmt)
 {
-	ASCInt nBits = C_ASCPixelFormatBits[SrcFmt];
+	ASCInt nBits = cASCPixelFormatBits[SrcFmt];
 	if ((nBits < 8) || (nBits > 32))
 	{
 		return 0;
@@ -24,7 +24,7 @@ ASCUInt ASCPixelFormatXTo32(ASCPointer pSrc, CASCPixelFormat SrcFmt)
 	default:
 		ASCUInt uMask;
 		ASCUInt uResult	= 0;
-		const CASCFormatBitInfo *pInfo = &C_ASCFormatBitInfos[SrcFmt];  // PASCFormatBitInfo pInfo	= &C_ASCFormatBitInfos[SrcFmt];
+		const CASCFormatBitInfo *pInfo = &cFormatBitInfos[SrcFmt];  // PASCFormatBitInfo pInfo	= &C_ASCFormatBitInfos[SrcFmt];
 
 		// Blue Component
 		if (pInfo->nBNum > 0)
@@ -77,7 +77,7 @@ ASCUInt ASCPixelFormatXTo32(ASCPointer pSrc, CASCPixelFormat SrcFmt)
 
 void Pixel32ToASCPixelFormatX(ASCUInt uSrc, ASCPointer pDest, CASCPixelFormat DestFmt)
 {
-	ASCInt nBits = C_ASCPixelFormatBits[DestFmt];
+	ASCInt nBits = cASCPixelFormatBits[DestFmt];
 	if ((nBits < 8) || (nBits > 32))
 	{
 		return;
@@ -93,7 +93,7 @@ void Pixel32ToASCPixelFormatX(ASCUInt uSrc, ASCPointer pDest, CASCPixelFormat De
 		break;
 	default:
 		ASCUInt uMask;
-		const CASCFormatBitInfo *pInfo = &C_ASCFormatBitInfos[DestFmt];  // PASCFormatBitInfo pInfo	= &C_ASCFormatBitInfos[DestFmt];
+		const CASCFormatBitInfo *pInfo = &cFormatBitInfos[DestFmt];  // PASCFormatBitInfo pInfo	= &C_ASCFormatBitInfos[DestFmt];
 
 		// Blue Component
 		if (pInfo->nBNum > 0)
@@ -131,7 +131,7 @@ void Pixel32ToASCPixelFormatX(ASCUInt uSrc, ASCPointer pDest, CASCPixelFormat De
 
 void ASCPixelFormatXArrayTo32(ASCPointer pSrc, ASCPointer pDest, CASCPixelFormat SrcFmt, ASCInt nElemNum)
 {
-	ASCInt nBits = C_ASCPixelFormatBits[SrcFmt];
+	ASCInt nBits = cASCPixelFormatBits[SrcFmt];
 	if (nBits < 8)
 	{
 		return;
@@ -150,7 +150,7 @@ void ASCPixelFormatXArrayTo32(ASCPointer pSrc, ASCPointer pDest, CASCPixelFormat
 
 void Pixel32ToASCPixelFormatXArray(ASCPointer pSrc, ASCPointer pDest, CASCPixelFormat DestFmt, ASCInt nElemNum)
 {
-	ASCInt nBits = C_ASCPixelFormatBits[DestFmt];
+	ASCInt nBits = cASCPixelFormatBits[DestFmt];
 	if (nBits < 8)
 	{
 		return;

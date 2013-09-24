@@ -21,6 +21,7 @@ using std::wstring;
 
 #pragma comment(lib, "Shlwapi.lib")
 
+// 通过四舍五入的方式取整数
 ASCInt ASCRound(ASCDouble f);
 
 RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight);
@@ -42,6 +43,17 @@ inline ASCInt GetArrayLen(const T& arr)
 	return (sizeof(arr) / sizeof(arr[0]));
 }
 
+template <typename T>
+inline void SwapValue(T& v1, T& v2)
+{
+	T v = v1;
+	v1 = v2;
+	v2 = v;
+}
+
+// 返回不小于两数相除的商的最小整数
+ASCInt CeilDiv(ASCInt nDividend, ASCInt nDivisor);
+
 class CASCResourse
 {
 public:
@@ -58,3 +70,11 @@ private:
 CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize);
 
 wstring ExtractFileExt(const wstring& sFileName);
+
+/*
+ * 取一行的字节数
+ * nPixelsPerLine: 一行多少像素
+ * nBitsPerPixel: 为一像素多少位
+ * nAlign: 多少位对齐
+*/
+ASCInt BytesPerLine(ASCInt nPixelsPerLine, ASCInt nBitsPerPixel, ASCInt nAlign);

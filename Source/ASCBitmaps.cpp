@@ -149,8 +149,8 @@ ASCBoolean CASCBitmapManager::SaveToFile(const wstring& sFileName, CASCSystemSur
 	}
 
 	ASCBoolean bResult = pHandler->SaveToStream(ExtractFileExt(sFileName), pFileStream, pSource);
+
 	delete pFileStream;
 	pFileStream = 0;
-
 	return bResult;
 }

@@ -2,7 +2,7 @@
 
 ASCInt ASCRound(ASCDouble f)
 {
-	return (ASCInt)(f + 0.5);
+	return (f >= 0 ? (ASCInt)(f + 0.5f) : (ASCInt)(f - 0.5f));  // return (ASCInt)(f + 0.5);
 }
 
 RECT ASCBounds( ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight )
@@ -114,4 +114,17 @@ CASCResourse* LoadResource(const wstring& sFileName, ASCUInt& uSize)
 wstring ExtractFileExt(const wstring& sFileName)
 {
 	return (PathFindExtensionW(sFileName.c_str()));
+}
+
+ASCInt BytesPerLine(ASCInt nPixelsPerLine, ASCInt nBitsPerPixel, ASCInt nAlign)
+{
+	return ((nPixelsPerLine * nBitsPerPixel + nAlign - 1) &~ (nAlign - 1)) >> 3;
+}
+
+ASCInt CeilDiv(ASCInt nDividend, ASCInt nDivisor)
+{
+	ASCInt nResult = nDividend / nDivisor;
+	if (nDividend % nDivisor > 0) 
+		++nResult;
+	return nResult;
 }

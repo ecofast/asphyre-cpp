@@ -15,7 +15,7 @@ CASCSystemSurface::~CASCSystemSurface()
 {
 	if (m_pBits)
 	{
-		delete m_pBits;
+		free(m_pBits);
 		m_pBits = 0;
 	}
 }

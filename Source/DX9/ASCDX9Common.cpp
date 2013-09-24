@@ -221,7 +221,7 @@ CASCPixelFormat DX9FindTextureFormatEx(CASCPixelFormat fmt, ASCUInt32 uUsage, AS
 	}
 
 	D3DFORMAT DisplayFmt = G_D3D9DisplayMode.Format;
-	if (DisplayFmt = D3DFMT_UNKNOWN)
+	if (DisplayFmt == D3DFMT_UNKNOWN)
 	{
 		DisplayFmt = D3DFMT_X8R8G8B8;
 	}
@@ -230,8 +230,8 @@ CASCPixelFormat DX9FindTextureFormatEx(CASCPixelFormat fmt, ASCUInt32 uUsage, AS
 	D3DFORMAT TestFormat;
 	for (ASCInt Sample = (ASCInt)apfUnknown + 1; Sample <= (ASCInt)apfX4R4G4B4; Sample++) // for (CASCPixelFormat Sample = apfUnknown + 1; Sample <= apfX4R4G4B4; Sample++)
 	{
-		TestFormat =ASCPixelFormatToDX9((CASCPixelFormat)Sample);
-		if (TestFormat = D3DFMT_UNKNOWN)
+		TestFormat = ASCPixelFormatToDX9((CASCPixelFormat)Sample);
+		if (TestFormat == D3DFMT_UNKNOWN)
 		{
 			continue;
 		}

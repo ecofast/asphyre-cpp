@@ -4,11 +4,14 @@ using std::wstring;
 #include "../../../Source/ASCEvents.h"
 #include "../../../Source/ASCDevice.h"
 #include "../../../Source/DX9/ASCDX9Provider.h"
+#include "../../../Source/ASCUtils.h"
 #include "../../../Source/ASCIntVector2D.h"
 #include "../../../Source/ASCWindowsConnector.h"
 #include "../../../Source/ASCWindowsTimer.h"
 #include "../../../Source/ASCTextures.h"
 #include "../../../Source/ASCImages.h"
+#include "../../../Source/ASCBitmaps.h"
+#include "../../../Source/ASCBitmapsBMP.h"
 
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
@@ -120,9 +123,6 @@ void OnASCCreate(const void* pSender, const ASCPointer pParam, ASCBoolean* bHand
 	// Create ASC components
 	G_pASCDevice = ASCFactory()->CreateDevice();
 	G_pASCCanvas = ASCFactory()->CreateCanvas();
-
-	G_pASCImage = new CASCImage();
-	G_pASCImage->LoadFromFile(L"lena.png");
 }
 
 void OnASCDestroy(const void* pSender, const ASCPointer pParam, ASCBoolean* bHandled)
@@ -174,6 +174,34 @@ void RenderEvent()
 		CASCFloatVector2D((ASCSingle)(G_DisplaySize.X * 0.5 + cos(G_nGameTicks * 0.0073) * G_DisplaySize.X * 0.25), 
 		(ASCSingle)(G_DisplaySize.Y * 0.5 + sin(G_nGameTicks * 0.00312) * G_DisplaySize.Y * 0.25)),
 		CASCFloatVector2D(80.0f, 100.0f), 0x20FFFFFF, 0x80955BFF, 16);
+
+	// Draw an image
+	if (G_pASCImage)
+	{
+		CASCPoint4 Pts, Mappings;
+		Pts[0].X = 750;
+		Pts[0].Y = 100;
+		Pts[1].X = 1262;
+		Pts[1].Y = 100;
+		Pts[2].X = 1262;
+		Pts[2].Y = 612;
+		Pts[3].X = 750;
+		Pts[3].Y = 612;
+
+		Mappings[0].X = 0;
+		Mappings[0].Y = 0;
+		Mappings[1].X = 1;
+		Mappings[1].Y = 0;
+		Mappings[2].X = 1;
+		Mappings[2].Y = 1;
+		Mappings[3].X = 0;
+		Mappings[3].Y = 1;
+
+		CASCColor4 Colors;
+		ASCColor4FromColor(0x5FFFFFFF, Colors);
+
+		G_pASCCanvas->RenderTexture(G_pASCImage->GetTexture(0), Pts, Mappings, Colors);
+	}
 }
 
 void HandleConnectFailure()
@@ -219,6 +247,13 @@ void TimerEvent()
 	{
 		return;
 	}
+	///*
+	if (!G_pASCImage)
+	{
+		G_pASCImage = new CASCImage();
+		G_pASCImage->LoadFromFile(L"D:\\Asphyre4CPP\\Examples\\Basic\\Debug\\1.bmp");  // G_pASCImage->LoadFromFile(L"1.bmp");
+	}
+	//*/
 
 	// Render the scene
 	G_pASCDevice->Render(RenderEvent, 0x000050);
@@ -259,6 +294,9 @@ void Setup()
 	ASCWindowsTimer()->SetOnTimer(&TimerEvent);
 	ASCWindowsTimer()->SetOnProcess(&ProcessEvent);
 	ASCWindowsTimer()->SetEnabled(true);
+
+	// Register BMP handler
+	ASCBitmapManager()->RegisterExt(L".bmp", ASCBitmapBMP());
 }
 
 void Cleanup()
@@ -273,4 +311,7 @@ void Cleanup()
 	ASCWindowsConnector()->Done();
 
 	ASCEventProviders()->UnSubscribe(wsClassName.c_str());
+
+	// UnRegister BMP handler
+	ASCBitmapManager()->UnregisterExt(L".bmp");
 }

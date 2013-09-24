@@ -20,6 +20,12 @@
 typedef	int					ASCInt;
 typedef	unsigned int		ASCUInt;
 
+typedef char				ASCInt8;
+typedef unsigned char		ASCUInt8;
+
+typedef short				ASCInt16;
+typedef unsigned short		ASCUInt16;
+
 typedef ASCInt				ASCInt32;
 typedef ASCUInt				ASCUInt32;
 
@@ -113,13 +119,16 @@ enum CASCPixelFormat {
 
 typedef CASCPixelFormat* PASCPixelFormat;
 
-const ASCInt ASC_PIXELFORMAT_ELEMNUM = 9;
+const ASCInt cASCPixelFormatElemNum = 9;
 
 /*
  * This constant has values defined for every possible combination of CASCPixelFormat 
  * and indicates the total number of bits used for each particular pixel format
 */
-const ASCInt C_ASCPixelFormatBits[ASC_PIXELFORMAT_ELEMNUM] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
+const ASCInt cASCPixelFormatBits[cASCPixelFormatElemNum] = {0, 24, 32, 32, 16, 16, 16, 16, 16};
+
+// 颜色占的字节数
+const ASCInt cASCPixelFormatBytes[cASCPixelFormatElemNum] = {0, 3, 4, 4, 2, 2, 2, 2, 2};
 
 /*
  * A combination of two colors, primarily used for displaying text with the
