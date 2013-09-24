@@ -115,12 +115,14 @@
     <ClInclude Include="..\..\..\Source\ASCBitmaps.h" />
     <ClInclude Include="..\..\..\Source\ASCBitmapsBMP.h" />
     <ClInclude Include="..\..\..\Source\ASCCanvas.h" />
+    <ClInclude Include="..\..\..\Source\ASCConfig.h" />
     <ClInclude Include="..\..\..\Source\ASCConsts.h" />
     <ClInclude Include="..\..\..\Source\ASCDevice.h" />
     <ClInclude Include="..\..\..\Source\ASCEvents.h" />
     <ClInclude Include="..\..\..\Source\ASCEventSystem.h" />
     <ClInclude Include="..\..\..\Source\ASCFloatVector2D.h" />
     <ClInclude Include="..\..\..\Source\ASCFormatInfo.h" />
+    <ClInclude Include="..\..\..\Source\ASCGraphics.h" />
     <ClInclude Include="..\..\..\Source\ASCImages.h" />
     <ClInclude Include="..\..\..\Source\ASCIntVector2D.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormatConv.h" />
@@ -131,6 +133,7 @@
     <ClInclude Include="..\..\..\Source\ASCSurfaces.h" />
     <ClInclude Include="..\..\..\Source\ASCSwapChains.h" />
     <ClInclude Include="..\..\..\Source\ASCTextures.h" />
+    <ClInclude Include="..\..\..\Source\ASCTimer.h" />
     <ClInclude Include="..\..\..\Source\ASCTiming.h" />
     <ClInclude Include="..\..\..\Source\ASCTypes.h" />
     <ClInclude Include="..\..\..\Source\ASCUtils.h" />

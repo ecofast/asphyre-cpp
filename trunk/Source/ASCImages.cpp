@@ -220,13 +220,14 @@ ASCBoolean CASCImage::LoadFromFile(const wstring& sFileName)
 	RemoveAllTextures();
 
 	m_PixelFormat = apfA8R8G8B8;
+
 	CASCLockableTexture* pNewTexture = InsertTexture(pSystemSurface->GetWidth(), pSystemSurface->GetHeight());
 	if (!pNewTexture)
 	{
 		delete pSystemSurface;
 		pSystemSurface = 0;
 		return false;
-	}
+	}	
 
 	ASCPointer pBits;
 	ASCInt nPitch;

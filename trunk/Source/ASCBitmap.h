@@ -15,6 +15,7 @@
 
 #include <string>
 using std::wstring;
+
 #include "ASCTypes.h"
 #include "ASCStreams.h"
 
@@ -35,6 +36,7 @@ public:
 	ASCByte* GetLineBits(ASCInt nLineNo);
 	ASCByte* GetBits();
 
+	// 设位图信息(nHeight 可以为负). 原来的位图数据将丢失
 	void SetBmpInfo(ASCInt nWidth, ASCInt nHeight, CASCPixelFormat fmt);
 
 	ASCBoolean LoadFormFile(const wstring& sFileName);
@@ -45,6 +47,8 @@ public:
 	// 绘制 DIB 位图
 	void Draw(HDC hDC, ASCInt nX, ASCInt nY);
 protected:
+	ASCUInt32* BitField16Bit();
+	ASCUInt32* BitField12Bit();
 private:
 	// 位图数据
 	ASCByte*		m_pBmpBits;

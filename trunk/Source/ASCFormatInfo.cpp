@@ -20,7 +20,7 @@ ASCInt AddChannel(const PASCPixelFormatInfo pInfo, CASCChannelType ChannelType, 
 		pInfo->Channels[nResult].ChannelType	= ChannelType;
 		pInfo->Channels[nResult].ChannelStorage	= ChannelStorage;
 		pInfo->Channels[nResult].nBits			= nBits;
-		pInfo->Channels[nBits].nPos				= nPos;
+		pInfo->Channels[nResult].nPos			= nPos;
 		pInfo->nNumChannels++;
 
 		return nResult;

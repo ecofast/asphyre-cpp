@@ -192,7 +192,7 @@ void CASCTexture::SetMipMapping(const ASCBoolean bMM)
 
 ASCInt CASCTexture::GetBytesPerPixel()
 {
-	return (C_ASCPixelFormatBits[m_PixelFormat] / 8);
+	return (cASCPixelFormatBits[m_PixelFormat] / 8);
 }
 
 void CASCTexture::UpdateSize()

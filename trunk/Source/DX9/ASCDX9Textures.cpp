@@ -76,6 +76,8 @@ void CASCDX9LockableTexture::Lock(RECT rc, ASCPointer& pBits, ASCInt& nPitch)
 	}
 
 	D3DLOCKED_RECT rcLocked;
+	rcLocked.Pitch = 0;
+	rcLocked.pBits = 0;
 	if (G_D3D9Mode == admDirect3D9Ex)
 	{
 		if (m_pSysTexture && (SUCCEEDED(m_pSysTexture->LockRect(0, &rcLocked, pRc, uUsage))))
