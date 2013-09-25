@@ -128,3 +128,111 @@ ASCInt CeilDiv(ASCInt nDividend, ASCInt nDivisor)
 		++nResult;
 	return nResult;
 }
+
+void ASCZeroPoint4(CASCPoint4& Rtn)
+{
+	Rtn[0].X = 0;
+	Rtn[0].Y = 0;
+	Rtn[1].X = 0;
+	Rtn[1].Y = 0;
+	Rtn[2].X = 0;
+	Rtn[2].Y = 0;
+	Rtn[3].X = 0;
+	Rtn[3].Y = 0;
+}
+
+void ASCPoint4From8Values(ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCSingle fX3, ASCSingle fY3, ASCSingle fX4, ASCSingle fY4, CASCPoint4& Rtn)
+{
+	Rtn[0].X = fX1;
+	Rtn[0].Y = fY1;
+	Rtn[1].X = fX2;
+	Rtn[1].Y = fY2;
+	Rtn[2].X = fX3;
+	Rtn[2].Y = fY3;
+	Rtn[3].X = fX4;
+	Rtn[3].Y = fY4;
+}
+
+void ASCPoint4FromLTWHScaled(ASCSingle fLeft, ASCSingle fTop, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScale, CASCPoint4& Rtn)
+{
+	ASCPoint4FromLTWH(fLeft, fTop, (ASCSingle)ASCRound(fWidth * fScale), (ASCSingle)ASCRound(fHeight * fScale), Rtn);
+}
+
+void ASCPoint4FromLTWHScaledXY(ASCSingle fLeft, ASCSingle fTop, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn)
+{
+	ASCPoint4FromLTWH(fLeft, fTop, (ASCSingle)ASCRound(fWidth * fScaleX), (ASCSingle)ASCRound(fHeight * fScaleY), Rtn);
+}
+
+ASCUInt ValueOfRGBA(ASCUInt uR, ASCUInt uG, ASCUInt uB, ASCUInt uA /*= 0xFF*/)
+{
+	return (uR | (uG << 8) | (uB << 16) | (uA << 24));
+}
+
+void ASCColor4FromRGBA(ASCUInt uR, ASCUInt uG, ASCUInt uB, ASCUInt uA, CASCColor4& Rtn)
+{
+	ASCColor4FromColor(ValueOfRGBA(uR, uG, uB, uA), Rtn);
+}
+
+void ASCPoint4Rotated(const CASCFloatVector2D& Origin, const CASCFloatVector2D& Size, const CASCFloatVector2D& Middle, ASCSingle fAngle, 
+					  ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn)
+{
+	ASCSingle fCosPhi = cos(fAngle);
+	ASCSingle fSinPhi = sin(fAngle);
+	// create 4 points centered at (0, 0)
+	ASCPoint4FromLTWH(-Middle.X, -Middle.Y, Size.X, Size.Y, Rtn);
+	CASCFloatVector2D pt2;
+	// process the created points
+	for (ASCInt i = 0; i < 4; i++)
+	{
+		// scale the point
+		Rtn[i].X = Rtn[i].X * fScaleX;
+		Rtn[i].Y = Rtn[i].Y * fScaleY;
+		// rotate the point around Phi
+		pt2.X = (Rtn[i].X * fCosPhi) - (Rtn[i].Y * fSinPhi);
+		pt2.Y = (Rtn[i].Y * fCosPhi) - (Rtn[i].X * fSinPhi);
+		// translate the point to (Origin)
+		Rtn[i].X = pt2.X + Origin.X;
+		Rtn[i].Y = pt2.Y + Origin.Y;
+	}
+}
+
+void ASCPoint4RotatedCentered(const CASCFloatVector2D& Origin, const CASCFloatVector2D& Size, ASCSingle fAngle, ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn)
+{
+	ASCPoint4Rotated(Origin, Size, CASCFloatVector2D((ASCSingle)(Size.X * 0.5), (ASCSingle)(Size.Y * 0.5)), fAngle, fScaleX, fScaleY, Rtn);
+}
+
+void ASCPoint4RotatedTransFormed(ASCSingle fX, ASCSingle fY, ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCSingle fX3, ASCSingle fY3, 
+								 ASCSingle fX4, ASCSingle fY4, ASCSingle fCenterX, ASCSingle fCenterY, ASCSingle fAngle, ASCSingle 
+								 fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn)
+{
+	ASCSingle fCosPhi = cos(fAngle);
+	ASCSingle fSinPhi = sin(fAngle);
+	// create 4 points centered at (0, 0)
+	Rtn[0].X = fX1 - fCenterX;
+	Rtn[0].Y = fY1 - fCenterY;
+	Rtn[1].X = fX2 - fCenterX;
+	Rtn[1].Y = fY2 - fCenterY;
+	Rtn[2].X = fX3 - fCenterX;
+	Rtn[2].Y = fY3 - fCenterY;
+	Rtn[3].X = fX4 - fCenterX;
+	Rtn[3].Y = fY4 - fCenterY;
+	CASCFloatVector2D pt2;
+	// process the created points
+	for (ASCInt i = 0; i < 4; i++)
+	{
+		// scale the point
+		Rtn[i].X = Rtn[i].X * fScaleX;
+		Rtn[i].Y = Rtn[i].Y * fScaleY;
+		// rotate the point around Phi
+		pt2.X = (Rtn[i].X * fCosPhi) - (Rtn[i].Y * fSinPhi);
+		pt2.Y = (Rtn[i].Y * fCosPhi) - (Rtn[i].X * fSinPhi);
+		// translate the point to (Origin)
+		Rtn[i].X = pt2.X + fX;
+		Rtn[i].Y = pt2.Y + fY;
+	}
+}
+
+ASCInt ASCTrunc(ASCDouble f)
+{
+	return (ASCInt)f;
+}

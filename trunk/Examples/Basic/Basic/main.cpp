@@ -178,29 +178,10 @@ void RenderEvent()
 	// Draw an image
 	if (G_pASCImage)
 	{
-		CASCPoint4 Pts, Mappings;
-		Pts[0].X = 750;
-		Pts[0].Y = 100;
-		Pts[1].X = 1262;
-		Pts[1].Y = 100;
-		Pts[2].X = 1262;
-		Pts[2].Y = 612;
-		Pts[3].X = 750;
-		Pts[3].Y = 612;
-
-		Mappings[0].X = 0;
-		Mappings[0].Y = 0;
-		Mappings[1].X = 1;
-		Mappings[1].Y = 0;
-		Mappings[2].X = 1;
-		Mappings[2].Y = 1;
-		Mappings[3].X = 0;
-		Mappings[3].Y = 1;
-
-		CASCColor4 Colors;
-		ASCColor4FromColor(0x5FFFFFFF, Colors);
-
-		G_pASCCanvas->RenderTexture(G_pASCImage->GetTexture(0), Pts, Mappings, Colors);
+		G_pASCCanvas->RenderTexture(750, 100, G_pASCImage->GetTexture(0));
+		// G_pASCCanvas->RenderScaledTexture(750, 100, G_pASCImage->GetTexture(0), 0.6f);
+		// G_pASCCanvas->RenderPartTexture(750, 100, G_pASCImage->GetTexture(0), 0, 0, 256, 256, 1, 1, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
+		// G_pASCCanvas->RenderRotateTexture(950, 400, G_pASCImage->GetTexture(0), 0.2f, 1, 1, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
 	}
 }
 

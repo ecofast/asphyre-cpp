@@ -317,7 +317,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = (ASCSingle)(ASC_PI * 0.25 + ASC_PI * 0.5 - fTheta * ASC_PI * 0.5);
+		fAngle = (ASCSingle)(cASC_PI * 0.25 + cASC_PI * 0.5 - fTheta * cASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -334,7 +334,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + fTheta * Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = (ASCSingle)(ASC_PI * 0.25 - fTheta * ASC_PI * 0.5);
+		fAngle = (ASCSingle)(cASC_PI * 0.25 - fTheta * cASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -351,7 +351,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + fTheta * Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = (ASCSingle)(ASC_PI * 0.75 + fTheta * ASC_PI * 0.5);
+		fAngle = (ASCSingle)(cASC_PI * 0.75 + fTheta * cASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -368,7 +368,7 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 		pVertices[i].Y = Pos.Y + Size.Y;
 		pColors[i] = uOutColor;
 
-		fAngle = (ASCSingle)(ASC_PI * 1.25 + fTheta * ASC_PI * 0.5);
+		fAngle = (ASCSingle)(cASC_PI * 1.25 + fTheta * cASC_PI * 0.5);
 
 		pVertices[nSteps + i].X = Center.X + cos(fAngle) * Radius.X;
 		pVertices[nSteps + i].Y = Center.Y - sin(fAngle) * Radius.Y;
@@ -380,4 +380,149 @@ void CASCCanvas::RenderQuadHole(const CASCFloatVector2D Pos, const CASCFloatVect
 	delete [] pVertices;
 	delete [] pIndices;
 	delete [] pColors;
+}
+
+void CASCCanvas::RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, 
+							   CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4FromLTWH(fX, fY, (ASCSingle)(pTexture->GetWidth()), (ASCSingle)(pTexture->GetHeight()), pt4);
+		CASCPoint4 maps;
+		ASCPoint4From8Values(0, 0, 1, 0, 1, 1, 0, 1, maps);
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	RenderTexture(fX, fY, pTexture, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, Effect);
+}
+
+void CASCCanvas::RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCColor Color, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	RenderTexture(fX, fY, pTexture, Color, Color, Color, Color, Effect);
+}
+
+void CASCCanvas::RenderScaledTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fScale, 
+									ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4FromLTWHScaled(fX, fY, (ASCSingle)(pTexture->GetWidth()), (ASCSingle)(pTexture->GetHeight()), fScale, pt4);
+		CASCPoint4 maps;
+		ASCPoint4From8Values(0, 0, 1, 0, 1, 1, 0, 1, maps);
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderScaledTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fScale, 
+									 ASCColor Color /*= cASCColor32White*/, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	RenderScaledTexture(fX, fY, pTexture, fScale, Color, Color, Color, Color, Effect);
+}
+
+void CASCCanvas::RenderStretchTexture(ASCSingle fLeft, ASCSingle fTop, ASCSingle fRight, ASCSingle fBottom, CASCTexture* pTexture, 
+									  ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4From8Values(fLeft, fTop, fRight, fTop, fRight, fBottom, fLeft, fBottom, pt4);
+		CASCPoint4 maps;
+		ASCPoint4From8Values(0, 0, 1, 0, 1, 1, 0, 1, maps);
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderStretchTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScaleX, ASCSingle fScaleY, 
+									  ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4FromLTWHScaledXY(fX, fY, fWidth, fHeight, fScaleX, fScaleY, pt4);
+		CASCPoint4 maps;
+		ASCPoint4From8Values(0, 0, 1, 0, 1, 1, 0, 1, maps);
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderPartTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nSrcX1, ASCInt nSrcY1, ASCInt nSrcX2, ASCInt nSrcY2, ASCSingle fScaleX, 
+								   ASCSingle fScaleY, ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4FromLTWHScaledXY((ASCSingle)fX, (ASCSingle)fY, (ASCSingle)(nSrcX2 - nSrcX1), (ASCSingle)(nSrcY2 - nSrcY1), fScaleX, fScaleY, pt4);
+		CASCPoint4 maps;
+		maps[0].X = (ASCSingle)nSrcX1 / pTexture->GetWidth();
+		maps[0].Y = (ASCSingle)nSrcY1 / pTexture->GetHeight();
+		maps[1].X = (ASCSingle)nSrcX2 / pTexture->GetWidth();
+		maps[1].Y = (ASCSingle)nSrcY1 / pTexture->GetHeight();
+		maps[2].X = (ASCSingle)nSrcX2 / pTexture->GetWidth();
+		maps[2].Y = (ASCSingle)nSrcY2 / pTexture->GetHeight();
+		maps[3].X = (ASCSingle)nSrcX1 / pTexture->GetWidth();
+		maps[3].Y = (ASCSingle)nSrcY2 / pTexture->GetHeight();
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderRotateTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fAngle, ASCSingle fScaleX, ASCSingle fScaleY, 
+									 ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		CASCPoint4 pt4;
+		ASCPoint4RotatedCentered(CASCFloatVector2D(fX, fY), CASCFloatVector2D((ASCSingle)(pTexture->GetWidth()), (ASCSingle)(pTexture->GetHeight())), fAngle, fScaleX, fScaleY, pt4);
+		CASCPoint4 maps;
+		ASCPoint4From8Values(0, 0, 1, 0, 1, 1, 0, 1, maps);
+		CASCColor4 c4;
+		ASCColor4From4Color(Color1, Color2, Color3, Color4, c4);
+		RenderTexture(pTexture, pt4, maps, c4, Effect);
+	}
+}
+
+void CASCCanvas::RenderTextureWaveX(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nWidth, ASCInt nHeight, ASCInt nAmp, ASCInt nLen, ASCInt nPhase, 
+									ASCColor Color /*= cASCColor32White*/, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		ASCInt nW = pTexture->GetWidth();
+		ASCInt i;
+		for (ASCInt j = 0; j < nWidth; j++)
+		{
+			i = ASCTrunc(j * nW / nWidth);
+			RenderPartTexture(fX + j, (ASCSingle)(fY + nAmp * sin((nPhase + j) * cASC_PI * nWidth / nLen / 256)), pTexture, i, 0, i + 1, nHeight, 1, 1, 
+				Color, Color, Color, Color, Effect);
+		}
+	}
+}
+
+void CASCCanvas::RenderTextureWaveY(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nWidth, ASCInt nHeight, ASCInt nAmp, ASCInt nLen, ASCInt nPhase, 
+									ASCColor Color /*= cASCColor32White*/, CASCBlendingEffect Effect /*= abeNormal*/)
+{
+	if (pTexture)
+	{
+		ASCInt nH = pTexture->GetHeight();
+		ASCInt i;
+		for (ASCInt j = 0; j < nHeight; j++)
+		{
+			i = ASCTrunc(j * nH / nHeight);
+			RenderPartTexture((ASCSingle)(fX + nAmp * sin((nPhase + j) * cASC_PI * nHeight / nLen / 256)), fY + j, pTexture, 0, i, nWidth, 1, 1, 1, 
+				Color, Color, Color, Color, Effect);
+		}
+	}
 }

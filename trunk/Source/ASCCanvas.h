@@ -18,6 +18,7 @@
 #include "ASCTypes.h"
 #include "ASCFloatVector2D.h"
 #include "ASCTextures.h"
+#include "ASCGraphics.h"
 
 /*
  * The blending effect that should be applied when drawing 2D primitives
@@ -196,6 +197,32 @@ public:
 	*/
 	virtual void RenderTexture(CASCTexture* pTexture, CASCPoint4 Points, CASCPoint4 Mappings, 
 		CASCColor4 Colors, CASCBlendingEffect Effect = abeNormal) = 0;
+
+	void RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, 
+		CASCBlendingEffect Effect = abeNormal);
+	void RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCColor Color, CASCBlendingEffect Effect = abeNormal);
+	void RenderTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, CASCBlendingEffect Effect = abeNormal);
+
+	void RenderScaledTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fScale, 
+		ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect = abeNormal);
+	void RenderScaledTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fScale, 
+		ASCColor Color = cASCColor32White, CASCBlendingEffect Effect = abeNormal);
+
+	void RenderStretchTexture(ASCSingle fLeft, ASCSingle fTop, ASCSingle fRight, ASCSingle fBottom, CASCTexture* pTexture, 
+		ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect = abeNormal);
+	void RenderStretchTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScaleX, ASCSingle fScaleY, 
+		ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect = abeNormal);
+	
+	void RenderPartTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nSrcX1, ASCInt nSrcY1, ASCInt nSrcX2, ASCInt nSrcY2, 
+		ASCSingle fScaleX, ASCSingle fScaleY, ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect = abeNormal);
+
+	void RenderRotateTexture(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCSingle fAngle, ASCSingle fScaleX, ASCSingle fScaleY, 
+		ASCColor Color1, ASCColor Color2, ASCColor Color3, ASCColor Color4, CASCBlendingEffect Effect = abeNormal);
+
+	void RenderTextureWaveX(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nWidth, ASCInt nHeight, ASCInt nAmp, ASCInt nLen, ASCInt nPhase, 
+		ASCColor Color = cASCColor32White, CASCBlendingEffect Effect = abeNormal);
+	void RenderTextureWaveY(ASCSingle fX, ASCSingle fY, CASCTexture* pTexture, ASCInt nWidth, ASCInt nHeight, ASCInt nAmp, ASCInt nLen, ASCInt nPhase, 
+		ASCColor Color = cASCColor32White, CASCBlendingEffect Effect = abeNormal);
 protected:
 	ASCSingle	m_fInternalScale;
 

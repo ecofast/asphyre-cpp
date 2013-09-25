@@ -1,7 +1,6 @@
 #include "ASCBitmap.h"
 #include "ASCUtils.h"
 #include "ASCGraphics.h"
-#include "ASCPixelFormatConv.h"
 
 CASCBitmap::CASCBitmap() : m_pBmpBits(0), m_nWidth(0), m_nHeight(0), m_nLineBytes(0), m_bValid(false), m_pBmpInfo(0)
 {
@@ -68,8 +67,6 @@ void CASCBitmap::SetPixelFormat(CASCPixelFormat fmt)
 		SetBmpInfo(m_nWidth, m_pBmpInfo->bmiHeader.biHeight, fmt);
 		memcpy(m_pBmpBits, pDestBits, nLineBytes * m_nHeight);
 		free(pDestBits);
-
-		// SaveToFile(L"D:\\Asphyre4CPP\\Examples\\Basic\\Debug\\2.bmp");
 	}
 }
 
