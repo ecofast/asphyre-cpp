@@ -24,18 +24,37 @@ using std::wstring;
 // 通过四舍五入的方式取整数
 ASCInt ASCRound(ASCDouble f);
 
+ASCInt ASCTrunc(ASCDouble f);
+
 RECT ASCBounds(ASCInt nLeft, ASCInt nTop, ASCInt nWidth, ASCInt nHeight);
+
+void ASCZeroPoint4(CASCPoint4& Rtn);
+void ASCPoint4From8Values(ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCSingle fX3, ASCSingle fY3, ASCSingle fX4, ASCSingle fY4, CASCPoint4& Rtn);
 
 void ASCPoint4FromRect(const RECT Rc, CASCPoint4& Rtn);
 
 // Creates 4-point rectangle with the specified top left corner and the given dimensions
 void ASCPoint4FromLTWH(ASCSingle fLeft, ASCSingle fTop, ASCSingle fWidth, ASCSingle fHeight, CASCPoint4& Rtn);
+void ASCPoint4FromLTWHScaled(ASCSingle fLeft, ASCSingle fTop, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScale, CASCPoint4& Rtn);
+void ASCPoint4FromLTWHScaledXY(ASCSingle fLeft, ASCSingle fTop, ASCSingle fWidth, ASCSingle fHeight, ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn);
+
+// rotated rectangle (Origin + Size) around (Middle) with Angle and Scale
+void ASCPoint4Rotated(const CASCFloatVector2D& Origin, const CASCFloatVector2D& Size, const CASCFloatVector2D& Middle, 
+					  ASCSingle fAngle, ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn);
+void ASCPoint4RotatedCentered(const CASCFloatVector2D& Origin, const CASCFloatVector2D& Size, ASCSingle fAngle, ASCSingle fScaleX, ASCSingle fScaleY, 
+							  CASCPoint4& Rtn);
+void ASCPoint4RotatedTransFormed(ASCSingle fX, ASCSingle fY, ASCSingle fX1, ASCSingle fY1, ASCSingle fX2, ASCSingle fY2, ASCSingle fX3, ASCSingle fY3, 
+								 ASCSingle fX4, ASCSingle fY4, ASCSingle fCenterX, ASCSingle fCenterY, ASCSingle fAngle, 
+								 ASCSingle fScaleX, ASCSingle fScaleY, CASCPoint4& Rtn);
 
 // Creates 4-color gradient where all colors are specified by the same source color
 void ASCColor4FromColor(ASCColor uColor, CASCColor4& Color4);
 
 // Creates 4-color gradient where each color is specified individually
 void ASCColor4From4Color(ASCColor uColor1, ASCColor uColor2, ASCColor uColor3, ASCColor uColor4, CASCColor4& Rtn);
+
+ASCUInt ValueOfRGBA(ASCUInt uR, ASCUInt uG, ASCUInt uB, ASCUInt uA = 0xFF);
+void ASCColor4FromRGBA(ASCUInt uR, ASCUInt uG, ASCUInt uB, ASCUInt uA, CASCColor4& Rtn);
 
 template <typename T>
 inline ASCInt GetArrayLen(const T& arr)

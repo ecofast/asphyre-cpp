@@ -15,26 +15,26 @@
 
 #include "ASCTypes.h"
 
-const ASCDouble ASC_PI = 3.14159265358979;
+const ASCDouble cASC_PI = 3.14159265358979;
 
 /*
  * Unknown Color individual constant. It can be used in some cases to specify
  * that no color is present or required, or to clear the rendering buffer
 */
-const ASCUInt ASCColorUnknown = 0x00000000;
+const ASCUInt cASCColorUnknown = 0x00000000;
 
 // White Color individual constant. In some cases it can be used when no color is to be specified
-const ASCUInt ASCColorWhite = 0xFFFFFFFF;
+const ASCUInt cASCColorWhite = 0xFFFFFFFF;
 
 // Black Color individual constant. It can be used in certain circumstances, for instance, to draw a shadow of the image
-const ASCUInt ASCColorBlack = 0xFF000000;
+const ASCUInt cASCColorBlack = 0xFF000000;
 
 /*
  * Opaque Color individual constant. This one can be used in certain cases
  * where the color of the image is to preserved but the result should be
  * completely transparent
 */
-const ASCUInt ASCColorOpaque = 0x00FFFFFF;
+const ASCUInt cASCColorOpaque = 0x00FFFFFF;
 
 /*
  * Creates 32-bit RGBA color using the specified individual components for
