@@ -232,7 +232,7 @@ void TimerEvent()
 	if (!G_pASCImage)
 	{
 		G_pASCImage = new CASCImage();
-		G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.bmp");  // G_pASCImage->LoadFromFile(L"..\\Debug\\1.bmp");
+		G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.bmp");
 	}
 
 	// Render the scene

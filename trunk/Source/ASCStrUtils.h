@@ -84,4 +84,4 @@ string WStrToStr(const wstring& ws, ASCUInt uCP = CP_ACP);
  * 提取字符串, ws 提取后会删除被提取的部分, wc 是分割符.
  * 返回提取的字符串
 */
-wstring FetchString(wstring &ws, ASCChar wc);
+wstring FetchString(wstring &ws, ASCWChar wc);
