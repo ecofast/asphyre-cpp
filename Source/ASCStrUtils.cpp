@@ -329,7 +329,7 @@ wstring BoolToStr(ASCBoolean bValue)
 		return wsBoolFalse;
 }
 
-wstring FetchString(wstring &ws, ASCChar wc)
+wstring FetchString(wstring &ws, ASCWChar wc)
 {
 	wstring sSub;
 	wstring::size_type pos = ws.find(wc);

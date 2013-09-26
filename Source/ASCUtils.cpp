@@ -1,4 +1,5 @@
 #include "ASCUtils.h"
+#include <direct.h>
 
 ASCInt ASCRound(ASCDouble f)
 {
@@ -242,6 +243,14 @@ wstring ExtractCurrPath()
 	wchar_t wc[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, wc);
 	return wc;
+
+	/*
+	char cs[MAX_PATH];
+	_getcwd(cs, MAX_PATH);
+	wchar_t wcs[MAX_PATH];
+	mbstowcs(wcs, cs, sizeof(cs) / sizeof(cs[0]));
+	return wcs;
+	*/
 }
 
 wstring ExtractCurrModulePath()
