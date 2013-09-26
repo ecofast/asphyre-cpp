@@ -97,3 +97,9 @@ wstring ExtractFileExt(const wstring& sFileName);
  * nAlign: 多少位对齐
 */
 ASCInt BytesPerLine(ASCInt nPixelsPerLine, ASCInt nBitsPerPixel, ASCInt nAlign);
+
+// 获取当前程序所在目录
+wstring ExtractCurrPath();
+
+// 获取程序启动目录
+wstring ExtractCurrModulePath();

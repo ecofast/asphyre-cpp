@@ -236,3 +236,18 @@ ASCInt ASCTrunc(ASCDouble f)
 {
 	return (ASCInt)f;
 }
+
+wstring ExtractCurrPath()
+{
+	wchar_t wc[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, wc);
+	return wc;
+}
+
+wstring ExtractCurrModulePath()
+{
+	wchar_t wc[MAX_PATH];
+	GetModuleFileName(0, wc, MAX_PATH);
+	*wcsrchr(wc, L'\\') = L'\0';
+	return wc;
+}
