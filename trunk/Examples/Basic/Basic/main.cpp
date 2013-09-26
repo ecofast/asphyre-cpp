@@ -228,13 +228,12 @@ void TimerEvent()
 	{
 		return;
 	}
-	///*
+
 	if (!G_pASCImage)
 	{
 		G_pASCImage = new CASCImage();
-		G_pASCImage->LoadFromFile(L"D:\\Asphyre4CPP\\Examples\\Basic\\Debug\\1.bmp");  // G_pASCImage->LoadFromFile(L"1.bmp");
+		G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.bmp");  // G_pASCImage->LoadFromFile(L"..\\Debug\\1.bmp");
 	}
-	//*/
 
 	// Render the scene
 	G_pASCDevice->Render(RenderEvent, 0x000050);
