@@ -70,12 +70,7 @@ ASCInt CASCStream::GetSize()
 	return nResult;	
 }
 
-CASCFileStream::CASCFileStream() : CASCStream(), m_nHandle(0)
-{
-
-}
-
-CASCFileStream::CASCFileStream(const CASCFileStream& Stream)
+CASCFileStream::CASCFileStream() : CASCStream(), m_nHandle(0), m_sFileName(L"")
 {
 
 }
@@ -86,12 +81,14 @@ CASCFileStream::~CASCFileStream()
 	{
 		CloseHandle((HANDLE)m_nHandle);
 	}
+	m_sFileName = L"";
 }
 
 ASCBoolean CASCFileStream::Create(const wstring& sFileName, ASCUInt uDesiredAccess /*= GENERIC_READ | GENERIC_WRITE*/, ASCUInt uShareMode /*= FILE_SHARE_READ*/)
 {
 	m_nHandle = (ASCInt)CreateFileW(sFileName.c_str(), uDesiredAccess, uShareMode, 
 		0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	m_sFileName = sFileName;
 	return (m_nHandle > 0);
 }
 
@@ -99,6 +96,7 @@ ASCBoolean CASCFileStream::Create(const wstring& sFileName, ASCUInt uDesiredAcce
 {
 	m_nHandle = (ASCInt)CreateFileW(sFileName.c_str(), uDesiredAccess, uShareMode, 0,  
 		uDisposition, uFlagsAndAttrs, 0);
+	m_sFileName = sFileName;
 	return (m_nHandle > 0);
 }
 
@@ -106,6 +104,7 @@ ASCBoolean CASCFileStream::Open(const wstring& sFileName, ASCUInt uDesiredAccess
 {
 	m_nHandle = (ASCInt)CreateFileW(sFileName.c_str(), uDesiredAccess, uShareMode, 0, 
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	m_sFileName = sFileName;
 	return (m_nHandle > 0);
 }
 

@@ -68,12 +68,11 @@ public:
 
 	wstring GetFileName();
 	ASCInt GetHandle();
-protected:
+private:
 	CASCFileStream(const CASCFileStream& Stream);
 	void operator = (const CASCFileStream& Stream);
-
-	ASCInt	m_nHandle;
 private:
+	ASCInt	m_nHandle;
 	wstring	m_sFileName;
 };
 

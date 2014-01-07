@@ -59,7 +59,7 @@ ASCBoolean CASCBitmapManager::RegisterExt(const wstring& sExtension, CASCCustomB
 	return true;
 }
 
-void CASCBitmapManager::UnregisterExt(const wstring& sExtension)
+void CASCBitmapManager::UnRegisterExt(const wstring& sExtension)
 {
 	ASCInt nIndex = FindExtension(sExtension);
 	if (nIndex != -1)

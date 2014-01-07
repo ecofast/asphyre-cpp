@@ -102,6 +102,12 @@
     <ClCompile Include="..\..\..\Source\ASCBitmap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ASCBmpHelpers.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ASCBitmapsPNG.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -210,6 +216,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ASCTimer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ASCZLib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ASCPng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ASCBmpHelpers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ASCBitmapsPNG.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

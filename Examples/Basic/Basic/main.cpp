@@ -12,6 +12,7 @@ using std::wstring;
 #include "../../../Source/ASCImages.h"
 #include "../../../Source/ASCBitmaps.h"
 #include "../../../Source/ASCBitmapsBMP.h"
+#include "../../../Source/ASCBitmapsPNG.h"
 
 const wchar_t* WINDOW_CLASS = L"Asphyre_Sphinx_for_C++_Basic";
 const wchar_t* WINDOW_TITLE = L"ASC(Asphyre Sphinx for C++) Basic Example";
@@ -232,7 +233,8 @@ void TimerEvent()
 	if (!G_pASCImage)
 	{
 		G_pASCImage = new CASCImage();
-		G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.bmp");
+		// G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.bmp");
+		G_pASCImage->LoadFromFile(ExtractCurrModulePath() + L"\\1.png");
 	}
 
 	// Render the scene
@@ -277,6 +279,8 @@ void Setup()
 
 	// Register BMP handler
 	ASCBitmapManager()->RegisterExt(L".bmp", ASCBitmapBMP());
+	// Register PNG handler
+	ASCBitmapManager()->RegisterExt(L".png", ASCBitmapPNG());
 }
 
 void Cleanup()
@@ -293,5 +297,5 @@ void Cleanup()
 	ASCEventProviders()->UnSubscribe(wsClassName.c_str());
 
 	// UnRegister BMP handler
-	ASCBitmapManager()->UnregisterExt(L".bmp");
+	ASCBitmapManager()->UnRegisterExt(L".bmp");
 }
