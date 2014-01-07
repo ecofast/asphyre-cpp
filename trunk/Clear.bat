@@ -6,3 +6,4 @@ del /S *.pch
 del /S *.pdb
 del /S *.ilk
 del /S *.user
+del /S *.sdf
