@@ -1,0 +1,1113 @@
+From: <ÓÉ Microsoft Internet Explorer 5 ±£´æ>
+Subject: Frequently Asked Questions about zlib
+Date: Sun, 15 Aug 2010 22:14:02 +0800
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01CB3CC7.2A8E2BF0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.3664
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0000_01CB3CC7.2A8E2BF0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.zlib.net/zlib_faq.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" =
+"http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML><HEAD><TITLE>Frequently Asked Questions about zlib</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3DISO-8859-1">
+<SCRIPT type=3Dtext/javascript>=0A=
+<!--=0A=
+function mail_to(name, domain)=0A=
+{=0A=
+  document.write("<a class=3D\"link\" href=3D\"mail" + "to:" + name +=0A=
+                 "&#64;" + domain + "\">");=0A=
+}=0A=
+//-->=0A=
+</SCRIPT>
+
+<STYLE type=3Dtext/css>P {
+	MARGIN-BOTTOM: 0em
+}
+</STYLE>
+<!--  Copyright (c) 1998-2000 Jean-loup Gailly and Greg Roelofs.  -->
+<META content=3D"MSHTML 6.00.2900.3698" name=3DGENERATOR></HEAD>
+<BODY text=3D#000000 vLink=3D#00a000 link=3D#0000ff bgColor=3D#ffffff>
+<H1 align=3Dcenter><IMG height=3D204 alt=3Dzlib=20
+src=3D"http://www.zlib.net/images/zlib3d-b1.png" width=3D369 =
+align=3Dmiddle> </H1>
+<H2 align=3Dcenter>Frequently Asked Questions </H2>
+<P>
+<HR>
+
+<P>
+<UL>
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq01">Is zlib=20
+  Y2K-compliant?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq02">Where can I =
+get a=20
+  Windows DLL version?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq03">Where can I =
+get a Visual=20
+  Basic interface to zlib?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq04">compress() =
+returns=20
+  <TT>Z_BUF_ERROR</TT>.</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq05">deflate() or =
+inflate()=20
+  returns <TT>Z_BUF_ERROR</TT>.</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq06">Where's the =
+zlib=20
+  documentation (man pages, etc.)?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq07">Why don't you =
+use GNU=20
+  autoconf or libtool or ...?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq08">I found a bug =
+in=20
+  zlib.</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq09">Why do I get =
+"undefined=20
+  reference to gzputc"?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq10">I need a =
+Delphi=20
+  interface to zlib.</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq11">Can zlib =
+handle .zip=20
+  archives?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq12">Can zlib =
+handle .Z=20
+  files?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq13">How can I make =
+a Unix=20
+  shared library?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq14">How do I =
+install a=20
+  shared zlib library on Unix?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq15">I have a =
+question about=20
+  OttoPDF</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq16">Can zlib =
+decode Flate=20
+  data in an Adobe PDF file?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq17">Why am I =
+getting this=20
+  "register_frame_info not found" error on Solaris?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq18">Why does gzip =
+give an=20
+  error on a file I make with compress/deflate?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq19">Ok, so why are =
+there two=20
+  different formats?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq20">Well that's =
+nice, but=20
+  how do I make a gzip file in memory?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq21">Is zlib =
+thread-safe?</A>=20
+
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq22">Can I use zlib =
+in my=20
+  commercial application?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq23">Is zlib under =
+the GNU=20
+  license?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq24">The license =
+says that=20
+  altered source versions must be "plainly marked". So what exactly do I =
+need to=20
+  do to meet that requirement?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq25">Will zlib work =
+on a=20
+  big-endian or little-endian architecture, and can I exchange =
+compressed data=20
+  between them?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq26">Will zlib work =
+on a=20
+  64-bit machine?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq27">Will zlib =
+decompress=20
+  data from the PKWare Data Compression Library?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq28">Can I access =
+data=20
+  randomly in a compressed stream?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq29">Does zlib work =
+on MVS,=20
+  OS/390, CICS, etc.?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq30">Is there some =
+simpler,=20
+  easier to read version of inflate I can look at to understand the =
+deflate=20
+  format?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq31">Does zlib =
+infringe on=20
+  any patents?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq32">Can zlib work =
+with=20
+  greater than 4 GB of data?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq33">Does zlib have =
+any=20
+  security vulnerabilities?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq34">Is there a =
+Java version=20
+  of zlib?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq35">I get this or =
+that=20
+  compiler or source-code scanner warning when I crank it up to=20
+  maximally-pendantic. Can't you guys write proper code?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq36">Valgrind (or =
+some=20
+  similar memory access checker) says that deflate is performing a =
+conditional=20
+  jump that depends on an uninitialized value. Isn't that a bug?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq37">Will zlib read =
+the=20
+  (insert any ancient or arcane format here) compressed data format?</A> =
+
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq38">How can I=20
+  encrypt/decrypt zip files with zlib?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq39">What's the =
+difference=20
+  between the "gzip" and "deflate" HTTP 1.1 encodings?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq40">Does zlib =
+support the=20
+  new "Deflate64" format introduced by PKWare?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq41">I'm having a =
+problem=20
+  with the zip functions in zlib, can you help?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq42">The match.asm =
+code in=20
+  contrib is under the GNU General Public License. Since it's part of =
+zlib,=20
+  doesn't that mean that all of zlib falls under the GNU GPL?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq43">Is zlib =
+subject to=20
+  export controls? What is its ECCN?</A>=20
+  <LI><A href=3D"http://www.zlib.net/zlib_faq.html#faq44">Can you please =
+sign=20
+  these lengthy legal documents and fax them back to us so that we can =
+use your=20
+  software in our product?</A> </LI></UL>
+<P>
+<HR>
+
+<P>
+<OL>
+  <LI><A name=3Dfaq01></A><EM>Is zlib Y2K-compliant?</EM>=20
+  <P>Yes. zlib doesn't handle dates. <BR><BR></P>
+  <LI><A name=3Dfaq02></A><EM>Where can I get a Windows DLL =
+version?</EM>=20
+  <P>The zlib sources can be compiled without change to produce a DLL. =
+See the=20
+  file <A href=3D"http://www.zlib.net/DLL_FAQ.txt">win32/DLL_FAQ.txt</A> =
+in the=20
+  zlib distribution. Pointers to the precompiled DLL are found in the =
+zlib web=20
+  site at <A=20
+  =
+href=3D"http://www.zlib.net/index.html">http://www.zlib.net/index.html</A=
+> .=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq03></A><EM>Where can I get a Visual Basic interface =
+to=20
+  zlib?</EM>=20
+  <P>See:=20
+  <UL>
+    <LI><A href=3D"http://marknelson.us/1997/01/01/zlib-engine/">zlib - =
+Looking=20
+    the Gift Code in the Mouth</A>=20
+    <LI><A =
+href=3D"http://www.zlib.net/DLL_FAQ.txt">win32/DLL_FAQ.txt</A> in the=20
+    zlib distribution </LI></UL><BR>
+  <LI><A name=3Dfaq04></A><EM>compress() returns =
+<TT>Z_BUF_ERROR</TT>.</EM>=20
+  <P>Make sure that before the call of <TT>compress()</TT>, the length =
+of the=20
+  compressed buffer is equal to the available size of the compressed =
+buffer and=20
+  not zero. For Visual Basic, check that this parameter is passed by =
+reference=20
+  ("as any"), not by value ("as long"). <BR><BR></P>
+  <LI><A name=3Dfaq05></A><EM>deflate() or inflate() returns=20
+  <TT>Z_BUF_ERROR</TT>.</EM>=20
+  <P>Before making the call, make sure that <TT>avail_in</TT> and=20
+  <TT>avail_out</TT> are not zero. When setting the parameter flush =
+equal to=20
+  <TT>Z_FINISH</TT>, also make sure that <TT>avail_out</TT> is big =
+enough to=20
+  allow processing all pending input. Note that a <TT>Z_BUF_ERROR</TT> =
+is not=20
+  fatal--another call to <TT>deflate()</TT> or <TT>inflate()</TT> can be =
+made=20
+  with more input or output space. A <TT>Z_BUF_ERROR</TT> may in fact be =
+
+  unavoidable depending on how the functions are used, since it is not =
+possible=20
+  to tell whether or not there is more output pending when=20
+  <TT>strm.avail_out</TT> returns with zero. See <A=20
+  =
+href=3D"http://zlib.net/zlib_how.html">http://zlib.net/zlib_how.html</A> =
+for a=20
+  heavily annotated example. <BR><BR></P>
+  <LI><A name=3Dfaq06></A><EM>Where's the zlib documentation (man pages, =
+
+  etc.)?</EM>=20
+  <P>It's in zlib.h . Examples of zlib usage are in the files example.c =
+and=20
+  minigzip.c, with more in examples/ . <BR><BR></P>
+  <LI><A name=3Dfaq07></A><EM>Why don't you use GNU autoconf or libtool =
+or=20
+  ...?</EM>=20
+  <P>Because we would like to keep zlib as a very small and simple =
+package. zlib=20
+  is rather portable and doesn't need much configuration. <BR><BR></P>
+  <LI><A name=3Dfaq08></A><EM>I found a bug in zlib.</EM>=20
+  <P>Most of the time, such problems are due to an incorrect usage of =
+zlib.=20
+  Please try to reproduce the problem with a small program and send the=20
+  corresponding source to <IMG alt=3D"zlib email address"=20
+  src=3D"http://www.zlib.net/zlib-email.png" align=3Dbottom>. Do not =
+send=20
+  multi-megabyte data files without prior agreement. <BR><BR></P>
+  <LI><A name=3Dfaq09></A><EM>Why do I get "undefined reference to =
+gzputc"?</EM>=20
+  <P>If <TT>make test</TT> produces something like:=20
+  <P><TT>example.o(.text+0x154): undefined reference to `gzputc' </TT>
+  <P>check that you don't have old files libz.* in /usr/lib, =
+/usr/local/lib or=20
+  /usr/X11R6/lib. Remove any old versions, then do <TT>make =
+install</TT>.=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq10></A><EM>I need a Delphi interface to zlib.</EM>=20
+  <P>See the contrib/delphi directory in the zlib distribution. =
+<BR><BR></P>
+  <LI><A name=3Dfaq11></A><EM>Can zlib handle .zip archives?</EM>=20
+  <P>Not by itself, no. See the directory contrib/minizip in the zlib=20
+  distribution. <BR><BR></P>
+  <LI><A name=3Dfaq12></A><EM>Can zlib handle .Z files?</EM>=20
+  <P>No, sorry. You have to spawn an uncompress or gunzip subprocess, or =
+adapt=20
+  the code of uncompress on your own. <BR><BR></P>
+  <LI><A name=3Dfaq13></A><EM>How can I make a Unix shared library?</EM> =
+
+  <P><TT>make clean<BR>./configure -s<BR>make<BR></TT><BR></P>
+  <LI><A name=3Dfaq14></A><EM>How do I install a shared zlib library on =
+Unix?</EM>=20
+
+  <P>After the above, then:=20
+  <P><TT>make install </TT>
+  <P>However, many flavors of Unix come with a shared zlib already =
+installed.=20
+  Before going to the trouble of compiling a shared version of zlib and =
+trying=20
+  to install it, you may want to check if it's already there! If you can =
+
+  <TT>#include &lt;zlib.h&gt;</TT>, it's there. The <TT>-lz</TT> option =
+will=20
+  probably link to it. You can check the version at the top of zlib.h or =
+with=20
+  the <TT>ZLIB_VERSION</TT> symbol defined in zlib.h . <BR><BR></P>
+  <LI><A name=3Dfaq15></A><EM>I have a question about OttoPDF.</EM>=20
+  <P>We are not the authors of OttoPDF. The real author is on the =
+OttoPDF web=20
+  site: <A href=3D"mailto:jhainley@myndkryme.com">Joel Hainley</A>. =
+<BR><BR></P>
+  <LI><A name=3Dfaq16></A><EM>Can zlib decode Flate data in an Adobe PDF =
+
+  file?</EM>=20
+  <P>Yes. See <A href=3D"http://www.pdflib.com/">PDFlib</A>. To modify =
+PDF forms,=20
+  see <A =
+href=3D"http://sourceforge.net/projects/acroformtool/">acroformtool</A>. =
+
+  <BR><BR></P>
+  <LI><A name=3Dfaq17></A><EM>Why am I getting this "register_frame_info =
+not=20
+  found" error on Solaris?</EM>=20
+  <P>After installing zlib 1.1.4 on Solaris 2.6, running applications =
+using zlib=20
+  generates an error such as:=20
+  <P><TT>ld.so.1: rpm: fatal: relocation error: file=20
+  /usr/local/lib/libz.so:<BR>symbol __register_frame_info: referenced =
+symbol not=20
+  found </TT>
+  <P>The symbol <TT>__register_frame_info</TT> is not part of zlib, it =
+is=20
+  generated by the C compiler (cc or gcc). You must recompile =
+applications using=20
+  zlib which have this problem. This problem is specific to Solaris. See =
+<A=20
+  href=3D"http://www.sunfreeware.com/">Sunfreeware</A> for Solaris =
+versions of=20
+  zlib and applications using zlib. <BR><BR></P>
+  <LI><A name=3Dfaq18></A><EM>Why does gzip give an error on a file I =
+make with=20
+  compress/deflate?</EM>=20
+  <P>The compress and deflate functions produce data in the zlib format, =
+which=20
+  is different and incompatible with the gzip format. The <TT>gz</TT>* =
+functions=20
+  in zlib on the other hand use the gzip format. Both the zlib and gzip =
+formats=20
+  use the same compressed data format internally, but have different =
+headers and=20
+  trailers around the compressed data. <BR><BR></P>
+  <LI><A name=3Dfaq19></A><EM>Ok, so why are there two different =
+formats?</EM>=20
+  <P>The gzip format was designed to retain the directory information =
+about a=20
+  single file, such as the name and last modification date. The zlib =
+format on=20
+  the other hand was designed for in-memory and communication channel=20
+  applications, and has a much more compact header and trailer and uses =
+a faster=20
+  integrity check than gzip. <BR><BR></P>
+  <LI><A name=3Dfaq20></A><EM>Well that's nice, but how do I make a gzip =
+file in=20
+  memory?</EM>=20
+  <P>You can request that deflate write the gzip format instead of the =
+zlib=20
+  format using <TT>deflateInit2()</TT>. You can also request that =
+inflate decode=20
+  the gzip format using <TT>inflateInit2()</TT>. Read zlib.h for more =
+details.=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq21></A><EM>Is zlib thread-safe?</EM>=20
+  <P>Yes. However any library routines that zlib uses and any =
+application-=20
+  provided memory allocation routines must also be thread-safe. zlib's=20
+  <TT>gz</TT>* functions use stdio library routines, and most of zlib's=20
+  functions use the library memory allocation routines by default. =
+zlib's=20
+  *<TT>Init</TT>* functions allow for the application to provide custom =
+memory=20
+  allocation routines.=20
+  <P>Of course, you should only operate on any given zlib or gzip stream =
+from a=20
+  single thread at a time. <BR><BR></P>
+  <LI><A name=3Dfaq22></A><EM>Can I use zlib in my commercial =
+application?</EM>=20
+  <P>Yes. Please read the license in zlib.h. <BR><BR></P>
+  <LI><A name=3Dfaq23></A><EM>Is zlib under the GNU license?</EM>=20
+  <P>No. Please read the license in zlib.h. <BR><BR></P>
+  <LI><A name=3Dfaq24></A><EM>The license says that altered source =
+versions must=20
+  be "plainly marked". So what exactly do I need to do to meet that=20
+  requirement?</EM>=20
+  <P>You need to change the <TT>ZLIB_VERSION</TT> and =
+<TT>ZLIB_VERNUM</TT>=20
+  #defines in zlib.h. In particular, the final version number needs to =
+be=20
+  changed to <TT>f</TT>, and an identification string should be appended =
+to=20
+  <TT>ZLIB_VERSION</TT>. Version numbers <TT><EM>x.x.x</EM>.f</TT> are =
+reserved=20
+  for modifications to zlib by others than the zlib maintainers. For =
+example, if=20
+  the version of the base zlib you are altering is <TT>1.2.3.4</TT>, =
+then in=20
+  zlib.h you should change <TT>ZLIB_VERNUM</TT> to <TT>0x123f</TT>, and=20
+  <TT>ZLIB_VERSION</TT> to something like =
+<TT>1.2.3.f-zachary-mods-v3</TT>. You=20
+  can also update the version strings in deflate.c and inftrees.c.=20
+  <P>For altered source distributions, you should also note the origin =
+and=20
+  nature of the changes in zlib.h, as well as in ChangeLog and README, =
+along=20
+  with the dates of the alterations. The origin should include at least =
+your=20
+  name (or your company's name), and an email address to contact for =
+help or=20
+  issues with the library.=20
+  <P>Note that distributing a compiled zlib library along with zlib.h =
+and=20
+  zconf.h is also a source distribution, and so you should change=20
+  <TT>ZLIB_VERSION</TT> and <TT>ZLIB_VERNUM</TT> and note the origin and =
+nature=20
+  of the changes in zlib.h as you would for a full source distribution.=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq25></A><EM>Will zlib work on a big-endian or =
+little-endian=20
+  architecture, and can I exchange compressed data between them?</EM>=20
+  <P>Yes and yes. <BR><BR></P>
+  <LI><A name=3Dfaq26></A><EM>Will zlib work on a 64-bit machine?</EM>=20
+  <P>Yes. It has been tested on 64-bit machines, and has no dependence =
+on any=20
+  data types being limited to 32-bits in length. If you have any =
+difficulties,=20
+  please provide a complete problem report to <IMG alt=3D"zlib email =
+address"=20
+  src=3D"http://www.zlib.net/zlib-email.png" align=3Dbottom>. =
+<BR><BR></P>
+  <LI><A name=3Dfaq27></A><EM>Will zlib decompress data from the PKWare =
+Data=20
+  Compression Library?</EM>=20
+  <P>No. The PKWare DCL uses a completely different compressed data =
+format than=20
+  does PKZIP and zlib. However, you can look in zlib's contrib/blast =
+directory=20
+  for a possible solution to your problem. <BR><BR></P>
+  <LI><A name=3Dfaq28></A><EM>Can I access data randomly in a compressed =
+
+  stream?</EM>=20
+  <P>No, not without some preparation. If when compressing you =
+periodically use=20
+  <TT>Z_FULL_FLUSH</TT>, carefully write all the pending data at those =
+points,=20
+  and keep an index of those locations, then you can start decompression =
+at=20
+  those points. You have to be careful to not use <TT>Z_FULL_FLUSH</TT> =
+too=20
+  often, since it can significantly degrade compression. Alternatively, =
+you can=20
+  scan a deflate stream once to generate an index, and then use that =
+index for=20
+  random access. See examples/zran.c . <BR><BR></P>
+  <LI><A name=3Dfaq29></A><EM>Does zlib work on MVS, OS/390, CICS, =
+etc.?</EM>=20
+  <P>It has in the past, but we have not heard of any recent evidence. =
+There=20
+  were working ports of zlib 1.1.4 to MVS, but those links no longer =
+work. If=20
+  you know of recent, successful applications of zlib on these operating =
+
+  systems, please let us know. Thanks. <BR><BR></P>
+  <LI><A name=3Dfaq30></A><EM>Is there some simpler, easier to read =
+version of=20
+  inflate I can look at to understand the deflate format?</EM>=20
+  <P>First off, you should read RFC 1951. Second, yes. Look in zlib's=20
+  contrib/puff directory. <BR><BR></P>
+  <LI><A name=3Dfaq31></A><EM>Does zlib infringe on any patents?</EM>=20
+  <P>As far as we know, no. In fact, that was originally the whole point =
+behind=20
+  zlib. Look <A href=3D"http://www.gzip.org/#faq11">here</A> for some =
+more=20
+  information. <BR><BR></P>
+  <LI><A name=3Dfaq32></A><EM>Can zlib work with greater than 4 GB of =
+data?</EM>=20
+  <P>Yes. <TT>inflate()</TT> and <TT>deflate()</TT> will process any =
+amount of=20
+  data correctly. Each call of <TT>inflate()</TT> or <TT>deflate()</TT> =
+is=20
+  limited to input and output chunks of the maximum value that can be =
+stored in=20
+  the compiler's "unsigned int" type, but there is no limit to the =
+number of=20
+  chunks. Note however that the <TT>strm.total_in</TT> and=20
+  <TT>strm_total_out</TT> counters may be limited to 4 GB. These =
+counters are=20
+  provided as a convenience and are not used internally by =
+<TT>inflate()</TT> or=20
+  <TT>deflate()</TT>. The application can easily set up its own counters =
+updated=20
+  after each call of <TT>inflate()</TT> or <TT>deflate()</TT> to count =
+beyond 4=20
+  GB. <TT>compress()</TT> and <TT>uncompress()</TT> may be limited to 4 =
+GB,=20
+  since they operate in a single call. <TT>gzseek()</TT> and =
+<TT>gztell()</TT>=20
+  may be limited to 4 GB depending on how zlib is compiled. See the=20
+  <TT>zlibCompileFlags()</TT> function in zlib.h.=20
+  <P>The word "may" appears several times above since there is a 4 GB =
+limit only=20
+  if the compiler's <TT>long</TT> type is 32 bits. If the compiler's=20
+  <TT>long</TT> type is 64 bits, then the limit is 16 exabytes. =
+<BR><BR></P>
+  <LI><A name=3Dfaq33></A><EM>Does zlib have any security =
+vulnerabilities?</EM>=20
+  <P>The only one that we are aware of is potentially in =
+<TT>gzprintf()</TT>. If=20
+  zlib is compiled to use <TT>sprintf()</TT> or <TT>vsprintf()</TT>, =
+then there=20
+  is no protection against a buffer overflow of a 4K string space, other =
+than=20
+  the caller of <TT>gzprintf()</TT> assuring that the output will not =
+exceed 4K.=20
+  On the other hand, if zlib is compiled to use <TT>snprintf()</TT> or=20
+  <TT>vsnprintf()</TT>, which should normally be the case, then there is =
+no=20
+  vulnerability. The <TT>./configure</TT> script will display warnings =
+if an=20
+  insecure variation of <TT>sprintf()</TT> will be used by =
+<TT>gzprintf()</TT>.=20
+  Also the <TT>zlibCompileFlags()</TT> function will return information =
+on what=20
+  variant of <TT>sprintf()</TT> is used by <TT>gzprintf()</TT>.=20
+  <P>If you don't have <TT>snprintf()</TT> or <TT>vsnprintf()</TT> and =
+would=20
+  like one, you can find a portable implementation <A=20
+  href=3D"http://www.ijs.si/software/snprintf/">here</A>.=20
+  <P>Note that you should be using the most recent version of zlib. =
+Versions=20
+  1.1.3 and before were subject to a double-free vulnerability, and =
+versions=20
+  1.2.1 and 1.2.2 were subject to an access exception when decompressing =
+invalid=20
+  compressed data. <BR><BR></P>
+  <LI><A name=3Dfaq34></A><EM>Is there a Java version of zlib?</EM>=20
+  <P>Probably what you want is to use zlib in Java. zlib is already =
+included as=20
+  part of the Java SDK in the java.util.zip package. If you really want =
+a=20
+  version of zlib written in the Java language, look on the zlib home =
+page for=20
+  links: <A=20
+  =
+href=3D"http://www.zlib.net/index.html">http://www.zlib.net/index.html</A=
+> .=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq35></A><EM>I get this or that compiler or source-code =
+scanner=20
+  warning when I crank it up to maximally-pedantic. Can't you guys write =
+proper=20
+  code?</EM>=20
+  <P>Many years ago, we gave up attempting to avoid warnings on every =
+compiler=20
+  in the universe. It just got to be a waste of time, and some compilers =
+were=20
+  downright silly. So now, we simply make sure that the code always =
+works.=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq36></A><EM>Valgrind (or some similar memory access =
+checker)=20
+  says that deflate is performing a conditional jump that depends on an=20
+  uninitialized value. Isn't that a bug?</EM>=20
+  <P>No. That is intentional for performance reasons, and the output of =
+deflate=20
+  is not affected. This only started showing up recently since zlib =
+1.2.x uses=20
+  <TT>malloc()</TT> by default for allocations, whereas earlier versions =
+used=20
+  <TT>calloc()</TT>, which zeros out the allocated memory. Even though =
+the code=20
+  was correct, versions 1.2.4 and later was changed to not stimulate =
+these=20
+  checkers. <BR><BR></P>
+  <LI><A name=3Dfaq37></A><EM>Will zlib read the (insert any ancient or =
+arcane=20
+  format here) compressed data format?</EM>=20
+  <P>Probably not. Look in the <A=20
+  href=3D"http://www.faqs.org/faqs/compression-faq/">comp.compression =
+FAQ</A> for=20
+  pointers to various formats and associated software. <BR><BR></P>
+  <LI><A name=3Dfaq38></A><EM>How can I encrypt/decrypt zip files with =
+zlib?</EM>=20
+  <P>zlib doesn't support encryption. The original PKZIP encryption is =
+very weak=20
+  and can be broken with freely available programs. To get strong =
+encryption,=20
+  use <A href=3D"http://www.gnupg.org/">GnuPG</A> which already includes =
+zlib=20
+  compression. For PKZIP compatible "encryption", look at <A=20
+  href=3D"http://www.info-zip.org/">InfoZIP</A>. <BR><BR></P>
+  <LI><A name=3Dfaq39></A><EM>What's the difference between the "gzip" =
+and=20
+  "deflate" HTTP 1.1 encodings?</EM>=20
+  <P>"gzip" is the gzip format, and "deflate" is the zlib format. They =
+should=20
+  probably have called the second one "zlib" instead to avoid confusion =
+with the=20
+  raw deflate compressed data format. While the HTTP 1.1 RFC 2616 =
+correctly=20
+  points to the zlib specification in RFC 1950 for the "deflate" =
+transfer=20
+  encoding, there have been reports of servers and browsers that =
+incorrectly=20
+  produce or expect raw deflate data per the deflate specficiation in =
+RFC 1951,=20
+  most notably Microsoft. So even though the "deflate" transfer encoding =
+using=20
+  the zlib format would be the more efficient approach (and in fact =
+exactly what=20
+  the zlib format was designed for), using the "gzip" transfer encoding =
+is=20
+  probably more reliable due to an unfortunate choice of name on the =
+part of the=20
+  HTTP 1.1 authors.=20
+  <P>Bottom line: use the gzip format for HTTP 1.1 encoding. =
+<BR><BR></P>
+  <LI><A name=3Dfaq40></A><EM>Does zlib support the new "Deflate64" =
+format=20
+  introduced by PKWare?</EM>=20
+  <P>No. PKWare has apparently decided to keep that format proprietary, =
+since=20
+  they have not documented it as they have previous compression formats. =
+In any=20
+  case, the compression improvements are so modest compared to other =
+more modern=20
+  approaches, that it's not worth the effort to implement. <BR><BR></P>
+  <LI><A name=3Dfaq41></A><EM>I'm having a problem with the zip =
+functions in zlib,=20
+  can you help?</EM>=20
+  <P>There are no zip functions in zlib. You are probably using minizip =
+by Giles=20
+  Vollant, which is found in the contrib directory of zlib. It is not =
+part of=20
+  zlib. In fact none of the stuff in contrib is part of zlib. The files =
+in there=20
+  are not supported by the zlib authors. You need to contact the authors =
+of the=20
+  respective contribution for help. <BR><BR></P>
+  <LI><A name=3Dfaq42></A><EM>The match.asm code in contrib is under the =
+GNU=20
+  General Public License. Since it's part of zlib, doesn't that mean =
+that all of=20
+  zlib falls under the GNU GPL?</EM>=20
+  <P>No. The files in contrib are not part of zlib. They were =
+contributed by=20
+  other authors and are provided as a convenience to the user within the =
+zlib=20
+  distribution. Each item in contrib has its own license. <BR><BR></P>
+  <LI><A name=3Dfaq43></A><EM>Is zlib subject to export controls? What =
+is its=20
+  ECCN?</EM>=20
+  <P>zlib is not subject to export controls, and so is classified as =
+EAR99.=20
+  <BR><BR></P>
+  <LI><A name=3Dfaq44></A><EM>Can you please sign these lengthy legal =
+documents=20
+  and fax them back to us so that we can use your software in our =
+product?</EM>=20
+  <P>No. Go away. Shoo. </P></LI></OL>
+<P>
+<HR>
+Click here to return to the <A =
+href=3D"http://www.zlib.net/index.html">zlib Home=20
+Page</A>. <BR><I>Last modified 14 March 2010 by Mark Adler</I>=20
+<HR>
+
+<TABLE cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD align=3Dleft><FONT size=3D-1>Web page copyright =A9 1996-2010 <A =
+
+      href=3D"http://pobox.com/~newt/">Greg Roelofs</A>, <A=20
+      href=3D"http://gailly.net/">Jean-loup Gailly</A> and <A=20
+      href=3D"http://www.alumni.caltech.edu/~madler/">Mark =
+Adler</A>.<BR>zlib=20
+      software copyright =A9 1995-2010 <A =
+href=3D"http://gailly.net/">Jean-loup=20
+      Gailly</A> and <A =
+href=3D"http://www.alumni.caltech.edu/~madler/">Mark=20
+      Adler</A>. </FONT></TD>
+    <TD vAlign=3Dtop align=3Dright><FONT size=3D-1><!--  <A =
+HREF=3D"http://www.info-zip.org/pub/infozip/zlib/">Primary site</A>=0A=
+      hosted by=0A=
+      <A =
+HREF=3D"http://www.freesoftware.com/"><B>FreeSoftware.com</B></A>.=0A=
+--><A=20
+      href=3D"http://www.zlib.net/index.html">Primary site</A> hosted by =
+<A=20
+      href=3D"http://www.teaser.fr/"><B>France =
+Teaser</B></A>.<BR><I>zlib.org</I>=20
+      domain name donated by <A>
+      <SCRIPT type=3Dtext/javascript>mail_to("ag","em.net")</SCRIPT>
+      Andrew Green</A>. </FONT></TD></TR></TBODY></TABLE></BODY></HTML>
+
+------=_NextPart_000_0000_01CB3CC7.2A8E2BF0
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: http://www.zlib.net/images/zlib3d-b1.png
+
+iVBORw0KGgoAAAANSUhEUgAAAXEAAADMCAMAAAHFfVMfAAAC61BMVEX///8EegRkemQEQgQEsgQ8
+SjxEgkQEXgRkqmQElgQ0sjQkQiQkXiRkkmQcehwEJgQsziyUqpQ8ZDw0ojSMlIwEVAQctBwEcAQk
+PiQclhwENwQcjBxkwmRcaFwkVCQcxhxUy1QURBQ8ijwkciQEigQUXhSMn4yEkoScwJwkqCSMqoxk
+oWRUl1Rkt2RUtlQchBwUVRQcvBwEpwQUKhRMbkwUbxQUORRkh2QEvgQ8WTwkZyScn5wEHAQEhQRU
+e1QkTSSUupQsjCw0VDQESwQEaAQEMQQkoiRcdVwUTBQEogR0lHRUkFQUZxRMWkxUhVQEugR0q3Q0
+YTQsfCws3CykrqRMYkwEWgQstCwEdgQEPgQckhx00HQkWiQsxCw0djQUjhSMpox0oHR0uHQshCwU
+WhQsvCx0jXQ8XjwUehScspyMmowsmCxU11QkdiQEkgQECgRUclQcdhwUPhQEIgQ0SjRscmwEFAQM
+fAxkgmQMRAwMtAwMYAxErkR0xHQUxRQ0RjQ0OjRMjkw0vjScx5xkmmQcyhwErgQUMhRUrlRkjmSc
+ppxUxlRUalQ8UjxksmQs1ixcblxU0lRkpmRkvmQskiw0WjR0mnR0snQs4iwsyix0pnR0vnRUdlR0
+ynRsfmwMlwwsQiwsYCwkfSQMKAycq5xEZESUlpQMUgwktCQMcAwsOywklyQMOAwkjCQsViwkwiQc
+RBxEjkQscCwMjAwcYByUnpQsqCxcllxctVwkhCQcUxwkuyQcLhwccBwcOhxcqlxshmxEWEQsZywM
+HgwMhAxcelwsTiycuJxcvlwMSwwMaAwMMAwsoCxkdWQcThwMoQxckVwcaBxcoVxchFwMvgwMugwM
+WgwMdgwMPgwkkiQsWiyUppQsriwcWhxEXkSUmpQsdiwMkgxculwcPhwMIgxsmmwMrgykpqQEDgQE
+fgRkfmQERgQEtgQ8TjwEYgRkrmQEmgQ0tjQkRiQkYiRklmQcfhwEKgQs0iyUrpQirctuAAAAAXRS
+TlMAQObYZgAAUClJREFUeNrtvX9gXHd1Jzr1sIInAqOdweT1BrSRABvC201aNkmTiGdmlNmk2XTL
+nbiIKeiWMFGS53EbEpmYQWm7K7fbBdqmtDPZiNKwF0FmTW+m1nWsYne9zbtrJyuNYpqSxMOs8iIe
+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
+
+------=_NextPart_000_0000_01CB3CC7.2A8E2BF0
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: http://www.zlib.net/zlib-email.png
+
+iVBORw0KGgoAAAANSUhEUgAAAHgAAAAYCAMAAAAGTsm6AAAABGdBTUEAANbY1E9YMgAAABl0RVh0
+U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAzUExURe/v/z8//5+f/9/f/w8P/8/P/4+P
+/y8v/19f/x8f/09P/6+v/29v/7+//39//wAA/////7GkjKoAAAARdFJOU///////////////////
+//8AJa2ZYgAAAs1JREFUeNrkVtmS20AIRHOfMP//teEYydrDqfVuUnnIVFmyEdBD04wM6x8t+N+B
+4xM33xG7/3vABxVBZ4TSbuZ5kK4jPs0z4SfAQAI8iJbjz7UGnSs8Q67UfgI8iXCtTGEVype1MGLp
+c47AyJ8X5nXH3wdORJPh0TPn7WYM0R01rsjI6fM0Ln2DakhTl3LK7Z38IRoJcYpDoDAzF+2WNODO
+aHQax/QDtxiw8f2dAKMZ2MXP5N8B593AwnWGtZCqULdNUjCyx+E6x/OdQwpXzj05nairKHlXld5S
+3rcBqYk8K8NLbHAGXK54zZvZoZ85p2yLsQ/IFMWMSri6Q92KA2+7tuXei9Jdj2RzuqJRzXRlCeX4
+IcpuvEUq3jfBYVCOS+wwI3/pPkj5SVz9nEk33Hf2MLLKc9crA4iSTqp1mTKLl1ofqhQ4hVtU1Mku
+TUpXkfNnPMaJtV60piR4HJ3115AaAlWQbeNjxMRHpp/jYLkaq4q3qJJg4woQih2N32FDIsBNyA3K
+a/agrdKRu3BNG5pjPoBNEEtGUfEuS9BRBcPNcmdqQS7inex3B+khpOQBj+ZgZ+7KkODqeElCe4CP
+HpuBqXGoJZ40oe3NxFX1gchKL8JvjLIf1fweIb/TjTWD5I/nI9WGCs+FxxEzpZwuBiVkbUhn2loA
+e5qOTZZc0u2EnKqMOXmmmoGQytpvdQc0WeCOEd0khHVNm+NmH5faNEjn+AzgbWiUeG7boTW6S1n1
+NiNh7WEylv05MsNckhVo02VW1cJZo8zS0ZBXk4NJ3CO3AXqciOcLYRondRiJ/IQZ5ZE7CseNwm4u
+ioYrNrSthmxtGWbActLvOHbL70tHLA/sm7Mw3Y+J68X2tfdT20p78Wzn9qEcJvXD+/g2wM9iORTr
+ZvpV4PTsvZz2rP5m7aO5wneA5fChUD7+CXJnwufL1ZtS/tyfvfii/y8BBgBtbZ3XLpQlLAAAAABJ
+RU5ErkJggg==
+
+------=_NextPart_000_0000_01CB3CC7.2A8E2BF0--
