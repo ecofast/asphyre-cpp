@@ -1,0 +1,57 @@
+﻿生成启动时间为 2014/1/7 15:09:03。
+     1>项目“D:\C++\ASC\Library\libpng\projects\vs2008\libpng.vcxproj”在节点 2 上(Build 个目标)。
+     1>CustomBuild:
+         Create dummy include files to prevent "Cannot find missing dependency..." warnings.
+         
+         Microsoft (R) 程序维护实用工具 11.00.50727.1 版
+         版权所有 (C) Microsoft Corporation。保留所有权利。
+         
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\.. /I..\..\..\zlib /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PNG_DEBUG=1 /D PNG_BUILD_DLL /D ZLIB_DLL /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0710 /D _WINDLL /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"png.h" /Fp".\Win32_DLL_Debug\libpng.pch" /Fo".\Win32_DLL_Debug\\" /Fd".\Win32_DLL_Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\pngerror.c
+         pngerror.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\.. /I..\..\..\zlib /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PNG_DEBUG=1 /D PNG_BUILD_DLL /D ZLIB_DLL /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0710 /D _WINDLL /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Win32_DLL_Debug\\" /Fd".\Win32_DLL_Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\png.c
+         png.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\.. /I..\..\..\zlib /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PNG_DEBUG=1 /D PNG_BUILD_DLL /D ZLIB_DLL /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0710 /D _WINDLL /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"png.h" /Fp".\Win32_DLL_Debug\libpng.pch" /Fo".\Win32_DLL_Debug\\" /Fd".\Win32_DLL_Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\pngget.c ..\..\pngmem.c ..\..\pngpread.c ..\..\pngread.c ..\..\pngrio.c ..\..\pngrtran.c ..\..\pngrutil.c ..\..\pngset.c ..\..\pngtrans.c ..\..\pngwio.c ..\..\pngwrite.c ..\..\pngwtran.c ..\..\pngwutil.c
+         pngget.c
+         pngmem.c
+         pngpread.c
+         pngread.c
+         pngrio.c
+         pngrtran.c
+         pngrutil.c
+         pngset.c
+         pngtrans.c
+         pngwio.c
+         pngwrite.c
+         pngwtran.c
+         pngwutil.c
+         正在生成代码...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\rc.exe /D _DEBUG /D PNG_DEBUG=1 /D _VC80_UPGRADE=0x0710 /l"0x0409" /I..\.. /I..\..\..\zlib /I.\Win32_DLL_Debug\ /nologo /fo".\Win32_DLL_Debug\pngwin.res" ..\..\scripts\pngwin.rc 
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1137,5): warning MSB8012: TargetPath(D:\C++\ASC\Library\libpng\projects\vs2008\.\Win32_DLL_Debug\libpng.dll) does not match the Linker's OutputFile property value (D:\C++\ASC\bin\debug\libpngd.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1139,5): warning MSB8012: TargetName(libpng) does not match the Linker's OutputFile property value (libpngd). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"../../../../bin/debug/libpngd.dll" /NOLOGO ../../../zlib/lib/dlib/zlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /DEF:"..\..\scripts\pngwin.def" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Win32_DLL_Debug\libpng.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"../../lib/dlib/libpngd.lib" /MACHINE:X86 /SAFESEH /DLL .\Win32_DLL_Debug\pngwin.res
+         .\Win32_DLL_Debug\png.obj
+         .\Win32_DLL_Debug\pngerror.obj
+         .\Win32_DLL_Debug\pngget.obj
+         .\Win32_DLL_Debug\pngmem.obj
+         .\Win32_DLL_Debug\pngpread.obj
+         .\Win32_DLL_Debug\pngread.obj
+         .\Win32_DLL_Debug\pngrio.obj
+         .\Win32_DLL_Debug\pngrtran.obj
+         .\Win32_DLL_Debug\pngrutil.obj
+         .\Win32_DLL_Debug\pngset.obj
+         .\Win32_DLL_Debug\pngtrans.obj
+         .\Win32_DLL_Debug\pngwio.obj
+         .\Win32_DLL_Debug\pngwrite.obj
+         .\Win32_DLL_Debug\pngwtran.obj
+         .\Win32_DLL_Debug\pngwutil.obj
+     1>png.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/SAFESEH”规范)
+            正在创建库 ../../lib/dlib/libpngd.lib 和对象 ../../lib/dlib/libpngd.exp
+         libpng.vcxproj -> D:\C++\ASC\Library\libpng\projects\vs2008\.\Win32_DLL_Debug\libpng.dll
+     1>已完成生成项目“D:\C++\ASC\Library\libpng\projects\vs2008\libpng.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:20.60

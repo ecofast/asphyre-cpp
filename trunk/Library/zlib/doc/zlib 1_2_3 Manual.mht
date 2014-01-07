@@ -1,0 +1,1762 @@
+From: <¨®¨¦ Microsoft Internet Explorer 5 ¡À¡ê¡ä?>
+Subject: zlib 1.2.3 Manual
+Date: Sun, 15 Aug 2010 22:43:30 +0800
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file://E:\code\lincodelib\3rdparty\zlib\zlib123\doc\zlib 1.2.3 Manual.htm
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.3664
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" =
+"http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=3D(0031)http://www.zlib.net/manual.html =
+--><HTML><HEAD><TITLE>zlib 1.2.3 Manual</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3DISO-8859-1">
+<META content=3D"MSHTML 6.00.2900.3698" name=3DGENERATOR></HEAD>
+<BODY>
+<H1><EM>zlib</EM> 1.2.3 Manual </H1>
+<HR>
+<A name=3DContents></A>
+<H2>Contents</H2>
+<OL type=3DI>
+  <LI><A href=3D"http://www.zlib.net/manual.html#Prologue">Prologue</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Version">Version</A>=20
+  <LI><A =
+href=3D"http://www.zlib.net/manual.html#Introduction">Introduction</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Stream">Stream Data=20
+  Structures</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Usage">Structures =
+Usage</A>=20
+  <LI><A =
+href=3D"http://www.zlib.net/manual.html#Constants">Constants</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Basic">Basic =
+Functions</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Advanced">Advanced =
+Functions</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Utility">Utility =
+Functions</A>=20
+  <LI><A href=3D"http://www.zlib.net/manual.html#Gzip">gzip File I/O =
+Functions</A>=20
+
+  <LI><A href=3D"http://www.zlib.net/manual.html#Checksum">Checksum =
+Functions</A>=20
+  <LI><A =
+href=3D"http://www.zlib.net/manual.html#Undocumented">Undocumented=20
+  Functions</A> </LI></OL>
+<HR>
+<A name=3DPrologue></A>
+<H2>Prologue </H2><EM>zlib</EM> general purpose compression =
+library<BR>version=20
+1.2.3, July 18th, 2005=20
+<P>Copyright (C) 1995-2005 Jean-loup Gailly and Mark Adler </P>
+<P>This software is provided 'as-is', without any express or implied =
+warranty.=20
+In no event will the authors be held liable for any damages arising from =
+the use=20
+of this software. </P>
+<P>Permission is granted to anyone to use this software for any purpose, =
+
+including commercial applications, and to alter it and redistribute it =
+freely,=20
+subject to the following restrictions: </P>
+<OL>
+  <LI>The origin of this software must not be misrepresented; you must =
+not claim=20
+  that you wrote the original software. If you use this software in a =
+product,=20
+  an acknowledgment in the product documentation would be appreciated =
+but is not=20
+  required.=20
+  <LI>Altered source versions must be plainly marked as such, and must =
+not be=20
+  misrepresented as being the original software.=20
+  <LI>This notice may not be removed or altered from any source =
+distribution.=20
+  </LI></OL>Jean-loup =
+Gailly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mark Adler
+<P>The data format used by the <EM>zlib</EM> library is described by =
+RFCs=20
+(Request for Comments) 1950 to 1952 in the files <A=20
+href=3D"http://www.ietf.org/rfc/rfc1950.txt">rfc1950.txt</A> (zlib =
+format), <A=20
+href=3D"http://www.ietf.org/rfc/rfc1951.txt">rfc1951.txt</A> (deflate =
+format) and=20
+<A href=3D"http://www.ietf.org/rfc/rfc1952.txt">rfc1952.txt</A> (gzip =
+format). <A=20
+name=3DVersion></A></P>
+<H2>Version </H2><PRE><B>#define ZLIB_VERSION "1.2.3"
+#define ZLIB_VERNUM 0x1230
+</B></PRE><A name=3DIntroduction></A>
+<H2>Introduction </H2>The <EM>zlib</EM> compression library provides =
+in-memory=20
+compression and decompression functions, including integrity checks of =
+the=20
+uncompressed data. This version of the library supports only one =
+compression=20
+method (deflation) but other algorithms will be added later and will =
+have the=20
+same stream interface.=20
+<P>Compression can be done in a single step if the buffers are large =
+enough (for=20
+example if an input file is mmap'ed), or can be done by repeated calls =
+of the=20
+compression function. In the latter case, the application must provide =
+more=20
+input and/or consume the output (providing more output space) before =
+each call.=20
+</P>
+<P>The compressed data format used by default by the in-memory functions =
+is the=20
+<EM>zlib</EM> format, which is a <EM>zlib</EM> wrapper documented in RFC =
+1950,=20
+wrapped around a deflate stream, which is itself documented in RFC 1951. =
+</P>
+<P>The library also supports reading and writing files in <EM>gzip</EM> =
+(.gz)=20
+format with an interface similar to that of stdio using the functions =
+that start=20
+with "gz". The <EM>gzip</EM> format is different from the <EM>zlib</EM> =
+format.=20
+<EM>gzip</EM> is a <EM>gzip</EM> wrapper, documented in RFC 1952, =
+wrapped around=20
+a deflate stream. </P>
+<P>This library can optionally read and write <EM>gzip</EM> streams in =
+memory as=20
+well. </P>
+<P>The <EM>zlib</EM> format was designed to be compact and fast for use =
+in=20
+memory and on communications channels. The <EM>gzip</EM> format was =
+designed for=20
+single- file compression on file systems, has a larger header than =
+<EM>zlib</EM>=20
+to maintain directory information, and uses a different, slower check =
+method=20
+than <EM>zlib</EM>. </P>
+<P>The library does not install any signal handler. The decoder checks =
+the=20
+consistency of the compressed data, so the library should never crash =
+even in=20
+case of corrupted input. <A name=3DStream></A></P>
+<H2>Stream Data Structures </H2><PRE><B>typedef voidpf (*alloc_func) =
+OF((voidpf opaque, uInt items, uInt size));
+typedef void   (*free_func)  OF((voidpf opaque, voidpf address));
+
+struct internal_state;
+
+typedef struct z_stream_s {
+    Bytef    *next_in;  /* next input byte */
+    uInt     avail_in;  /* number of bytes available at next_in */
+    uLong    total_in;  /* total nb of input bytes read so far */
+
+    Bytef    *next_out; /* next output byte should be put there */
+    uInt     avail_out; /* remaining free space at next_out */
+    uLong    total_out; /* total nb of bytes output so far */
+
+    char     *msg;      /* last error message, NULL if no error */
+    struct internal_state FAR *state; /* not visible by applications */
+
+    alloc_func zalloc;  /* used to allocate the internal state */
+    free_func  zfree;   /* used to free the internal state */
+    voidpf     opaque;  /* private data object passed to zalloc and =
+zfree */
+
+    int     data_type;  /* best guess about the data type: binary or =
+text */
+    uLong   adler;      /* adler32 value of the uncompressed data */
+    uLong   reserved;   /* reserved for future use */
+} z_stream;
+
+typedef z_stream FAR *z_streamp;
+
+</B></PRE><EM>gzip</EM> header information passed to and from =
+<EM>zlib</EM>=20
+routines. See RFC 1952 for more details on the meanings of these fields. =
+<PRE><B>
+typedef struct gz_header_s {
+    int     text;       /* true if compressed data believed to be text =
+*/
+    uLong   time;       /* modification time */
+    int     xflags;     /* extra flags (not used when writing a gzip =
+file) */
+    int     os;         /* operating system */
+    Bytef   *extra;     /* pointer to extra field or Z_NULL if none */
+    uInt    extra_len;  /* extra field length (valid if extra !=3D =
+Z_NULL) */
+    uInt    extra_max;  /* space at extra (only when reading header) */
+    Bytef   *name;      /* pointer to zero-terminated file name or =
+Z_NULL */
+    uInt    name_max;   /* space at name (only when reading header) */
+    Bytef   *comment;   /* pointer to zero-terminated comment or Z_NULL =
+*/
+    uInt    comm_max;   /* space at comment (only when reading header) =
+*/
+    int     hcrc;       /* true if there was or will be a header crc */
+    int     done;       /* true when done reading gzip header (not used
+                           when writing a gzip file) */
+} gz_header;
+
+typedef gz_header FAR *gz_headerp;
+</B></PRE><A name=3DUsage></A>
+<H2>Structures Usage </H2>The application must update <TT>next_in</TT> =
+and=20
+<TT>avail_in</TT> when <TT>avail_in</TT> has dropped to zero. It must =
+update=20
+<TT>next_out</TT> and <TT>avail_out</TT> when <TT>avail_out</TT> has =
+dropped to=20
+zero. The application must initialize <TT>zalloc</TT>, <TT>zfree</TT> =
+and=20
+<TT>opaque</TT> before calling the init function. All other fields are =
+set by=20
+the compression library and must not be updated by the application.=20
+<P>The <TT>opaque</TT> value provided by the application will be passed =
+as the=20
+first parameter for calls of <TT>zalloc</TT> and <TT>zfree</TT>. This =
+can be=20
+useful for custom memory management. The compression library attaches no =
+meaning=20
+to the <TT>opaque</TT> value. </P>
+<P><TT>zalloc</TT> must return <TT>Z_NULL</TT> if there is not enough =
+memory for=20
+the object. If <EM>zlib</EM> is used in a multi-threaded application,=20
+<TT>zalloc</TT> and <TT>zfree</TT> must be thread safe. </P>
+<P>On 16-bit systems, the functions <TT>zalloc</TT> and <TT>zfree</TT> =
+must be=20
+able to allocate exactly 65536 bytes, but will not be required to =
+allocate more=20
+than this if the symbol <TT>MAXSEG_64K</TT> is defined (see zconf.h). =
+WARNING:=20
+On MSDOS, pointers returned by <TT>zalloc</TT> for objects of exactly =
+65536=20
+bytes <EM>must</EM> have their offset normalized to zero. The default =
+allocation=20
+function provided by this library ensures this (see zutil.c). To reduce =
+memory=20
+requirements and avoid any allocation of 64K objects, at the expense of=20
+compression ratio, compile the library with <TT>-DMAX_WBITS=3D14</TT> =
+(see=20
+zconf.h). </P>
+<P>The fields <TT>total_in</TT> and <TT>total_out</TT> can be used for=20
+statistics or progress reports. After compression, <TT>total_in</TT> =
+holds the=20
+total size of the uncompressed data and may be saved for use in the =
+decompressor=20
+(particularly if the decompressor wants to decompress everything in a =
+single=20
+step). <A name=3DConstants></A></P>
+<H2>Constants </H2>Allowed <TT>flush</TT> values; see <TT>deflate()</TT> =
+and=20
+<TT>inflate()</TT> below for details. <PRE><B>#define Z_NO_FLUSH      0
+#define Z_PARTIAL_FLUSH 1 /* will be removed, use Z_SYNC_FLUSH instead =
+*/
+#define Z_SYNC_FLUSH    2
+#define Z_FULL_FLUSH    3
+#define Z_FINISH        4
+#define Z_BLOCK         5
+</B></PRE>Return codes for the compression/decompression functions. =
+Negative=20
+values are errors, positive values are used for special but normal =
+events. <PRE><B>#define Z_OK            0
+#define Z_STREAM_END    1
+#define Z_NEED_DICT     2
+#define Z_ERRNO        (-1)
+#define Z_STREAM_ERROR (-2)
+#define Z_DATA_ERROR   (-3)
+#define Z_MEM_ERROR    (-4)
+#define Z_BUF_ERROR    (-5)
+#define Z_VERSION_ERROR (-6)
+</B></PRE>Compression levels. <PRE><B>#define Z_NO_COMPRESSION         0
+#define Z_BEST_SPEED             1
+#define Z_BEST_COMPRESSION       9
+#define Z_DEFAULT_COMPRESSION  (-1)
+</B></PRE>Compression strategy =97 see <TT>deflateInit2()</TT> below for =
+details. <PRE><B>#define Z_FILTERED            1
+#define Z_HUFFMAN_ONLY        2
+#define Z_RLE                 3
+#define Z_FIXED               4
+#define Z_DEFAULT_STRATEGY    0
+</B></PRE>Possible values of the <TT>data_type</TT> field (though see=20
+<TT>inflate()</TT>). <PRE><B>#define Z_BINARY   0
+#define Z_TEXT     1
+#define Z_ASCII    Z_TEXT   /* for compatibility with 1.2.2 and earlier =
+*/
+#define Z_UNKNOWN  2
+</B></PRE>The deflate compression method (the only one supported in this =
+
+version). <PRE><B>#define Z_DEFLATED   8
+</B></PRE>For initializing <TT>zalloc</TT>, <TT>zfree</TT>, =
+<TT>opaque</TT>. <PRE><B>#define Z_NULL  0
+</B></PRE>For compatibility with versions &lt; 1.0.2. <PRE><B>#define =
+zlib_version zlibVersion()
+</B></PRE><A name=3DBasic></A>
+<H2>Basic Functions </H2><PRE><B>ZEXTERN const char * ZEXPORT =
+zlibVersion OF((void));
+</B></PRE>The application can compare <TT>zlibVersion</TT> and=20
+<TT>ZLIB_VERSION</TT> for consistency. If the first character differs, =
+the=20
+library code actually used is not compatible with the zlib.h header file =
+used by=20
+the application. This check is automatically made by =
+<TT>deflateInit</TT> and=20
+<TT>inflateInit</TT>. <PRE><B>
+ZEXTERN int ZEXPORT deflateInit OF((z_streamp strm, int level));
+</B></PRE>Initializes the internal stream state for compression. The =
+fields=20
+<TT>zalloc</TT>, <TT>zfree</TT> and <TT>opaque</TT> must be initialized =
+before=20
+by the caller. If <TT>zalloc</TT> and <TT>zfree</TT> are set to =
+<TT>Z_NULL</TT>,=20
+<TT>deflateInit</TT> updates them to use default allocation functions.=20
+<P>The compression level must be <TT>Z_DEFAULT_COMPRESSION</TT>, or =
+between 0=20
+and 9: 1 gives best speed, 9 gives best compression, 0 gives no =
+compression at=20
+all (the input data is simply copied a block at a time).=20
+<TT>Z_DEFAULT_COMPRESSION</TT> requests a default compromise between =
+speed and=20
+compression (currently equivalent to level 6). </P>
+<P><TT>deflateInit</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_STREAM_ERROR</TT> if =
+<TT>level</TT> is not=20
+a valid compression level, <TT>Z_VERSION_ERROR</TT> if the <EM>zlib</EM> =
+library=20
+version (<TT>zlib_version</TT>) is incompatible with the version assumed =
+by the=20
+caller (<TT>ZLIB_VERSION</TT>). <TT>msg</TT> is set to null if there is =
+no error=20
+message. <TT>deflateInit</TT> does not perform any compression: this =
+will be=20
+done by deflate(). </P><PRE><B>
+ZEXTERN int ZEXPORT deflate OF((z_streamp strm, int flush));
+</B></PRE><TT>deflate</TT> compresses as much data as possible, and =
+stops when=20
+the input buffer becomes empty or the output buffer becomes full. It may =
+
+introduce some output latency (reading input without producing any =
+output)=20
+except when forced to flush.=20
+<P>The detailed semantics are as follows. <TT>deflate</TT> performs one =
+or both=20
+of the following actions: </P>
+<P></P>
+<UL>
+  <LI>Compress more input starting at <TT>next_in</TT> and update=20
+  <TT>next_in</TT> and <TT>avail_in</TT> accordingly. If not all input =
+can be=20
+  processed (because there is not enough room in the output buffer),=20
+  <TT>next_in</TT> and <TT>avail_in</TT> are updated and processing will =
+resume=20
+  at this point for the next call of <TT>deflate()</TT>.=20
+  <LI>Provide more output starting at <TT>next_out</TT> and update=20
+  <TT>next_out</TT> and <TT>avail_out</TT> accordingly. This action is =
+forced if=20
+  the parameter <TT>flush</TT> is non zero. Forcing flush frequently =
+degrades=20
+  the compression ratio, so this parameter should be set only when =
+necessary (in=20
+  interactive applications). Some output may be provided even if =
+<TT>flush</TT>=20
+  is not set. </LI></UL>Before the call of <TT>deflate()</TT>, the =
+application=20
+should ensure that at least one of the actions is possible, by providing =
+more=20
+input and/or consuming more output, and updating <TT>avail_in</TT> or=20
+<TT>avail_out</TT> accordingly; <TT>avail_out</TT> should never be zero =
+before=20
+the call. The application can consume the compressed output when it =
+wants, for=20
+example when the output buffer is full (<TT>avail_out =3D=3D 0</TT>), or =
+after each=20
+call of <TT>deflate()</TT>. If <TT>deflate</TT> returns <TT>Z_OK</TT> =
+and with=20
+zero <TT>avail_out</TT>, it must be called again after making room in =
+the output=20
+buffer because there might be more output pending.=20
+<P>Normally the parameter <TT>flush</TT> is set to <TT>Z_NO_FLUSH</TT>, =
+which=20
+allows <TT>deflate</TT> to decide how much data to accumualte before =
+producing=20
+output, in order to maximize compression. </P>
+<P>If the parameter <TT>flush</TT> is set to <TT>Z_SYNC_FLUSH</TT>, all =
+pending=20
+output is flushed to the output buffer and the output is aligned on a =
+byte=20
+boundary, so that the decompressor can get all input data available so =
+far. (In=20
+particular <TT>avail_in</TT> is zero after the call if enough output =
+space has=20
+been provided before the call.) Flushing may degrade compression for =
+some=20
+compression algorithms and so it should be used only when necessary. =
+</P>
+<P>If <TT>flush</TT> is set to <TT>Z_FULL_FLUSH</TT>, all output is =
+flushed as=20
+with <TT>Z_SYNC_FLUSH</TT>, and the compression state is reset so that=20
+decompression can restart from this point if previous compressed data =
+has been=20
+damaged or if random access is desired. Using <TT>Z_FULL_FLUSH</TT> too =
+often=20
+can seriously degrade compression. </P>
+<P>If <TT>deflate</TT> returns with <TT>avail_out =3D=3D 0</TT>, this =
+function must=20
+be called again with the same value of the <TT>flush</TT> parameter and =
+more=20
+output space (updated <TT>avail_out</TT>), until the flush is complete=20
+(<TT>deflate</TT> returns with non-zero <TT>avail_out</TT>). In the case =
+of a=20
+<TT>Z_FULL_FLUSH</TT> or <TT>Z_SYNC_FLUSH</TT>, make sure that=20
+<TT>avail_out</TT> is greater than six to avoid repeated flush markers =
+due to=20
+<TT>avail_out =3D=3D 0</TT> on return. </P>
+<P>If the parameter <TT>flush</TT> is set to <TT>Z_FINISH</TT>, pending =
+input is=20
+processed, pending output is flushed and <TT>deflate</TT> returns with=20
+<TT>Z_STREAM_END</TT> if there was enough output space; if =
+<TT>deflate</TT>=20
+returns with <TT>Z_OK</TT>, this function must be called again with=20
+<TT>Z_FINISH</TT> and more output space (updated <TT>avail_out</TT>) but =
+no more=20
+input data, until it returns with <TT>Z_STREAM_END</TT> or an error. =
+After=20
+<TT>deflate</TT> has returned <TT>Z_STREAM_END</TT>, the only possible=20
+operations on the stream are <TT>deflateReset</TT> or =
+<TT>deflateEnd</TT>. </P>
+<P><TT>Z_FINISH</TT> can be used immediately after <TT>deflateInit</TT> =
+if all=20
+the compression is to be done in a single step. In this case, =
+<TT>avail_out</TT>=20
+must be at least the value returned by <TT>deflateBound</TT> (see =
+below). If=20
+<TT>deflate</TT> does not return <TT>Z_STREAM_END</TT>, then it must be =
+called=20
+again as described above. </P>
+<P><TT>deflate()</TT> sets <TT>strm-&gt;adler</TT> to the adler32 =
+checksum of=20
+all input read so far (that is, <TT>total_in</TT> bytes). </P>
+<P><TT>deflate()</TT> may update <TT>strm-&gt;data_type</TT> if it can =
+make a=20
+good guess about the input data type (<TT>Z_BINARY</TT> or =
+<TT>Z_TEXT</TT>). In=20
+doubt, the data is considered binary. This field is only for information =
+
+purposes and does not affect the compression algorithm in any manner. =
+</P>
+<P><TT>deflate()</TT> returns <TT>Z_OK</TT> if some progress has been =
+made (more=20
+input processed or more output produced), <TT>Z_STREAM_END</TT> if all =
+input has=20
+been consumed and all output has been produced (only when <TT>flush</TT> =
+is set=20
+to <TT>Z_FINISH</TT>), <TT>Z_STREAM_ERROR</TT> if the stream state was=20
+inconsistent (for example if <TT>next_in</TT> or <TT>next_out</TT> was=20
+<TT>NULL</TT>), <TT>Z_BUF_ERROR</TT> if no progress is possible (for =
+example=20
+<TT>avail_in</TT> or <TT>avail_out</TT> was zero). Note that=20
+<TT>Z_BUF_ERROR</TT> is not fatal, and <TT>deflate()</TT> can be called =
+again=20
+with more input and more output space to continue compressing. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT deflateEnd OF((z_streamp strm));
+</B></PRE>All dynamically allocated data structures for this stream are =
+freed.=20
+This function discards any unprocessed input and does not flush any =
+pending=20
+output.=20
+<P><TT>deflateEnd</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_STREAM_ERROR</TT>=20
+if the stream state was inconsistent, <TT>Z_DATA_ERROR</TT> if the =
+stream was=20
+freed prematurely (some input or output was discarded). In the error =
+case,=20
+<TT>msg</TT> may be set but then points to a static string (which must =
+not be=20
+deallocated). </P><PRE><B>
+ZEXTERN int ZEXPORT inflateInit OF((z_streamp strm));
+</B></PRE>Initializes the internal stream state for decompression. The =
+fields=20
+<TT>next_in</TT>, <TT>avail_in</TT>, <TT>zalloc</TT>, <TT>zfree</TT> and =
+
+<TT>opaque</TT> must be initialized before by the caller. If =
+<TT>next_in</TT> is=20
+not <TT>Z_NULL</TT> and <TT>avail_in</TT> is large enough (the exact =
+value=20
+depends on the compression method), <TT>inflateInit</TT> determines the=20
+compression method from the <EM>zlib</EM> header and allocates all data=20
+structures accordingly; otherwise the allocation will be deferred to the =
+first=20
+call of <TT>inflate</TT>. If <TT>zalloc</TT> and <TT>zfree</TT> are set =
+to=20
+<TT>Z_NULL</TT>, <TT>inflateInit</TT> updates them to use default =
+allocation=20
+functions.=20
+<P><TT>inflateInit</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_VERSION_ERROR</TT> if the =
+<EM>zlib</EM>=20
+library version is incompatible with the version assumed by the caller.=20
+<TT>msg</TT> is set to null if there is no error message. =
+<TT>inflateInit</TT>=20
+does not perform any decompression apart from reading the <EM>zlib</EM> =
+header=20
+if present: this will be done by <TT>inflate()</TT>. (So =
+<TT>next_in</TT> and=20
+<TT>avail_in</TT> may be modified, but <TT>next_out</TT> and =
+<TT>avail_out</TT>=20
+are unchanged.) </P><PRE><B>
+ZEXTERN int ZEXPORT inflate OF((z_streamp strm, int flush));
+</B></PRE><TT>inflate</TT> decompresses as much data as possible, and =
+stops when=20
+the input buffer becomes empty or the output buffer becomes full. It may =
+
+introduce some output latency (reading input without producing any =
+output)=20
+except when forced to flush.=20
+<P>The detailed semantics are as follows. <TT>inflate</TT> performs one =
+or both=20
+of the following actions: </P>
+<UL>
+  <LI>Decompress more input starting at <TT>next_in</TT> and update=20
+  <TT>next_in</TT> and <TT>avail_in</TT> accordingly. If not all input =
+can be=20
+  processed (because there is not enough room in the output buffer),=20
+  <TT>next_in</TT> is updated and processing will resume at this point =
+for the=20
+  next call of <TT>inflate()</TT>.=20
+  <LI>Provide more output starting at <TT>next_out</TT> and update=20
+  <TT>next_out</TT> and <TT>avail_out</TT> accordingly. =
+<TT>inflate()</TT>=20
+  provides as much output as possible, until there is no more input data =
+or no=20
+  more space in the output buffer (see below about the <TT>flush</TT>=20
+  parameter). </LI></UL>Before the call of <TT>inflate()</TT>, the =
+application=20
+should ensure that at least one of the actions is possible, by providing =
+more=20
+input and/or consuming more output, and updating the <TT>next_</TT>* and =
+
+<TT>avail_</TT>* values accordingly. The application can consume the=20
+uncompressed output when it wants, for example when the output buffer is =
+full=20
+(<TT>avail_out =3D=3D 0</TT>), or after each call of <TT>inflate()</TT>. =
+If=20
+<TT>inflate</TT> returns <TT>Z_OK</TT> and with zero <TT>avail_out</TT>, =
+it must=20
+be called again after making room in the output buffer because there =
+might be=20
+more output pending.=20
+<P>The <TT>flush</TT> parameter of <TT>inflate()</TT> can be=20
+<TT>Z_NO_FLUSH</TT>, <TT>Z_SYNC_FLUSH</TT>, <TT>Z_FINISH</TT>, or=20
+<TT>Z_BLOCK</TT>. <TT>Z_SYNC_FLUSH</TT> requests that <TT>inflate()</TT> =
+flush=20
+as much output as possible to the output buffer. <TT>Z_BLOCK</TT> =
+requests that=20
+<TT>inflate()</TT> stop if and when it gets to the next deflate block =
+boundary.=20
+When decoding the <EM>zlib</EM> or <EM>gzip</EM> format, this will cause =
+
+<TT>inflate()</TT> to return immediately after the header and before the =
+first=20
+block. When doing a raw inflate, <TT>inflate()</TT> will go ahead and =
+process=20
+the first block, and will return when it gets to the end of that block, =
+or when=20
+it runs out of data. </P>
+<P>The <TT>Z_BLOCK</TT> option assists in appending to or combining =
+deflate=20
+streams. Also to assist in this, on return <TT>inflate()</TT> will set=20
+<TT>strm-&gt;data_type</TT> to the number of unused bits in the last =
+byte taken=20
+from <TT>strm-&gt;next_in</TT>, plus 64 if <TT>inflate()</TT> is =
+currently=20
+decoding the last block in the deflate stream, plus 128 if =
+<TT>inflate()</TT>=20
+returned immediately after decoding an end-of-block code or decoding the =
+
+complete header up to just before the first byte of the deflate stream. =
+The=20
+end-of-block will not be indicated until all of the uncompressed data =
+from that=20
+block has been written to <TT>strm-&gt;next_out</TT>. The number of =
+unused bits=20
+may in general be greater than seven, except when bit 7 of =
+<TT>data_type</TT> is=20
+set, in which case the number of unused bits will be less than eight. =
+</P>
+<P><TT>inflate()</TT> should normally be called until it returns=20
+<TT>Z_STREAM_END</TT> or an error. However if all decompression is to be =
+
+performed in a single step (a single call of <TT>inflate</TT>), the =
+parameter=20
+<TT>flush</TT> should be set to <TT>Z_FINISH</TT>. In this case all =
+pending=20
+input is processed and all pending output is flushed; <TT>avail_out</TT> =
+must be=20
+large enough to hold all the uncompressed data. (The size of the =
+uncompressed=20
+data may have been saved by the compressor for this purpose.) The next =
+operation=20
+on this stream must be <TT>inflateEnd</TT> to deallocate the =
+decompression=20
+state. The use of <TT>Z_FINISH</TT> is never required, but can be used =
+to inform=20
+<TT>inflate</TT> that a faster approach may be used for the single=20
+<TT>inflate()</TT> call. </P>
+<P>In this implementation, <TT>inflate()</TT> always flushes as much =
+output as=20
+possible to the output buffer, and always uses the faster approach on =
+the first=20
+call. So the only effect of the <TT>flush</TT> parameter in this =
+implementation=20
+is on the return value of <TT>inflate()</TT>, as noted below, or when it =
+returns=20
+early because <TT>Z_BLOCK</TT> is used. </P>
+<P>If a preset dictionary is needed after this call (see=20
+<TT>inflateSetDictionary</TT> below), <TT>inflate</TT> sets=20
+<TT>strm-&gt;adler</TT> to the adler32 checksum of the dictionary chosen =
+by the=20
+compressor and returns <TT>Z_NEED_DICT</TT>; otherwise it sets=20
+<TT>strm-&gt;adler</TT> to the adler32 checksum of all output produced =
+so far=20
+(that is, <TT>total_out</TT> bytes) and returns <TT>Z_OK</TT>,=20
+<TT>Z_STREAM_END</TT> or an error code as described below. At the end of =
+the=20
+stream, <TT>inflate()</TT> checks that its computed adler32 checksum is =
+equal to=20
+that saved by the compressor and returns <TT>Z_STREAM_END</TT> only if =
+the=20
+checksum is correct. </P>
+<P><TT>inflate()</TT> will decompress and check either =
+<EM>zlib</EM>-wrapped or=20
+<EM>gzip</EM>-wrapped deflate data. The header type is detected =
+automatically.=20
+Any information contained in the <EM>gzip</EM> header is not retained, =
+so=20
+applications that need that information should instead use raw inflate, =
+see=20
+<TT>inflateInit2()</TT> below, or <TT>inflateBack()</TT> and perform =
+their own=20
+processing of the <EM>gzip</EM> header and trailer. </P>
+<P><TT>inflate()</TT> returns <TT>Z_OK</TT> if some progress has been =
+made (more=20
+input processed or more output produced), <TT>Z_STREAM_END</TT> if the =
+end of=20
+the compressed data has been reached and all uncompressed output has =
+been=20
+produced, <TT>Z_NEED_DICT</TT> if a preset dictionary is needed at this =
+point,=20
+<TT>Z_DATA_ERROR</TT> if the input data was corrupted (input stream not=20
+conforming to the <EM>zlib</EM> format or incorrect check value),=20
+<TT>Z_STREAM_ERROR</TT> if the stream structure was inconsistent (for =
+example if=20
+<TT>next_in</TT> or <TT>next_out</TT> was <TT>NULL</TT>), =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_BUF_ERROR</TT> if no progress is =
+possible=20
+or if there was not enough room in the output buffer when =
+<TT>Z_FINISH</TT> is=20
+used. Note that <TT>Z_BUF_ERROR</TT> is not fatal, and =
+<TT>inflate()</TT> can be=20
+called again with more input and more output space to continue =
+decompressing. If=20
+<TT>Z_DATA_ERROR</TT> is returned, the application may then call=20
+<TT>inflateSync()</TT> to look for a good compression block if a partial =
+
+recovery of the data is desired. </P><PRE><B>
+ZEXTERN int ZEXPORT inflateEnd OF((z_streamp strm));
+</B></PRE>All dynamically allocated data structures for this stream are =
+freed.=20
+This function discards any unprocessed input and does not flush any =
+pending=20
+output.=20
+<P><TT>inflateEnd</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_STREAM_ERROR</TT>=20
+if the stream state was inconsistent. In the error case, <TT>msg</TT> =
+may be set=20
+but then points to a static string (which must not be deallocated). <A=20
+name=3DAdvanced></A></P>
+<H2>Advanced Functions </H2>The following functions are needed only in =
+some=20
+special applications. <PRE><B>
+ZEXTERN int ZEXPORT deflateInit2 OF((z_streamp strm,
+                                     int  level,
+                                     int  method,
+                                     int  windowBits,
+                                     int  memLevel,
+                                     int  strategy));
+</B></PRE>This is another version of <TT>deflateInit</TT> with more =
+compression=20
+options. The fields <TT>next_in</TT>, <TT>zalloc</TT>, <TT>zfree</TT> =
+and=20
+<TT>opaque</TT> must be initialized before by the caller.=20
+<P>The <TT>method</TT> parameter is the compression method. It must be=20
+<TT>Z_DEFLATED</TT> in this version of the library. </P>
+<P>The <TT>windowBits</TT> parameter is the base two logarithm of the =
+window=20
+size (the size of the history buffer). It should be in the range 8..15 =
+for this=20
+version of the library. Larger values of this parameter result in better =
+
+compression at the expense of memory usage. The default value is 15 if=20
+<TT>deflateInit</TT> is used instead. </P>
+<P><TT>windowBits</TT> can also be =968..=9615 for raw deflate. In this =
+case,=20
+<TT>-windowBits</TT> determines the window size. <TT>deflate()</TT> will =
+then=20
+generate raw deflate data with no <EM>zlib</EM> header or trailer, and =
+will not=20
+compute an adler32 check value. </P>
+<P><TT>windowBits</TT> can also be greater than 15 for optional =
+<EM>gzip</EM>=20
+encoding. Add 16 to <TT>windowBits</TT> to write a simple <EM>gzip</EM> =
+header=20
+and trailer around the compressed data instead of a <EM>zlib</EM> =
+wrapper. The=20
+<EM>gzip</EM> header will have no file name, no extra data, no comment, =
+no=20
+modification time (set to zero), no header crc, and the operating system =
+will be=20
+set to 255 (unknown). If a <EM>gzip</EM> stream is being written,=20
+<TT>strm-&gt;adler</TT> is a crc32 instead of an adler32. </P>
+<P>The <TT>memLevel</TT> parameter specifies how much memory should be =
+allocated=20
+for the internal compression state. <TT>memLevel=3D1</TT> uses minimum =
+memory but=20
+is slow and reduces compression ratio; <TT>memLevel=3D9</TT> uses =
+maximum memory=20
+for optimal speed. The default value is 8. See zconf.h for total memory =
+usage as=20
+a function of <TT>windowBits</TT> and <TT>memLevel</TT>. </P>
+<P>The <TT>strategy</TT> parameter is used to tune the compression =
+algorithm.=20
+Use the value <TT>Z_DEFAULT_STRATEGY</TT> for normal data, =
+<TT>Z_FILTERED</TT>=20
+for data produced by a filter (or predictor), <TT>Z_HUFFMAN_ONLY</TT> to =
+force=20
+Huffman encoding only (no string match), or <TT>Z_RLE</TT> to limit =
+match=20
+distances to one (run-length encoding). Filtered data consists mostly of =
+small=20
+values with a somewhat random distribution. In this case, the =
+compression=20
+algorithm is tuned to compress them better. The effect of =
+<TT>Z_FILTERED</TT> is=20
+to force more Huffman coding and less string matching; it is somewhat=20
+intermediate between <TT>Z_DEFAULT_STRATEGY</TT> and =
+<TT>Z_HUFFMAN_ONLY</TT>.=20
+<TT>Z_RLE</TT> is designed to be almost as fast as =
+<TT>Z_HUFFMAN_ONLY</TT>, but=20
+give better compression for <EM>PNG</EM> image data. The =
+<TT>strategy</TT>=20
+parameter only affects the compression ratio but not the correctness of =
+the=20
+compressed output even if it is not set appropriately. <TT>Z_FIXED</TT> =
+prevents=20
+the use of dynamic Huffman codes, allowing for a simpler decoder for =
+special=20
+applications. </P>
+<P><TT>deflateInit2</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_STREAM_ERROR</TT> if a parameter =
+is=20
+invalid (such as an invalid method). <TT>msg</TT> is set to null if =
+there is no=20
+error message. <TT>deflateInit2</TT> does not perform any compression: =
+this will=20
+be done by <TT>deflate()</TT>. </P><PRE><B>
+ZEXTERN int ZEXPORT deflateSetDictionary OF((z_streamp strm,
+                                             const Bytef *dictionary,
+                                             uInt  dictLength));
+</B></PRE>Initializes the compression dictionary from the given byte =
+sequence=20
+without producing any compressed output. This function must be called=20
+immediately after <TT>deflateInit</TT>, <TT>deflateInit2</TT> or=20
+<TT>deflateReset</TT>, before any call of <TT>deflate</TT>. The =
+compressor and=20
+decompressor must use exactly the same dictionary (see=20
+<TT>inflateSetDictionary</TT>).=20
+<P>The dictionary should consist of strings (byte sequences) that are =
+likely to=20
+be encountered later in the data to be compressed, with the most =
+commonly used=20
+strings preferably put towards the end of the dictionary. Using a =
+dictionary is=20
+most useful when the data to be compressed is short and can be predicted =
+with=20
+good accuracy; the data can then be compressed better than with the =
+default=20
+empty dictionary. </P>
+<P>Depending on the size of the compression data structures selected by=20
+<TT>deflateInit</TT> or <TT>deflateInit2</TT>, a part of the dictionary =
+may in=20
+effect be discarded, for example if the dictionary is larger than the =
+window=20
+size in <TT>deflate</TT> or <TT>deflate2</TT>. Thus the strings most =
+likely to=20
+be useful should be put at the end of the dictionary, not at the front. =
+In=20
+addition, the current implementation of <TT>deflate</TT> will use at =
+most the=20
+window size minus 262 bytes of the provided dictionary. </P>
+<P>Upon return of this function, <TT>strm-&gt;adler</TT> is set to the =
+adler32=20
+value of the dictionary; the decompressor may later use this value to =
+determine=20
+which dictionary has been used by the compressor. (The adler32 value =
+applies to=20
+the whole dictionary even if only a subset of the dictionary is actually =
+used by=20
+the compressor.) If a raw deflate was requested, then the adler32 value =
+is not=20
+computed and <TT>strm-&gt;adler</TT> is not set. </P>
+<P><TT>deflateSetDictionary</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if a parameter is invalid (such as <TT>NULL</TT> =
+
+dictionary) or the stream state is inconsistent (for example if =
+<TT>deflate</TT>=20
+has already been called for this stream or if the compression method is =
+bsort).=20
+<TT>deflateSetDictionary</TT> does not perform any compression: this =
+will be=20
+done by <TT>deflate()</TT>. </P><PRE><B>
+ZEXTERN int ZEXPORT deflateCopy OF((z_streamp dest,
+                                    z_streamp source));
+</B></PRE>Sets the destination stream as a complete copy of the source =
+stream.=20
+<P>This function can be useful when several compression strategies will =
+be=20
+tried, for example when there are several ways of pre-processing the =
+input data=20
+with a filter. The streams that will be discarded should then be freed =
+by=20
+calling <TT>deflateEnd</TT>. Note that <TT>deflateCopy</TT> duplicates =
+the=20
+internal compression state which can be quite large, so this strategy is =
+slow=20
+and can consume lots of memory. </P>
+<P><TT>deflateCopy</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_STREAM_ERROR</TT> if the source =
+stream=20
+state was inconsistent (such as <TT>zalloc</TT> being <TT>NULL</TT>).=20
+<TT>msg</TT> is left unchanged in both source and destination. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT deflateReset OF((z_streamp strm));
+</B></PRE>This function is equivalent to <TT>deflateEnd</TT> followed by =
+
+<TT>deflateInit</TT>, but does not free and reallocate all the internal=20
+compression state. The stream will keep the same compression level and =
+any other=20
+attributes that may have been set by <TT>deflateInit2</TT>.=20
+<P><TT>deflateReset</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent =
+(such as=20
+<TT>zalloc</TT> or state being <TT>NULL</TT>). </P><PRE><B>
+ZEXTERN int ZEXPORT deflateParams OF((z_streamp strm,
+                                      int level,
+                                      int strategy));
+</B></PRE>Dynamically update the compression level and compression =
+strategy. The=20
+interpretation of <TT>level</TT> and <TT>strategy</TT> is as in=20
+<TT>deflateInit2</TT>. This can be used to switch between compression =
+and=20
+straight copy of the input data, or to switch to a different kind of =
+input data=20
+requiring a different strategy. If the compression level is changed, the =
+input=20
+available so far is compressed with the old level (and may be flushed); =
+the new=20
+level will take effect only at the next call of <TT>deflate()</TT>.=20
+<P>Before the call of <TT>deflateParams</TT>, the stream state must be =
+set as=20
+for a call of <TT>deflate()</TT>, since the currently available input =
+may have=20
+to be compressed and flushed. In particular, <TT>strm-&gt;avail_out</TT> =
+must be=20
+non-zero. </P>
+<P><TT>deflateParams</TT> returns <TT>Z_OK</TT> if success,=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent or =
+if a=20
+parameter was invalid, <TT>Z_BUF_ERROR</TT> if =
+<TT>strm-&gt;avail_out</TT> was=20
+zero. </P><PRE><B>
+ZEXTERN int ZEXPORT deflateTune OF((z_streamp strm,
+                                    int good_length,
+                                    int max_lazy,
+                                    int nice_length,
+                                    int max_chain));
+</B></PRE>Fine tune <TT>deflate</TT>'s internal compression parameters. =
+This=20
+should only be used by someone who understands the algorithm used by=20
+<EM>zlib</EM>'s <TT>deflate</TT> for searching for the best matching =
+string, and=20
+even then only by the most fanatic optimizer trying to squeeze out the =
+last=20
+compressed bit for their specific input data. Read the deflate.c source =
+code for=20
+the meaning of the <TT>max_lazy</TT>, <TT>good_length</TT>,=20
+<TT>nice_length</TT>, and <TT>max_chain</TT> parameters.=20
+<P><TT>deflateTune()</TT> can be called after <TT>deflateInit()</TT> or=20
+<TT>deflateInit2()</TT>, and returns <TT>Z_OK</TT> on success, or=20
+<TT>Z_STREAM_ERROR</TT> for an invalid deflate stream. </P><PRE><B>
+ZEXTERN uLong ZEXPORT deflateBound OF((z_streamp strm,
+                                       uLong sourceLen));
+</B></PRE><TT>deflateBound()</TT> returns an upper bound on the =
+compressed size=20
+after deflation of <TT><TT>sourceLen</TT></TT> bytes. It must be called =
+after=20
+<TT>deflateInit()</TT> or <TT>deflateInit2()</TT>. This would be used to =
+
+allocate an output buffer for deflation in a single pass, and so would =
+be called=20
+before <TT>deflate()</TT>. <PRE><B>
+ZEXTERN int ZEXPORT deflatePrime OF((z_streamp strm,
+                                     int bits,
+                                     int value));
+</B></PRE><TT>deflatePrime()</TT> inserts bits in the deflate output =
+stream. The=20
+intent is that this function is used to start off the deflate output =
+with the=20
+bits leftover from a previous deflate stream when appending to it. As =
+such, this=20
+function can only be used for raw deflate, and must be used before the =
+first=20
+<TT>deflate()</TT> call after a <TT>deflateInit2()</TT> or=20
+<TT>deflateReset()</TT>. <TT>bits</TT> must be less than or equal to 16, =
+and=20
+that many of the least significant bits of <TT>value</TT> will be =
+inserted in=20
+the output.=20
+<P><TT>deflatePrime</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT deflateSetHeader OF((z_streamp strm,
+                                         gz_headerp head));
+</B></PRE><TT>deflateSetHeader()</TT> provides <EM>gzip</EM> header =
+information=20
+for when a <EM>gzip</EM> stream is requested by <TT>deflateInit2()</TT>. =
+
+<TT>deflateSetHeader()</TT> may be called after <TT>deflateInit2()</TT> =
+or=20
+<TT>deflateReset()</TT> and before the first call of <TT>deflate()</TT>. =
+The=20
+text, time, os, extra field, name, and comment information in the =
+provided=20
+gz_header structure are written to the <EM>gzip</EM> header (xflag is =
+ignored =97=20
+the extra flags are set according to the compression level). The caller =
+must=20
+assure that, if not <TT>Z_NULL</TT>, name and comment are terminated =
+with a zero=20
+byte, and that if extra is not <TT>Z_NULL</TT>, that extra_len bytes are =
+
+available there. If hcrc is true, a <EM>gzip</EM> header crc is =
+included. Note=20
+that the current versions of the command-line version of <EM>gzip</EM> =
+(up=20
+through version 1.3.x) do not support header crc's, and will report that =
+it is a=20
+"multi-part <EM>gzip</EM> file" and give up.=20
+<P>If <TT>deflateSetHeader</TT> is not used, the default <EM>gzip</EM> =
+header=20
+has text false, the time set to zero, and os set to 255, with no extra, =
+name, or=20
+comment fields. The <EM>gzip</EM> header is returned to the default =
+state by=20
+<TT>deflateReset()</TT>. </P>
+<P><TT>deflateSetHeader</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
+                                     int  windowBits));
+</B></PRE>This is another version of <TT>inflateInit</TT> with an extra=20
+parameter. The fields <TT>next_in</TT>, <TT>avail_in</TT>, =
+<TT>zalloc</TT>,=20
+<TT>zfree</TT> and <TT>opaque</TT> must be initialized before by the =
+caller.=20
+<P>The <TT>windowBits</TT> parameter is the base two logarithm of the =
+maximum=20
+window size (the size of the history buffer). It should be in the range =
+8..15=20
+for this version of the library. The default value is 15 if =
+<TT>inflateInit</TT>=20
+is used instead. <TT>windowBits</TT> must be greater than or equal to =
+the=20
+<TT>windowBits</TT> value provided to <TT>deflateInit2()</TT> while =
+compressing,=20
+or it must be equal to 15 if <TT>deflateInit2()</TT> was not used. If a=20
+compressed stream with a larger window size is given as input,=20
+<TT>inflate()</TT> will return with the error code <TT>Z_DATA_ERROR</TT> =
+instead=20
+of trying to allocate a larger window. </P>
+<P><TT>windowBits</TT> can also be =968..=9615 for raw inflate. In this =
+case,=20
+<TT>-windowBits</TT> determines the window size. <TT>inflate()</TT> will =
+then=20
+process raw deflate data, not looking for a <EM>zlib</EM> or =
+<EM>gzip</EM>=20
+header, not generating a check value, and not looking for any check =
+values for=20
+comparison at the end of the stream. This is for use with other formats =
+that use=20
+the deflate compressed data format such as <EM>zip</EM>. Those formats =
+provide=20
+their own check values. If a custom format is developed using the raw =
+deflate=20
+format for compressed data, it is recommended that a check value such as =
+an=20
+adler32 or a crc32 be applied to the uncompressed data as is done in the =
+
+<EM>zlib</EM>, <EM>gzip</EM>, and <EM>zip</EM> formats. For most =
+applications,=20
+the <EM>zlib</EM> format should be used as is. Note that comments above =
+on the=20
+use in <TT>deflateInit2()</TT> applies to the magnitude of =
+<TT>windowBits</TT>.=20
+</P>
+<P><TT>windowBits</TT> can also be greater than 15 for optional =
+<EM>gzip</EM>=20
+decoding. Add 32 to <TT>windowBits</TT> to enable <EM>zlib</EM> and=20
+<EM>gzip</EM> decoding with automatic header detection, or add 16 to =
+decode only=20
+the <EM>gzip</EM> format (the <EM>zlib</EM> format will return a=20
+<TT>Z_DATA_ERROR</TT>). If a <EM>gzip</EM> stream is being decoded,=20
+<TT>strm-&gt;adler</TT> is a crc32 instead of an adler32. </P>
+<P><TT>inflateInit2</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_STREAM_ERROR</TT> if a parameter =
+is=20
+invalid (such as a null strm). <TT>msg</TT> is set to null if there is =
+no error=20
+message. <TT>inflateInit2</TT> does not perform any decompression apart =
+from=20
+reading the <EM>zlib</EM> header if present: this will be done by=20
+<TT>inflate()</TT>. (So <TT>next_in</TT> and <TT>avail_in</TT> may be =
+modified,=20
+but <TT>next_out</TT> and <TT>avail_out</TT> are unchanged.) =
+</P><PRE><B>
+ZEXTERN int ZEXPORT inflateSetDictionary OF((z_streamp strm,
+                                             const Bytef *dictionary,
+                                             uInt  dictLength));
+</B></PRE>Initializes the decompression dictionary from the given =
+uncompressed=20
+byte sequence. This function must be called immediately after a call of=20
+<TT>inflate</TT>, if that call returned <TT>Z_NEED_DICT</TT>. The =
+dictionary=20
+chosen by the compressor can be determined from the adler32 value =
+returned by=20
+that call of <TT>inflate</TT>. The compressor and decompressor must use =
+exactly=20
+the same dictionary (see <TT>deflateSetDictionary</TT>). For raw =
+inflate, this=20
+function can be called immediately after <TT>inflateInit2()</TT> or=20
+<TT>inflateReset()</TT> and before any call of <TT>inflate()</TT> to set =
+the=20
+dictionary. The application must insure that the dictionary that was =
+used for=20
+compression is provided.=20
+<P><TT>inflateSetDictionary</TT> returns <TT>Z_OK</TT> if success,=20
+<TT>Z_STREAM_ERROR</TT> if a parameter is invalid (such as <TT>NULL</TT> =
+
+dictionary) or the stream state is inconsistent, <TT>Z_DATA_ERROR</TT> =
+if the=20
+given dictionary doesn't match the expected one (incorrect adler32 =
+value).=20
+<TT>inflateSetDictionary</TT> does not perform any decompression: this =
+will be=20
+done by subsequent calls of <TT>inflate()</TT>. </P><PRE><B>
+ZEXTERN int ZEXPORT inflateSync OF((z_streamp strm));
+</B></PRE>Skips invalid compressed data until a full flush point (see =
+above the=20
+description of <TT>deflate</TT> with <TT>Z_FULL_FLUSH</TT>) can be =
+found, or=20
+until all available input is skipped. No output is provided.=20
+<P><TT>inflateSync</TT> returns <TT>Z_OK</TT> if a full flush point has =
+been=20
+found, <TT>Z_BUF_ERROR</TT> if no more input was provided, =
+<TT>Z_DATA_ERROR</TT>=20
+if no flush point has been found, or <TT>Z_STREAM_ERROR</TT> if the =
+stream=20
+structure was inconsistent. In the success case, the application may =
+save the=20
+current current value of <TT>total_in</TT> which indicates where valid=20
+compressed data was found. In the error case, the application may =
+repeatedly=20
+call <TT>inflateSync</TT>, providing more input each time, until success =
+or end=20
+of the input data. </P><PRE><B>
+ZEXTERN int ZEXPORT inflateCopy OF((z_streamp dest,
+                                    z_streamp source));
+</B></PRE>Sets the destination stream as a complete copy of the source =
+stream.=20
+<P>This function can be useful when randomly accessing a large stream. =
+The first=20
+pass through the stream can periodically record the <TT>inflate</TT> =
+state,=20
+allowing restarting <TT>inflate</TT> at those points when randomly =
+accessing the=20
+stream. </P>
+<P><TT>inflateCopy</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT>=20
+if there was not enough memory, <TT>Z_STREAM_ERROR</TT> if the source =
+stream=20
+state was inconsistent (such as <TT>zalloc</TT> being <TT>NULL</TT>).=20
+<TT>msg</TT> is left unchanged in both source and destination. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT inflateReset OF((z_streamp strm));
+</B></PRE>This function is equivalent to <TT>inflateEnd</TT> followed by =
+
+<TT>inflateInit</TT>, but does not free and reallocate all the internal=20
+decompression state. The stream will keep attributes that may have been =
+set by=20
+<TT>inflateInit2</TT>.=20
+<P><TT>inflateReset</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent =
+(such as=20
+<TT>zalloc</TT> or state being <TT>NULL</TT>). </P><PRE><B>
+ZEXTERN int ZEXPORT inflatePrime OF((z_streamp strm,
+                                     int bits,
+                                     int value));
+</B></PRE>This function inserts bits in the <TT>inflate</TT> input =
+stream. The=20
+intent is that this function is used to start inflating at a bit =
+position in the=20
+middle of a byte. The provided bits will be used before any bytes are =
+used from=20
+<TT>next_in</TT>. This function should only be used with raw inflate, =
+and should=20
+be used before the first <TT>inflate()</TT> call after =
+<TT>inflateInit2()</TT>=20
+or <TT>inflateReset()</TT>. <TT>bits</TT> must be less than or equal to =
+16, and=20
+that many of the least significant bits of <TT>value</TT> will be =
+inserted in=20
+the input.=20
+<P><TT>inflatePrime</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT inflateGetHeader OF((z_streamp strm,
+                                         gz_headerp head));
+</B></PRE><TT>inflateGetHeader()</TT> requests that <EM>gzip</EM> header =
+
+information be stored in the provided gz_header structure.=20
+<TT>inflateGetHeader()</TT> may be called after <TT>inflateInit2()</TT> =
+or=20
+<TT>inflateReset()</TT>, and before the first call of =
+<TT>inflate()</TT>. As=20
+<TT>inflate()</TT> processes the <EM>gzip</EM> stream, =
+<TT>head-&gt;done</TT> is=20
+zero until the header is completed, at which time <TT>head-&gt;done</TT> =
+is set=20
+to one. If a <EM>zlib</EM> stream is being decoded, then =
+<TT>head-&gt;done</TT>=20
+is set to =961 to indicate that there will be no <EM>gzip</EM> header =
+information=20
+forthcoming. Note that <TT>Z_BLOCK</TT> can be used to force =
+<TT>inflate()</TT>=20
+to return immediately after header processing is complete and before any =
+actual=20
+data is decompressed.=20
+<P>The text, time, xflags, and os fields are filled in with the =
+<EM>gzip</EM>=20
+header contents. hcrc is set to true if there is a header CRC. (The =
+header CRC=20
+was valid if done is set to one.) If extra is not <TT>Z_NULL</TT>, then=20
+extra_max contains the maximum number of bytes to write to extra. Once =
+done is=20
+true, extra_len contains the actual extra field length, and extra =
+contains the=20
+extra field, or that field truncated if extra_max is less than =
+extra_len. If=20
+name is not <TT>Z_NULL</TT>, then up to name_max characters are written =
+there,=20
+terminated with a zero unless the length is greater than name_max. If =
+comment is=20
+not <TT>Z_NULL</TT>, then up to comm_max characters are written there,=20
+terminated with a zero unless the length is greater than comm_max. When =
+any of=20
+extra, name, or comment are not <TT>Z_NULL</TT> and the respective field =
+is not=20
+present in the header, then that field is set to <TT>Z_NULL</TT> to =
+signal its=20
+absence. This allows the use of <TT>deflateSetHeader()</TT> with the =
+returned=20
+structure to duplicate the header. However if those fields are set to =
+allocated=20
+memory, then the application will need to save those pointers elsewhere =
+so that=20
+they can be eventually freed. </P>
+<P>If <TT>inflateGetHeader</TT> is not used, then the header information =
+is=20
+simply discarded. The header is always checked for validity, including =
+the=20
+header CRC if present. <TT>inflateReset()</TT> will reset the process to =
+discard=20
+the header information. The application would need to call=20
+<TT>inflateGetHeader()</TT> again to retrieve the header from the next=20
+<EM>gzip</EM> stream. </P>
+<P><TT>inflateGetHeader</TT> returns <TT>Z_OK</TT> if success, or=20
+<TT>Z_STREAM_ERROR</TT> if the source stream state was inconsistent. =
+</P><PRE><B>
+ZEXTERN int ZEXPORT inflateBackInit OF((z_streamp strm, int windowBits,
+                                        unsigned char FAR *window));
+</B></PRE>Initialize the internal stream state for decompression using=20
+<TT>inflateBack()</TT> calls. The fields <TT>zalloc</TT>, <TT>zfree</TT> =
+and=20
+<TT>opaque</TT> in strm must be initialized before the call. If =
+<TT>zalloc</TT>=20
+and <TT>zfree</TT> are <TT>Z_NULL</TT>, then the default library- =
+derived memory=20
+allocation routines are used. <TT>windowBits</TT> is the base two =
+logarithm of=20
+the window size, in the range 8..15. window is a caller supplied buffer =
+of that=20
+size. Except for special applications where it is assured that =
+<TT>deflate</TT>=20
+was used with small window sizes, <TT>windowBits</TT> must be 15 and a =
+32K byte=20
+window must be supplied to be able to decompress general deflate =
+streams.=20
+<P>See <TT>inflateBack()</TT> for the usage of these routines. </P>
+<P><TT>inflateBackInit</TT> will return <TT>Z_OK</TT> on success,=20
+<TT>Z_STREAM_ERROR</TT> if any of the paramaters are invalid,=20
+<TT>Z_MEM_ERROR</TT> if the internal state could not be allocated, or=20
+<TT>Z_VERSION_ERROR</TT> if the version of the library does not match =
+the=20
+version of the header file. </P><PRE><B>
+typedef unsigned (*in_func) OF((void FAR *, unsigned char FAR * FAR *));
+typedef int (*out_func) OF((void FAR *, unsigned char FAR *, unsigned));
+
+ZEXTERN int ZEXPORT inflateBack OF((z_streamp strm,
+                                    in_func in, void FAR *in_desc,
+                                    out_func out, void FAR *out_desc));
+</B></PRE><TT>inflateBack()</TT> does a raw inflate with a single call =
+using a=20
+call-back interface for input and output. This is more efficient than=20
+<TT>inflate()</TT> for file i/o applications in that it avoids copying =
+between=20
+the output and the sliding window by simply making the window itself the =
+output=20
+buffer. This function trusts the application to not change the output =
+buffer=20
+passed by the output function, at least until <TT>inflateBack()</TT> =
+returns.=20
+<P><TT>inflateBackInit()</TT> must be called first to allocate the =
+internal=20
+state and to initialize the state with the user-provided window buffer.=20
+<TT>inflateBack()</TT> may then be used multiple times to =
+<TT>inflate</TT> a=20
+complete, raw deflate stream with each call. <TT>inflateBackEnd()</TT> =
+is then=20
+called to free the allocated state. </P>
+<P>A raw deflate stream is one with no <EM>zlib</EM> or <EM>gzip</EM> =
+header or=20
+trailer. This routine would normally be used in a utility that reads=20
+<EM>zip</EM> or <EM>gzip</EM> files and writes out uncompressed files. =
+The=20
+utility would decode the header and process the trailer on its own, =
+hence this=20
+routine expects only the raw deflate stream to decompress. This is =
+different=20
+from the normal behavior of <TT>inflate()</TT>, which expects either a=20
+<EM>zlib</EM> or <EM>gzip</EM> header and trailer around the deflate =
+stream.=20
+</P>
+<P><TT>inflateBack()</TT> uses two subroutines supplied by the caller =
+that are=20
+then called by <TT>inflateBack()</TT> for input and output.=20
+<TT>inflateBack()</TT> calls those routines until it reads a complete =
+deflate=20
+stream and writes out all of the uncompressed data, or until it =
+encounters an=20
+error. The function's parameters and return types are defined above in =
+the=20
+<TT>in_func</TT> and <TT>out_func</TT> typedefs. <TT>inflateBack()</TT> =
+will=20
+call <TT>in(in_desc, &amp;buf)</TT> which should return the number of =
+bytes of=20
+provided input, and a pointer to that input in buf. If there is no input =
+
+available, <TT>in()</TT> must return zero=97<TT>buf</TT> is ignored in =
+that=20
+case=97and <TT>inflateBack()</TT> will return a buffer error.=20
+<TT>inflateBack()</TT> will call <TT>out(out_desc, buf, len)</TT> to =
+write the=20
+uncompressed data <TT>buf[0..len-1]</TT>. <TT>out()</TT> should return =
+zero on=20
+success, or non-zero on failure. If <TT>out()</TT> returns non-zero,=20
+<TT>inflateBack()</TT> will return with an error. Neither <TT>in()</TT> =
+nor=20
+<TT>out()</TT> are permitted to change the contents of the window =
+provided to=20
+<TT>inflateBackInit()</TT>, which is also the buffer that <TT>out()</TT> =
+uses to=20
+write from. The length written by <TT>out()</TT> will be at most the =
+window=20
+size. Any non-zero amount of input may be provided by <TT>in()</TT>. =
+</P>
+<P>For convenience, <TT>inflateBack()</TT> can be provided input on the =
+first=20
+call by setting <TT>strm-&gt;next_in</TT> and =
+<TT>strm-&gt;avail_in</TT>. If=20
+that input is exhausted, then <TT>in()</TT> will be called. Therefore=20
+<TT>strm-&gt;next_in</TT> must be initialized before calling=20
+<TT>inflateBack()</TT>. If <TT>strm-&gt;next_in</TT> is <TT>Z_NULL</TT>, =
+then=20
+<TT>in()</TT> will be called immediately for input. If =
+<TT>strm-&gt;next_in</TT>=20
+is not <TT>Z_NULL</TT>, then <TT>strm-&gt;avail_in</TT> must also be=20
+initialized, and then if <TT>strm-&gt;avail_in</TT> is not zero, input =
+will=20
+initially be taken from <TT>strm-&gt;next_in[0 .. strm-&gt;avail_in - =
+1]</TT>.=20
+</P>
+<P>The <TT>in_desc</TT> and <TT>out_desc</TT> parameters of=20
+<TT>inflateBack()</TT> is passed as the first parameter of <TT>in()</TT> =
+and=20
+<TT>out()</TT> respectively when they are called. These descriptors can =
+be=20
+optionally used to pass any information that the caller- supplied =
+<TT>in()</TT>=20
+and <TT>out()</TT> functions need to do their job. </P>
+<P>On return, <TT>inflateBack()</TT> will set <TT>strm-&gt;next_in</TT> =
+and=20
+<TT>strm-&gt;avail_in</TT> to pass back any unused input that was =
+provided by=20
+the last <TT>in()</TT> call. The return values of <TT>inflateBack()</TT> =
+can be=20
+<TT>Z_STREAM_END</TT> on success, <TT>Z_BUF_ERROR</TT> if <TT>in()</TT> =
+or=20
+<TT>out()</TT> returned an error, <TT>Z_DATA_ERROR</TT> if there was a =
+format=20
+error in the deflate stream (in which case <TT>strm-&gt;msg</TT> is set =
+to=20
+indicate the nature of the error), or <TT>Z_STREAM_ERROR</TT> if the =
+stream was=20
+not properly initialized. In the case of <TT>Z_BUF_ERROR</TT>, an input =
+or=20
+output error can be distinguished using <TT>strm-&gt;next_in</TT> which =
+will be=20
+<TT>Z_NULL</TT> only if <TT>in()</TT> returned an error. If=20
+<TT>strm-&gt;next_in</TT> is not <TT>Z_NULL</TT>, then the =
+<TT>Z_BUF_ERROR</TT>=20
+was due to <TT>out()</TT> returning non-zero. (<TT>in()</TT> will always =
+be=20
+called before <TT>out()</TT>, so <TT>strm-&gt;next_in</TT> is assured to =
+be=20
+defined if <TT>out()</TT> returns non-zero.) Note that =
+<TT>inflateBack()</TT>=20
+cannot return <TT>Z_OK</TT>. </P><PRE><B>
+ZEXTERN int ZEXPORT inflateBackEnd OF((z_streamp strm));
+</B></PRE>All memory allocated by <TT>inflateBackInit()</TT> is freed.=20
+<P><TT>inflateBackEnd()</TT> returns <TT>Z_OK</TT> on success, or=20
+<TT>Z_STREAM_ERROR</TT> if the stream state was inconsistent. =
+</P><PRE><B>
+ZEXTERN uLong ZEXPORT zlibCompileFlags OF((void));
+</B></PRE>Return flags indicating compile-time options.=20
+<P>Type sizes, two bits each, 00 =3D 16 bits, 01 =3D 32, 10 =3D 64, 11 =
+=3D other: </P>
+<UL>
+  <LI>1.0: size of <TT>uInt</TT>=20
+  <LI>3.2: size of <TT>uLong</TT>=20
+  <LI>5.4: size of <TT>voidpf</TT> (pointer)=20
+  <LI>7.6: size of <TT>z_off_t</TT> </LI></UL>Compiler, assembler, and =
+debug=20
+options:=20
+<UL>
+  <LI>8: <TT>DEBUG</TT>=20
+  <LI>9: <TT>ASMV</TT> or <TT>ASMINF</TT> =97 use ASM code=20
+  <LI>10: <TT>ZLIB_WINAPI</TT> =97 exported functions use the WINAPI =
+calling=20
+  convention=20
+  <LI>11: 0 (reserved) </LI></UL>One-time table building (smaller code, =
+but not=20
+thread-safe if true):=20
+<UL>
+  <LI>12: <TT>BUILDFIXED</TT> =97 build static block decoding tables =
+when needed=20
+  <LI>13: <TT>DYNAMIC_CRC_TABLE</TT> =97 build CRC calculation tables =
+when needed=20
+  <LI>14,15: 0 (reserved) </LI></UL>Library content (indicates missing=20
+functionality):=20
+<UL>
+  <LI>16: <TT>NO_GZCOMPRESS</TT> =97 <TT>gz</TT>* functions cannot =
+compress (to=20
+  avoid linking deflate code when not needed)=20
+  <LI>17: <TT>NO_GZIP</TT> =97 <TT>deflate</TT> can't write =
+<EM>gzip</EM> streams,=20
+  and <TT>inflate</TT> can't detect and decode <EM>gzip</EM> streams (to =
+avoid=20
+  linking crc code)=20
+  <LI>18-19: 0 (reserved) </LI></UL>Operation variations (changes in =
+library=20
+functionality):=20
+<UL>
+  <LI>20: <TT>PKZIP_BUG_WORKAROUND</TT> =97 slightly more permissive=20
+  <TT>inflate</TT>=20
+  <LI>21: <TT>FASTEST</TT> =97 <TT>deflate</TT> algorithm with only one, =
+lowest=20
+  compression level=20
+  <LI>22,23: 0 (reserved) </LI></UL>The <TT>sprintf</TT> variant used by =
+
+<TT>gzprintf</TT> (zero is best):=20
+<UL>
+  <LI>24: 0 =3D <TT>vs</TT>*, 1 =3D <TT>s</TT>* =97 1 means limited to =
+20 arguments=20
+  after the format=20
+  <LI>25: 0 =3D *<TT>nprintf</TT>, 1 =3D *<TT>printf</TT> =97 1 means=20
+  <TT>gzprintf()</TT> not secure!=20
+  <LI>26: 0 =3D returns value, 1 =3D <TT>void</TT> =97 1 means inferred =
+string length=20
+  returned </LI></UL>Remainder:=20
+<UL>
+  <LI>27-31: 0 (reserved) </LI></UL><A name=3DUtility></A>
+<H2>Utility Functions </H2>The following utility functions are =
+implemented on=20
+top of the basic stream-oriented functions. To simplify the interface, =
+some=20
+default options are assumed (compression level and memory usage, =
+standard memory=20
+allocation functions). The source code of these utility functions can =
+easily be=20
+modified if you need special options. <PRE><B>
+ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
+                                 const Bytef *source, uLong =
+<TT>sourceLen</TT>));
+</B></PRE>Compresses the source buffer into the destination buffer.=20
+<TT>sourceLen</TT> is the byte length of the source buffer. Upon entry,=20
+<TT>destLen</TT> is the total size of the destination buffer, which must =
+be at=20
+least the value returned by <TT>compressBound(sourceLen)</TT>. Upon =
+exit,=20
+<TT>destLen</TT> is the actual size of the compressed buffer. This =
+function can=20
+be used to compress a whole file at once if the input file is mmap'ed. =
+compress=20
+returns <TT>Z_OK</TT> if success, <TT>Z_MEM_ERROR</TT> if there was not =
+enough=20
+memory, <TT>Z_BUF_ERROR</TT> if there was not enough room in the output =
+buffer. <PRE><B>
+ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
+                                  const Bytef *source, uLong sourceLen,
+                                  int level));
+</B></PRE>Compresses the source buffer into the destination buffer. The=20
+<TT>level</TT> parameter has the same meaning as in =
+<TT>deflateInit</TT>.=20
+<TT>sourceLen</TT> is the byte length of the source buffer. Upon entry,=20
+<TT>destLen</TT> is the total size of the destination buffer, which must =
+be at=20
+least the value returned by <TT>compressBound(sourceLen)</TT>. Upon =
+exit,=20
+<TT>destLen</TT> is the actual size of the compressed buffer.=20
+<P><TT>compress2</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT> if=20
+there was not enough memory, <TT>Z_BUF_ERROR</TT> if there was not =
+enough room=20
+in the output buffer, <TT>Z_STREAM_ERROR</TT> if the <TT>level</TT> =
+parameter is=20
+invalid. </P><PRE><B>
+ZEXTERN uLong ZEXPORT compressBound OF((uLong sourceLen));
+</B></PRE><TT>compressBound()</TT> returns an upper bound on the =
+compressed size=20
+after <TT>compress()</TT> or <TT>compress2()</TT> on <TT>sourceLen</TT> =
+bytes.=20
+It would be used before a <TT>compress()</TT> or <TT>compress2()</TT> =
+call to=20
+allocate the destination buffer. <PRE><B>
+ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
+                                   const Bytef *source, uLong =
+sourceLen));
+</B></PRE>Decompresses the source buffer into the destination buffer.=20
+<TT>sourceLen</TT> is the byte length of the source buffer. Upon entry,=20
+<TT>destLen</TT> is the total size of the destination buffer, which must =
+be=20
+large enough to hold the entire uncompressed data. (The size of the =
+uncompressed=20
+data must have been saved previously by the compressor and transmitted =
+to the=20
+decompressor by some mechanism outside the scope of this compression =
+library.)=20
+Upon exit, <TT>destLen</TT> is the actual size of the compressed buffer. =
+
+<P>This function can be used to decompress a whole file at once if the =
+input=20
+file is mmap'ed. </P>
+<P><TT>uncompress</TT> returns <TT>Z_OK</TT> if success, =
+<TT>Z_MEM_ERROR</TT> if=20
+there was not enough memory, <TT>Z_BUF_ERROR</TT> if there was not =
+enough room=20
+in the output buffer, or <TT>Z_DATA_ERROR</TT> if the input data was =
+corrupted=20
+or incomplete. <A name=3DGzip></A></P>
+<H2>gzip File I/O Functions </H2><PRE><B>typedef voidp gzFile;
+
+ZEXTERN gzFile ZEXPORT gzopen  OF((const char *path, const char *mode));
+</B></PRE>Opens a <EM>gzip</EM> (.gz) file for reading or writing. The=20
+<TT>mode</TT> parameter is as in <TT>fopen</TT> (<TT>"rb"</TT> or =
+<TT>"wb"</TT>)=20
+but can also include a compression level (<TT>"wb9"</TT>) or a strategy: =
+
+<TT>'f'</TT> for filtered data as in <TT>"wb6f"</TT>, <TT>'h'</TT> for =
+Huffman=20
+only compression as in <TT>"wb1h"</TT>, or <TT>'R'</TT> for run-length =
+encoding=20
+as in <TT>"wb1R"</TT>. (See the description of <TT>deflateInit2</TT> for =
+more=20
+information about the <TT>strategy</TT> parameter.)=20
+<P><TT>gzopen</TT> can be used to read a file which is not in =
+<EM>gzip</EM>=20
+format; in this case <TT>gzread</TT> will directly read from the file =
+without=20
+decompression. </P>
+<P><TT>gzopen</TT> returns <TT>NULL</TT> if the file could not be opened =
+or if=20
+there was insufficient memory to allocate the (de)compression state;=20
+<TT>errno</TT> can be checked to distinguish the two cases (if =
+<TT>errno</TT> is=20
+zero, the <EM>zlib</EM> error is <TT>Z_MEM_ERROR</TT>). </P><PRE><B>
+ZEXTERN gzFile ZEXPORT gzdopen  OF((int fd, const char *mode));
+</B></PRE><TT>gzdopen()</TT> associates a <TT>gzFile</TT> with the file=20
+descriptor <TT>fd</TT>. File descriptors are obtained from calls like=20
+<TT>open</TT>, <TT>dup</TT>, <TT>creat</TT>, <TT>pipe</TT> or =
+<TT>fileno</TT>=20
+(in the file has been previously opened with <TT>fopen</TT>). The mode =
+parameter=20
+is as in <TT>gzopen</TT>. The next call of <TT>gzclose</TT> on the =
+returned=20
+<TT>gzFile</TT> will also close the file descriptor <TT>fd</TT>, just =
+like=20
+<TT>fclose(fdopen(fd), mode)</TT> closes the file descriptor =
+<TT>fd</TT>. If you=20
+want to keep <TT>fd</TT> open, use <TT>gzdopen(dup(fd), mode)</TT>.=20
+<TT>gzdopen</TT> returns <TT>NULL</TT> if there was insufficient memory =
+to=20
+allocate the (de)compression state. <PRE><B>
+ZEXTERN int ZEXPORT gzsetparams OF((gzFile file, int level, int =
+strategy));
+</B></PRE>Dynamically update the compression <TT>level</TT> or=20
+<TT>strategy</TT>. See the description of <TT>deflateInit2</TT> for the =
+meaning=20
+of these parameters. <TT>gzsetparams</TT> returns <TT>Z_OK</TT> if =
+success, or=20
+<TT>Z_STREAM_ERROR</TT> if the file was not opened for writing. <PRE><B>
+ZEXTERN int ZEXPORT    gzread  OF((gzFile file, voidp buf, unsigned =
+len));
+</B></PRE>Reads the given number of uncompressed bytes from the =
+compressed file.=20
+If the input file was not in <EM>gzip</EM> format, <TT>gzread</TT> =
+copies the=20
+given number of bytes into the buffer. <TT>gzread</TT> returns the =
+number of=20
+uncompressed bytes actually read (0 for end of file, =961 for error). =
+<PRE><B>
+ZEXTERN int ZEXPORT    gzwrite OF((gzFile file,
+                                   voidpc buf, unsigned len));
+</B></PRE>Writes the given number of uncompressed bytes into the =
+compressed=20
+file. <TT>gzwrite</TT> returns the number of uncompressed bytes actually =
+written=20
+(0 in case of error). <PRE><B>
+ZEXTERN int ZEXPORTVA   gzprintf OF((gzFile file, const char *format, =
+...));
+</B></PRE>Converts, formats, and writes the args to the compressed file =
+under=20
+control of the <TT>format</TT> string, as in <TT>fprintf</TT>. =
+<TT>gzprintf</TT>=20
+returns the number of uncompressed bytes actually written (0 in case of =
+error).=20
+The number of uncompressed bytes written is limited to 4095. The caller =
+should=20
+assure that this limit is not exceeded. If it is exceeded, then=20
+<TT>gzprintf()</TT> will return return an error (0) with nothing =
+written. In=20
+this case, there may also be a buffer overflow with unpredictable =
+consequences,=20
+which is possible only if <EM>zlib</EM> was compiled with the insecure =
+functions=20
+<TT>sprintf()</TT> or <TT>vsprintf()</TT> because the secure =
+<TT>snprintf()</TT>=20
+or <TT>vsnprintf()</TT> functions were not available. <PRE><B>
+ZEXTERN int ZEXPORT gzputs OF((gzFile file, const char *s));
+</B></PRE>Writes the given null-terminated string to the compressed =
+file,=20
+excluding the terminating null character. <TT>gzputs</TT> returns the =
+number of=20
+characters written, or =961 in case of error. <PRE><B>
+ZEXTERN char * ZEXPORT gzgets OF((gzFile file, char *buf, int len));
+</B></PRE>Reads bytes from the compressed file until <TT>len-1</TT> =
+characters=20
+are read, or a newline character is read and transferred to =
+<TT>buf</TT>, or an=20
+end-of-file condition is encountered. The string is then terminated with =
+a null=20
+character. <TT>gzgets</TT> returns <TT>buf</TT>, or <TT>Z_NULL</TT> in =
+case of=20
+error. <PRE><B>
+ZEXTERN int ZEXPORT    gzputc OF((gzFile file, int c));
+</B></PRE>Writes <TT>c</TT>, converted to an <TT>unsigned char</TT>, =
+into the=20
+compressed file. <TT>gzputc</TT> returns the value that was written, or =
+=961 in=20
+case of error. <PRE><B>
+ZEXTERN int ZEXPORT    gzgetc OF((gzFile file));
+</B></PRE>Reads one byte from the compressed file. <TT>gzgetc</TT> =
+returns this=20
+byte or =961 in case of end of file or error. <PRE><B>
+ZEXTERN int ZEXPORT    gzungetc OF((int c, gzFile file));
+</B></PRE>Push one character back onto the stream to be read again =
+later. Only=20
+one character of push-back is allowed. <TT>gzungetc()</TT> returns the =
+character=20
+pushed, or =961 on failure. <TT>gzungetc()</TT> will fail if a character =
+has been=20
+pushed but not read yet, or if <TT>c</TT> is =961. The pushed character =
+will be=20
+discarded if the stream is repositioned with <TT>gzseek()</TT> or=20
+<TT>gzrewind()</TT>. <PRE><B>
+ZEXTERN int ZEXPORT    gzflush OF((gzFile file, int flush));
+</B></PRE>Flushes all pending output into the compressed file. The =
+parameter=20
+<TT>flush</TT> is as in the <TT>deflate()</TT> function. The return =
+value is the=20
+<EM>zlib</EM> error number (see function <TT>gzerror</TT> below).=20
+<TT>gzflush</TT> returns <TT>Z_OK</TT> if the <TT>flush</TT> parameter =
+is=20
+<TT>Z_FINISH</TT> and all output could be flushed. <TT>gzflush</TT> =
+should be=20
+called only when strictly necessary because it can degrade compression. =
+<PRE><B>
+ZEXTERN z_off_t ZEXPORT    gzseek OF((gzFile file,
+                                      z_off_t offset, int whence));
+</B></PRE>Sets the starting position for the next <TT>gzread</TT> or=20
+<TT>gzwrite</TT> on the given compressed file. The offset represents a =
+number of=20
+bytes in the uncompressed data stream. The <TT>whence</TT> parameter is =
+defined=20
+as in <TT>lseek</TT>(2); the value <TT>SEEK_END</TT> is not supported. =
+If the=20
+file is opened for reading, this function is emulated but can be =
+extremely slow.=20
+If the file is opened for writing, only forward seeks are supported;=20
+<TT>gzseek</TT> then compresses a sequence of zeroes up to the new =
+starting=20
+position.=20
+<P><TT>gzseek</TT> returns the resulting offset location as measured in =
+bytes=20
+from the beginning of the uncompressed stream, or =961 in case of error, =
+in=20
+particular if the file is opened for writing and the new starting =
+position would=20
+be before the current position. </P><PRE><B>
+ZEXTERN int ZEXPORT    gzrewind OF((gzFile file));
+</B></PRE>Rewinds the given file. This function is supported only for =
+reading.=20
+<P><TT>gzrewind(file)</TT> is equivalent to <TT>(int)gzseek(file, 0L,=20
+SEEK_SET)</TT> </P><PRE><B>
+ZEXTERN z_off_t ZEXPORT    gztell OF((gzFile file));
+</B></PRE>Returns the starting position for the next <TT>gzread</TT> or=20
+<TT>gzwrite</TT> on the given compressed file. This position represents =
+a number=20
+of bytes in the uncompressed data stream.=20
+<P>gztell(file) is equivalent to gzseek(file, 0L, SEEK_CUR) </P><PRE><B>
+ZEXTERN int ZEXPORT gzeof OF((gzFile file));
+</B></PRE>Returns 1 when <TT>EOF</TT> has previously been detected =
+reading the=20
+given input stream, otherwise zero. <PRE><B>
+ZEXTERN int ZEXPORT gzdirect OF((gzFile file));
+</B></PRE>Returns 1 if file is being read directly without =
+decompression,=20
+otherwise zero. <PRE><B>
+ZEXTERN int ZEXPORT    gzclose OF((gzFile file));
+</B></PRE>Flushes all pending output if necessary, closes the compressed =
+file=20
+and deallocates all the (de)compression state. The return value is the=20
+<EM>zlib</EM> error number (see function <TT>gzerror</TT> below). =
+<PRE><B>
+ZEXTERN const char * ZEXPORT gzerror OF((gzFile file, int *errnum));
+</B></PRE>Returns the error message for the last error which occurred on =
+the=20
+given compressed <TT>file</TT>. <TT>errnum</TT> is set to <EM>zlib</EM> =
+error=20
+number. If an error occurred in the file system and not in the =
+compression=20
+library, <TT>errnum</TT> is set to <TT>Z_ERRNO</TT> and the application =
+may=20
+consult <TT>errno</TT> to get the exact error code. <PRE><B>
+ZEXTERN void ZEXPORT gzclearerr OF((gzFile file));
+</B></PRE>Clears the error and end-of-file flags for <TT>file</TT>. This =
+is=20
+analogous to the <TT>clearerr()</TT> function in <TT>stdio</TT>. This is =
+useful=20
+for continuing to read a <EM>gzip</EM> file that is being written =
+concurrently.=20
+<A name=3DChecksum></A>
+<H2>Checksum Functions </H2>These functions are not related to =
+compression but=20
+are exported anyway because they might be useful in applications using =
+the=20
+compression library. <PRE><B>
+ZEXTERN uLong ZEXPORT adler32 OF((uLong adler, const Bytef *buf, uInt =
+len));
+</B></PRE>Update a running Adler-32 checksum with the bytes=20
+<TT>buf[0..len-1]</TT> and return the updated checksum. If <TT>buf</TT> =
+is=20
+<TT>NULL</TT>, this function returns the required initial value for the=20
+checksum. An Adler-32 checksum is almost as reliable as a CRC32 but can =
+be=20
+computed much faster. Usage example: <PRE>     uLong adler =3D =
+adler32(0L, Z_NULL, 0);
+
+     while (read_buffer(buffer, length) !=3D EOF) {
+       adler =3D adler32(adler, buffer, length);
+     }
+     if (adler !=3D original_adler) error();
+</PRE><PRE><B>
+ZEXTERN uLong ZEXPORT adler32_combine OF((uLong adler1, uLong adler2,
+                                          z_off_t len2));
+</B></PRE>Combine two Adler-32 checksums into one. For two sequences of =
+bytes,=20
+<TT>seq1</TT> and <TT>seq2</TT> with lengths <TT>len1</TT> and =
+<TT>len2</TT>,=20
+Adler-32 checksums were calculated for each, <TT>adler1</TT> and=20
+<TT>adler2</TT>. <TT>adler32_combine()</TT> returns the Adler-32 =
+checksum of=20
+<TT>seq1</TT> and <TT>seq2</TT> concatenated, requiring only =
+<TT>adler1</TT>,=20
+<TT>adler2</TT>, and <TT>len2</TT>. <PRE><B>
+ZEXTERN uLong ZEXPORT crc32   OF((uLong crc, const Bytef *buf, uInt =
+len));
+</B></PRE>Update a running CRC-32 with the bytes <TT>buf[0..len-1]</TT> =
+and=20
+return the updated CRC-32. If <TT>buf</TT> is <TT>NULL</TT>, this =
+function=20
+returns the required initial value for the for the crc. Pre- and=20
+post-conditioning (one's complement) is performed within this function =
+so it=20
+shouldn't be done by the application. Usage example: <PRE>     uLong crc =
+=3D crc32(0L, Z_NULL, 0);
+
+     while (read_buffer(buffer, length) !=3D EOF) {
+       crc =3D crc32(crc, buffer, length);
+     }
+     if (crc !=3D original_crc) error();
+</PRE><PRE><B>
+ZEXTERN uLong ZEXPORT crc32_combine OF((uLong crc1, uLong crc2, z_off_t =
+len2));
+</B></PRE>Combine two CRC-32 check values into one. For two sequences of =
+bytes,=20
+<TT>seq1</TT> and <TT>seq2</TT> with lengths <TT>len1</TT> and =
+<TT>len2</TT>,=20
+CRC-32 check values were calculated for each, <TT>crc1</TT> and =
+<TT>crc2</TT>.=20
+<TT>crc32_combine()</TT> returns the CRC-32 check value of <TT>seq1</TT> =
+and=20
+<TT>seq2</TT> concatenated, requiring only <TT>crc1</TT>, <TT>crc2</TT>, =
+and=20
+<TT>len2</TT>. <A name=3DUndocumented></A>
+<H2>Undocumented Functions </H2><PRE><B>ZEXTERN const char   * ZEXPORT =
+zError           OF((int));
+ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp z));
+ZEXTERN const uLongf * ZEXPORT get_crc_table    OF((void));
+</B></PRE></BODY></HTML>
