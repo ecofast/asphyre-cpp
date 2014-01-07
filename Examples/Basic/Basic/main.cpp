@@ -298,4 +298,6 @@ void Cleanup()
 
 	// UnRegister BMP handler
 	ASCBitmapManager()->UnRegisterExt(L".bmp");
+	// UnRegister PNG handler
+	ASCBitmapManager()->UnRegisterExt(L".png");
 }
