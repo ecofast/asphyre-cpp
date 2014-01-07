@@ -47,7 +47,7 @@ public:
 	~CASCBitmapManager();
 
 	ASCBoolean RegisterExt(const wstring& sExtension, CASCCustomBitmap* pHandler);
-	void UnregisterExt(const wstring& sExtension);
+	void UnRegisterExt(const wstring& sExtension);
 
 	CASCCustomBitmap* AssociatedHandler(const wstring& sExtension);
 

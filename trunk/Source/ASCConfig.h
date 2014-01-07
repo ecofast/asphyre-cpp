@@ -9,10 +9,12 @@
  *
  *******************************************************************************************/
 
- #define ALLOWPRECISEFLOAT
+#pragma once
 
- #define MSWINDOWS
- #ifdef MSWINDOWS
+#define ALLOWPRECISEFLOAT
+
+#define MSWINDOWS
+#ifdef MSWINDOWS
 	// Provide shorter keyword for Windows platform
 	#define WINDOWS
- #endif
+#endif

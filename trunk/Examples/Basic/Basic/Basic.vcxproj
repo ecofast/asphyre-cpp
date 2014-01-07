@@ -46,6 +46,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VCInstallDir)PlatformSDK\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,11 +56,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../Library/zlib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);d3d9.lib;d3dx9.lib;winmm.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../Library/libpng/lib/dlib;../../../Library/zlib/lib/dlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,6 +75,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../Library/zlib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -77,12 +83,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);d3d9.lib;d3dx9.lib;winmm.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../Library/libpng/lib/slib;../../../Library/zlib/lib/slib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\ASCBitmap.cpp" />
     <ClCompile Include="..\..\..\Source\ASCBitmaps.cpp" />
     <ClCompile Include="..\..\..\Source\ASCBitmapsBMP.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCBitmapsPNG.cpp" />
+    <ClCompile Include="..\..\..\Source\ASCBmpHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\ASCCanvas.cpp" />
     <ClCompile Include="..\..\..\Source\ASCDevice.cpp" />
     <ClCompile Include="..\..\..\Source\ASCEvents.cpp" />
@@ -114,6 +123,8 @@
     <ClInclude Include="..\..\..\Source\ASCBitmap.h" />
     <ClInclude Include="..\..\..\Source\ASCBitmaps.h" />
     <ClInclude Include="..\..\..\Source\ASCBitmapsBMP.h" />
+    <ClInclude Include="..\..\..\Source\ASCBitmapsPNG.h" />
+    <ClInclude Include="..\..\..\Source\ASCBmpHelpers.h" />
     <ClInclude Include="..\..\..\Source\ASCCanvas.h" />
     <ClInclude Include="..\..\..\Source\ASCConfig.h" />
     <ClInclude Include="..\..\..\Source\ASCConsts.h" />
@@ -127,6 +138,7 @@
     <ClInclude Include="..\..\..\Source\ASCIntVector2D.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormatConv.h" />
     <ClInclude Include="..\..\..\Source\ASCPixelFormats.h" />
+    <ClInclude Include="..\..\..\Source\ASCPng.h" />
     <ClInclude Include="..\..\..\Source\ASCProvider.h" />
     <ClInclude Include="..\..\..\Source\ASCStreams.h" />
     <ClInclude Include="..\..\..\Source\ASCStrUtils.h" />
@@ -139,6 +151,7 @@
     <ClInclude Include="..\..\..\Source\ASCUtils.h" />
     <ClInclude Include="..\..\..\Source\ASCWindowsConnector.h" />
     <ClInclude Include="..\..\..\Source\ASCWindowsTimer.h" />
+    <ClInclude Include="..\..\..\Source\ASCZLib.h" />
     <ClInclude Include="..\..\..\Source\DX9\ASCDX9Canvas.h" />
     <ClInclude Include="..\..\..\Source\DX9\ASCDX9Common.h" />
     <ClInclude Include="..\..\..\Source\DX9\ASCDX9Device.h" />
