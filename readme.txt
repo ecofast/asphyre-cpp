@@ -1,5 +1,3 @@
-the C++ edition of Asphyre Sphinx Framework(Yuriy Kotsarenko), translator: adelphicoder(�޾�Ը)
+the C++ edition of Asphyre Sphinx Framework(Yuriy Kotsarenko), translator: ecofast(无尽愿).
 
-For more information of Asphyre Sphinx Framework, please refer to http://www.afterwarp.net/
-
-You can contact me at: adelphicoder@gmail.com
+For more information of Asphyre Sphinx Framework, please refer to: http://www.afterwarp.net/
